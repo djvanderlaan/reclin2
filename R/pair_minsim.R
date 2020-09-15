@@ -1,8 +1,11 @@
+
+
+# @export
 pair_minsim <- function(x, y, on, minsim = 0.0, 
     comparators = list(default_comparator), default_comparator = identical(), 
     cluster = NULL, keep_simsum = TRUE, add_xy = TRUE) {
-  x <- as.data.table(x)
-  y <- as.data.table(y)
+  x <- data.table::as.data.table(x)
+  y <- data.table::as.data.table(y)
   if (!missing(cluster) && !is.null(cluster))
     return(cluster_pair_minsim(cluster, x, y, on, minsim, comparators, 
       default_comparator))
@@ -14,7 +17,7 @@ pair_minsim <- function(x, y, on, minsim = 0.0,
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*nchunks)
   idx <- split(seq_len(nrow(x)), group)
   pairs <- lapply(idx, function(idx, x, y, on, minsim, comparators) {
-    pairs <- CJ(.x = idx, .y = seq_len(nrow(y)))
+    pairs <- data.table::CJ(.x = idx, .y = seq_len(nrow(y)))
     pairs[, simsum := rep(0, nrow(pairs))]
     for (var in on) {
       cmp_fun <- comparators[[var]]
@@ -23,7 +26,7 @@ pair_minsim <- function(x, y, on, minsim = 0.0,
     }
     pairs[simsum >= minsim]
   }, x = x, y = y, on = on, minsim = minsim, comparators = comparators)
-  pairs <- rbindlist(pairs)
+  pairs <- data.table::rbindlist(pairs)
   if (!keep_simsum) pairs <- pairs[, c(".x", ".y")]
   class(pairs) <- c("pairs", class(pairs))
   if (add_xy) {

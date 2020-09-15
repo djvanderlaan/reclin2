@@ -1,4 +1,5 @@
 
+# @export
 pair <- function(x, y, cluster = NULL, add_xy = TRUE) {
   x <- data.table::as.data.table(x)
   y <- data.table::as.data.table(y)

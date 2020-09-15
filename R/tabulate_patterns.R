@@ -1,11 +1,13 @@
 
 
 
+# @export
 tabulate_patterns <- function(pairs, on, comparators, complete = TRUE, ...) {
   UseMethod("tabulate_patterns", pairs)
 }
 
 
+# @export
 tabulate_patterns.pairs <- function(pairs, on, comparators, complete = TRUE) {
   # Process arguments
   if (missing(comparators) || is.null(comparators)) 
@@ -27,7 +29,7 @@ tabulate_patterns.pairs <- function(pairs, on, comparators, complete = TRUE) {
       u <- unique(x)
       if (is.factor(x)) union(x, levels(x)) else u
     })
-    possible_patterns <- do.call(CJ, possible_patterns)
+    possible_patterns <- do.call(data.table::CJ, possible_patterns)
     tab <- tab[possible_patterns, , on = on]
     tab$n[is.na(tab$n)] <- 0
   }
@@ -35,6 +37,7 @@ tabulate_patterns.pairs <- function(pairs, on, comparators, complete = TRUE) {
 }
 
 
+# @export
 tabulate_patterns.cluster_pairs <- function(pairs, on, comparators, 
     complete = TRUE) {
   # Process arguments
@@ -43,14 +46,14 @@ tabulate_patterns.cluster_pairs <- function(pairs, on, comparators,
       attr(pairs, "compare_on") else names(comparators)
   if (missing(comparators)) comparators <- NULL
   # Run tabulate_pairs on all workers
-  tabs <- clusterCall(pairs$cluster, function(name, on, comparators) {
+  tabs <- parallel::clusterCall(pairs$cluster, function(name, on, comparators) {
     env <- reclin_env[[name]]
     pairs <- env$pairs
     tabulate_patterns(pairs, on = on, comparators = comparators, 
       complete = FALSE)
   }, name= pairs$name, on = on, comparators = comparators)
   # Combine results
-  tab <- rbindlist(tabs)
+  tab <- data.table::rbindlist(tabs)
   tab <- tab[, .(n = sum(n)), by = on]
   # Add patterns not present in dataset
   if (complete) {
@@ -58,7 +61,7 @@ tabulate_patterns.cluster_pairs <- function(pairs, on, comparators,
       u <- unique(x)
       if (is.factor(x)) union(x, levels(x)) else u
     })
-    possible_patterns <- do.call(CJ, possible_patterns)
+    possible_patterns <- do.call(data.table::CJ, possible_patterns)
     tab <- tab[possible_patterns, , on = on]
     tab$n[is.na(tab$n)] <- 0
   }

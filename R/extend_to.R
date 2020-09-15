@@ -1,3 +1,4 @@
+
 extend_to <- function(by, what = list(default), default) {
   if (!is.list(what)) stop("what should be a list.")
   if (!is.character(by)) stop("by should be a character vector.")

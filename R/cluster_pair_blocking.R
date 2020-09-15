@@ -1,7 +1,8 @@
 
+# @export
 cluster_pair_blocking <- function(cluster, x, y, on, name = "default") {
-  x <- as.data.table(x)
-  y <- as.data.table(y)
+  x <- data.table::as.data.table(x)
+  y <- data.table::as.data.table(y)
   # Split x into a length(cluster) groups
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*length(cl))
   group <- sample(group)
@@ -9,11 +10,11 @@ cluster_pair_blocking <- function(cluster, x, y, on, name = "default") {
   x <- split(x, group)
   for (i in seq_along(x)) x[[i]]$.id <- idx[[i]]
   # Copy data to cluster
-  clusterApply(cluster, x, function(name, x, y, on) {
-    library(data.table)
-    library(stringdist)
+  parallel::clusterApply(cluster, x, function(name, x, y, on) {
+    library(data.table) #TODO
+    library(stringdist) #TODO
     files <- list.files("R", "*.R", full.names = TRUE)
-    for (file in files) source(file)
+    for (file in files) source(file)   # TODO
     # environment in which to store all data
     if (!exists("reclin_env")) reclin_env <<- environment()
     # TODO: warnings are not returned to main
@@ -26,5 +27,4 @@ cluster_pair_blocking <- function(cluster, x, y, on, name = "default") {
   structure(list(cluster = cluster, name = name), class = "cluster_pairs", 
     blocking_on = on)
 }
-
 

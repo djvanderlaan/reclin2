@@ -1,7 +1,8 @@
 
+# @export
 cluster_pair <- function(cluster, x, y, name = "default") {
-  x <- as.data.table(x)
-  y <- as.data.table(y)
+  x <- data.table::as.data.table(x)
+  y <- data.table::as.data.table(y)
   # Split x into a length(cluster) groups
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*length(cl))
   group <- sample(group)
@@ -9,9 +10,9 @@ cluster_pair <- function(cluster, x, y, name = "default") {
   x <- split(x, group)
   for (i in seq_along(x)) x[[i]]$.id <- idx[[i]]
   # Copy data to cluster
-  clusterApply(cluster, x, function(name, x, y) {
-    library(data.table)
-    library(stringdist)
+  parallel::clusterApply(cluster, x, function(name, x, y) {
+    library(data.table)  #TODO
+    library(stringdist)  #TODO
     files <- list.files("R", "*.R", full.names = TRUE)
     for (file in files) source(file)
     # environment in which to store all data

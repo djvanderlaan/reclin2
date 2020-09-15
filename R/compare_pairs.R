@@ -1,11 +1,13 @@
 
 
+# @export
 compare_pairs <- function(pairs, on, comparators = list(default_comparator), 
     default_comparator = identical(), ...) {
   UseMethod("compare_pairs", pairs)
 }
 
 
+# @export
 compare_pairs.pairs <- function(pairs, on, 
     comparators = list(default_comparator), default_comparator = identical(), 
     overwrite = FALSE) {
@@ -30,5 +32,4 @@ compare_pairs.pairs <- function(pairs, on,
   attr(pairs, "comparators") <- comparators
   pairs
 }
-
 

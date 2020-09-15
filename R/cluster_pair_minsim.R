@@ -1,8 +1,10 @@
+
+# @export
 cluster_pair_minsim<- function(cluster, x, y, on, minsim = 0.0, 
     comparators = list(default_comparator), default_comparator = identical(), 
     keep_simsum = TRUE, name = "default") {
-  x <- as.data.table(x)
-  y <- as.data.table(y)
+  x <- data.table::as.data.table(x)
+  y <- data.table::as.data.table(y)
   # Split x into a length(cluster) groups
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*length(cl))
   group <- sample(group)
@@ -10,13 +12,13 @@ cluster_pair_minsim<- function(cluster, x, y, on, minsim = 0.0,
   x <- split(x, group)
   for (i in seq_along(x)) x[[i]]$.id <- idx[[i]]
   # Copy data to cluster
-  clusterApply(cluster, x, function(name, x, y, on, minsim = minsim, 
+  parallel::clusterApply(cluster, x, function(name, x, y, on, minsim = minsim, 
       comparators = comparators, default_comparator = default_comparator, 
       keep_simsum = keep_simsum) {
-    library(data.table)
-    library(stringdist)
-    files <- list.files("R", "*.R", full.names = TRUE)
-    for (file in files) source(file)
+    library(data.table) # TODO
+    library(stringdist) # TODO
+    files <- list.files("R", "*.R", full.names = TRUE) # TODO
+    for (file in files) source(file) # TODO
     # environment in which to store all data
     if (!exists("reclin_env")) reclin_env <<- environment()
     # TODO: warnings are not returned to main

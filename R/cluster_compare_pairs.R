@@ -1,11 +1,10 @@
 
-
-
+# @export
 compare_pairs.cluster_pairs <- function(pairs, on, 
     comparators = list(default_comparator), default_comparator = identical(), 
     overwrite = FALSE, new_name = NULL) {
   
-  tmp <- clusterCall(pairs$cluster, function(name, on, comparators, 
+  tmp <- parallel::clusterCall(pairs$cluster, function(name, on, comparators, 
       default_comparator, overwrite, new_name) {
     env <- reclin_env[[name]]
     pairs <- env$pairs

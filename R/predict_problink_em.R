@@ -23,8 +23,6 @@
 #' m- and u probabilities. In case \code{type == "all"} returns a \code{data.frame} or 
 #' \code{\link{ldat}} with both probabilities and weights. 
 #' 
-#' @import ldat
-#' @import lvec
 #' @export
 predict.problink_em <- function(object, pairs = newdata, newdata = NULL, 
     type = c("weights", "mpost", "probs", "all"), binary = FALSE, 
@@ -72,7 +70,7 @@ predict_problinkem.pairs <- function(pairs, model, type, binary, comparators) {
     mprobs * model$p / (mprobs * model$p + uprobs * (1 - model$p))
   } else {
     mpost <- mprobs * model$p / (mprobs * model$p + uprobs * (1 - model$p))
-    res <- data.table(mprob = mprobs, uprob = uprobs, mpost = mpost, 
+    res <- data.table::data.table(mprob = mprobs, uprob = uprobs, mpost = mpost, 
         upost = 1 - mpost)
     if (type == "all") res$weight <- weights
     res
@@ -83,7 +81,7 @@ predict_problinkem.pairs <- function(pairs, model, type, binary, comparators) {
 predict_problink.cluster_pairs <- function(pairs, model, type, binary, 
       comparators) {
   
-  tmp <- clusterCall(pairs$cluster, function(name, model, type, binary, 
+  tmp <- parallel::clusterCall(pairs$cluster, function(name, model, type, binary, 
       comparators) {
     env <- reclin_env[[name]]
     pairs <- env$pairs
