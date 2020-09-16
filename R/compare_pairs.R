@@ -1,16 +1,16 @@
 
 
-# @export
+#' @export
 compare_pairs <- function(pairs, on, comparators = list(default_comparator), 
     default_comparator = identical(), ...) {
   UseMethod("compare_pairs", pairs)
 }
 
 
-# @export
+#' @export
 compare_pairs.pairs <- function(pairs, on, 
     comparators = list(default_comparator), default_comparator = identical(), 
-    overwrite = FALSE) {
+    overwrite = FALSE, ...) {
   # Process and preparare input
   x <- attr(pairs, "x")
   y <- attr(pairs, "y")

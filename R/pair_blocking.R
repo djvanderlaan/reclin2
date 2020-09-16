@@ -1,9 +1,10 @@
 
 
-# @export
+#' @import data.table
+#' @export
 pair_blocking <- function(x, y, on, cluster = NULL, add_xy = TRUE) {
-  x <- data.table::as.data.table(x)
-  y <- data.table::as.data.table(y)
+  x <- as.data.table(x)
+  y <- as.data.table(y)
   if (!missing(cluster) && !is.null(cluster))
     return(cluster_pair_blocking(cluster, x, y, on))
   a <- x[, ..on]

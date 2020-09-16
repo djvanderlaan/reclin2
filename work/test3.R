@@ -1,8 +1,9 @@
+library(devtools)
+load_all()
 
-library(data.table)
-library(stringdist)
 
-source("random_data.R")
+
+source("work/random_data.R")
 
 n <- 5000
 dta <- random_data(n1 = n, n2 = n*0.8, overlap = 0.2)
@@ -11,11 +12,10 @@ x <- as.data.table(dta[[1]])
 y <- as.data.table(dta[[2]])
 
 
-files <- list.files("R", "*.R", full.names = TRUE)
-for (file in files) source(file)
+#files <- list.files("R", "*.R", full.names = TRUE)
+#for (file in files) source(file)
 
 
-library(parallel)
 cl <- makeCluster(4)
 
 # pairs <- pair(x, y)

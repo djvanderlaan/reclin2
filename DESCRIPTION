@@ -14,9 +14,9 @@ URL: https://github.com/djvanderlaan/reclin2
 Depends:
     stats,
     parallel,
+    data.table,
     R (>= 4.0.0)
 Imports:
-    data.table,
     stringdist,
     utils,
     methods,

@@ -1,8 +1,9 @@
-
-# @export
+#' @importFrom parallel clusterApply
+#' @import data.table
+#' @export
 cluster_pair <- function(cluster, x, y, name = "default") {
-  x <- data.table::as.data.table(x)
-  y <- data.table::as.data.table(y)
+  x <- as.data.table(x)
+  y <- as.data.table(y)
   # Split x into a length(cluster) groups
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*length(cl))
   group <- sample(group)
@@ -10,11 +11,9 @@ cluster_pair <- function(cluster, x, y, name = "default") {
   x <- split(x, group)
   for (i in seq_along(x)) x[[i]]$.id <- idx[[i]]
   # Copy data to cluster
-  parallel::clusterApply(cluster, x, function(name, x, y) {
-    library(data.table)  #TODO
-    library(stringdist)  #TODO
-    files <- list.files("R", "*.R", full.names = TRUE)
-    for (file in files) source(file)
+  clusterApply(cluster, x, function(name, x, y) {
+    if (!require("reclin2"))
+      stop("reclin2 needs to be installed on cluster nodes.")
     # environment in which to store all data
     if (!exists("reclin_env")) reclin_env <<- environment()
     # TODO: warnings are not returned to main

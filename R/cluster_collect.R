@@ -1,9 +1,11 @@
 
 
+#' @importFrom parallel clusterCall
+#' @import data.table
 #' @export
 cluster_collect <- function(pairs, clear = FALSE) {
   # Collect pairs
-  tmp <- parallel::clusterCall(pairs$cluster, function(name, clear) {
+  tmp <- clusterCall(pairs$cluster, function(name, clear) {
     env <- reclin_env[[name]]
     pairs <- env$pairs
     x <- attr(pairs, "x")
@@ -14,10 +16,10 @@ cluster_collect <- function(pairs, clear = FALSE) {
     }
     pairs
   }, name = pairs$name, clear = clear)
-  p <- data.table::rbindlist(tmp)
+  p <- rbindlist(tmp)
   # x has been split; combine again into one dataset and add to pairs
   x <- lapply(tmp, function(d) attr(d, "x"))
-  x <- data.table::rbindlist(x)
+  x <- rbindlist(x)
   attr(p, "x") <- x
   # Build a list of attributes we want to copy from the data.tables in tmp to 
   # the new pairs list

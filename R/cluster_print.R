@@ -1,7 +1,9 @@
 
+#' @importFrom parallel clusterCall
+#' @import data.table
 #' @export
 print.cluster_pairs <- function(x, ...) {
-  res <- parallel::clusterCall(clpairs$cluster, function(name) {
+  res <- clusterCall(clpairs$cluster, function(name) {
     env <- reclin_env[[name]]
     pairs <- env$pairs
     nx <- nrow(attr(pairs, "x"))
@@ -10,11 +12,10 @@ print.cluster_pairs <- function(x, ...) {
     pairs <- pairs[sample(nrow(pairs), min(nrow(pairs), 5)), ]
     x <- attr(pairs, "x")
     pairs$.x <- x$.id[pairs$.x]
-    pairs  # TODO: necessary?
     list(nx = nx, ny = ny, np = np, pairs = pairs)
   }, name = clpairs$name)
   
-  pairs <- data.table::rbindlist(lapply(res, function(d) d$pairs))
+  pairs <- rbindlist(lapply(res, function(d) d$pairs))
   nx <- sum(sapply(res, function(d) d$nx))
   ny <- head(sapply(res, function(d) d$ny), 1)
   np <- sum(sapply(res, function(d) d$np))

@@ -1,11 +1,14 @@
 
-# @export
+#' @importFrom parallel clusterCall
+#' @export
 compare_pairs.cluster_pairs <- function(pairs, on, 
     comparators = list(default_comparator), default_comparator = identical(), 
-    overwrite = FALSE, new_name = NULL) {
+    overwrite = FALSE, new_name = NULL, ...) {
   
-  tmp <- parallel::clusterCall(pairs$cluster, function(name, on, comparators, 
+  tmp <- clusterCall(pairs$cluster, function(name, on, comparators, 
       default_comparator, overwrite, new_name) {
+    if (!require("reclin2"))
+      stop("reclin2 needs to be installed on cluster nodes.")
     env <- reclin_env[[name]]
     pairs <- env$pairs
     if (!is.null(new_name)) {
