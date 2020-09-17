@@ -15,11 +15,11 @@ cluster_pair <- function(cluster, x, y, name = "default") {
     if (!require("reclin2"))
       stop("reclin2 needs to be installed on cluster nodes.")
     # environment in which to store all data
-    if (!exists("reclin_env")) reclin_env <<- environment()
+    if (!exists("reclin_env")) reclin_env <<- new.env()
     # TODO: warnings are not returned to main
     if (exists(name, envir = reclin_env)) 
       warning("'", name, "' already exists; overwriting.")
-    reclin_env[[name]] <- environment()
+    reclin_env[[name]] <- new.env()
     reclin_env[[name]]$pairs <- pair(x, y)
     TRUE
   }, name = name, y = y)

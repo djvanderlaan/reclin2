@@ -12,7 +12,7 @@ compare_pairs.cluster_pairs <- function(pairs, on,
     env <- reclin_env[[name]]
     pairs <- env$pairs
     if (!is.null(new_name)) {
-      reclin_env[[new_name]] <- environment()
+      reclin_env[[new_name]] <- new.env()
       env <- reclin_env[[new_name]]
     }
     env$pairs <- compare_pairs(env$pairs, on = on, comparators = comparators, 
