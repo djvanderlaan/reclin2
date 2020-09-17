@@ -87,8 +87,16 @@ predict_problink.cluster_pairs <- function(pairs, model, type, binary,
       comparators) {
     env <- reclin_env[[name]]
     pairs <- env$pairs
+    
     p <- predict(model, newdata = pairs, type = type, binary = binary, 
       comparators = comparators)
+
+    # if (!is.null(new_name)) {
+    #   reclin_env[[new_name]] <- environment()
+    #   env <- reclin_env[[new_name]]
+    # }
+    # env$pairs <- compare_pairs(env$pairs, on = on, comparators = comparators, 
+    #   default_comparator = default_comparator, overwrite = overwrite)
   }, name = pairs$name, model = model, type = type, binary = binary, 
     comparators = comparators)
 }
