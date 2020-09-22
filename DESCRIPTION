@@ -15,7 +15,7 @@ Depends:
     stats,
     parallel,
     data.table,
-    R (>= 4.0.0)
+    R (>= 3.6.0)
 Imports:
     stringdist,
     utils,
