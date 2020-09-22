@@ -38,12 +38,12 @@ predict.problink_em <- function(object, pairs = newdata, newdata = NULL,
 
 
 
-predict_problinkem <- function(pairs, model, type, binary, comparators) {
+predict_problinkem <- function(pairs, model, type, binary, comparators, ...) {
   UseMethod("predict_problinkem")
 }
 
 #' @import data.table
-predict_problinkem.pairs <- function(pairs, model, type, binary, comparators) {
+predict_problinkem.pairs <- function(pairs, model, type, binary, comparators, ...) {
   on <- names(model$mprobs)
   # Initialise end result and for-loop
   weights <- rep(0, nrow(pairs))
@@ -65,31 +65,46 @@ predict_problinkem.pairs <- function(pairs, model, type, binary, comparators) {
     uprobs  <- uprobs * pu
   }
   # Construct end result
+  res <- pairs[, .(.x, .y)]
   if (type == "weights") {
-   weights 
+    res[, weights := weights]
   } else if (type == "mpost") {
-    mprobs * model$p / (mprobs * model$p + uprobs * (1 - model$p))
+    res[, mpost := mprobs * model$p / (mprobs * model$p + uprobs * (1 - model$p))]
   } else {
-    mpost <- mprobs * model$p / (mprobs * model$p + uprobs * (1 - model$p))
-    res <- data.table(mprob = mprobs, uprob = uprobs, mpost = mpost, 
-        upost = 1 - mpost)
-    if (type == "all") res$weight <- weights
-    res
+    res[, mprob := mprobs]
+    res[, uprob := uprobs]
+    res[, mpost := mprobs * model$p / (mprobs * model$p + uprobs * (1 - model$p))]
+    res[, upost := 1 - mpost]
+    if (type == "all") res[,  weight := weights]
   } 
+  res
 }
 
 
 #' @importFrom parallel clusterCall
-predict_problink.cluster_pairs <- function(pairs, model, type, binary, 
-      comparators) {
+predict_problinkem.cluster_pairs <- function(pairs, model, type, binary, 
+      comparators, new_name = NULL, ...) {
   
   tmp <- clusterCall(pairs$cluster, function(name, model, type, binary, 
-      comparators) {
+      comparators, new_name) {
+    if (!require("reclin2"))
+      stop("reclin2 needs to be installed on cluster nodes.")
     env <- reclin_env[[name]]
     pairs <- env$pairs
+    if (!is.null(new_name)) {
+      reclin_env[[new_name]] <- new.env()
+      env <- reclin_env[[new_name]]
+    }
     p <- predict(model, newdata = pairs, type = type, binary = binary, 
       comparators = comparators)
+    # TODO
+    # Example how compare_pairs handles new_name
+    # env$pairs <- compare_pairs(env$pairs, on = on, comparators = comparators, 
+    #   default_comparator = default_comparator, overwrite = overwrite)
   }, name = pairs$name, model = model, type = type, binary = binary, 
-    comparators = comparators)
+    comparators = comparators, new_name = new_name)
+
+  if (!missing(new_name) && !is.null(new_name)) pairs$name <- new_name
+  pairs
 }
 
