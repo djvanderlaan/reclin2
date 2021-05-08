@@ -98,8 +98,12 @@ summary.problink_em <- function(object, ...) {
   # calculate the posterior probabilities
   m_prob <- rep(1, nrow(object$patterns))
   u_prob <- rep(1, nrow(object$patterns))
+  w <- rep(0, nrow(object$patterns))
   for (col in names(object$mprobs)) {
     m <- object$patterns[[col]]
+    pm <- (1 - object$mprobs[[col]]) + (2*object$mprobs[[col]]-1)*m
+    pu <- (1 - object$uprobs[[col]]) + (2*object$uprobs[[col]]-1)*m
+    w <- w + log(pm/pu)
     m_prob <- m_prob * ifelse(m, object$mprobs[[col]], 1-object$mprobs[[col]])
     u_prob <- u_prob * ifelse(m, object$uprobs[[col]], 1-object$uprobs[[col]])
   }
@@ -110,6 +114,7 @@ summary.problink_em <- function(object, ...) {
   object$patterns$m_post <- m_post
   object$patterns$u_post <- u_post
   object$patterns$weight <- log(m_prob) - log(u_prob)
+  object$patterns$weight <- w
   # return orignal model with additional stats
   structure(object, class="summary_problink_em")
 }

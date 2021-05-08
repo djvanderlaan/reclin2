@@ -49,12 +49,13 @@ pairs <- compare_pairs(pairs, on = names(x)[1:8], comparators = list(
 })
 
 system.time({
-clpairs <- compare_pairs(clpairs, on = names(x)[1:8], comparators = list(
+clpairs <- compare_pairs(clpairs, on = setdiff(names(x)[1:8], "postcode"), comparators = list(
   last_name = jaro_winkler(),
   street = jaro_winkler()
 ), overwrite = TRUE)
 })
 
+names(x)[1:8]
 
 
 # foo <- compare_pairs(clpairs, on = names(x)[1:4], comparators = list(
@@ -79,4 +80,4 @@ tabs
 m <- problink_em(clpairs)
 summary(m)
 
-
+m
