@@ -4,12 +4,9 @@
 #' @export
 pair_minsim <- function(x, y, on, minsim = 0.0, 
     comparators = list(default_comparator), default_comparator = identical(), 
-    cluster = NULL, keep_simsum = TRUE, add_xy = TRUE) {
+    keep_simsum = TRUE, add_xy = TRUE) {
   x <- as.data.table(x)
   y <- as.data.table(y)
-  if (!missing(cluster) && !is.null(cluster))
-    return(cluster_pair_minsim(cluster, x, y, on, minsim, comparators, 
-      default_comparator))
   comparators <- extend_to(on, comparators, default = default_comparator) 
   ny <- nrow(y)
   nx <- nrow(x)

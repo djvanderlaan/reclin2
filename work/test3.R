@@ -12,33 +12,74 @@ x <- as.data.table(dta[[1]])
 y <- as.data.table(dta[[2]])
 
 
-#files <- list.files("R", "*.R", full.names = TRUE)
-#for (file in files) source(file)
+# =============================================================================
+# Different methods for generating pairs
 
-
-cl <- makeCluster(4)
-
-# pairs <- pair(x, y)
-
-# pairs <- pair_blocking(x, y, on = c("postcode"))
+system.time({
+  pairs <- pair(x, y)
+})
+nrow(pairs)
 
 system.time({
   pairs <- pair_minsim(x, y, on = names(x)[1:8], minsim = 2)
-  nrow(pairs)
 })
+nrow(pairs)
 
 system.time({
   pairs <- pair_blocking(x, y, on = "postcode")
 })
+nrow(pairs)
+
+# =============================================================================
+# Compare pairs on variables
+
+foo <- function(a, b) {
+  data.table(
+    jw = jaro_winkler()(a,b),
+    ja = jaccard()(a,b)
+  )
+}
 
 
-system.time({
-  clpairs <- cluster_pair_minsim(cluster = cl, x, y, on = names(x)[1:8], minsim = 2)
-})
+compare_vars <- function(pairs, variable, x_vars, y_vars = x_vars, fun = identical(), 
+    x = attr(pairs, 'x'), y = attr(pairs, 'y')) {
+  if (missing(x_vars) && missing(y_vars)) { 
+    x_vars <- variable
+    y_vars <- variable
+  }
+  xv <- x[pairs$.x, ..x_vars]
+  yv <- y[pairs$.y, ..y_vars]
+  # Compare
+  res <- if (ncol(xv) == 1 && ncol(yv) == 1) 
+    fun(xv[[1]], yv[[1]]) else fun(xv, yv)
+  # Assign result of comparison to pairs
+  if (is.data.table(res)) {
+    for (col in names(res)) {
+      v <- paste0(variable, "_", col)
+      pairs[[v]] <- res[[col]]
+    }
+  } else {
+    pairs[[variable]] <- res
+  }
+  # Todo store comparison function and variables on which was compared
+  pairs
+}
 
-system.time({
-  clpairs <- cluster_pair_blocking(cluster = cl, x, y, on = "postcode")
-})
+pairs <- compare_vars(pairs, "first_name")
+
+pairs <- compare_vars(pairs, "foo", x_vars = "first_name")
+
+pairs <- compare_vars(pairs, "first_name", fun = jaro_winkler())
+
+foo <- function(x, y) {
+  cmp <- jaro_winkler()
+  c1 <- cmp(x[[1]], y[[1]]) + cmp(x[[2]], y[[2]])
+  c2 <- cmp(x[[1]], y[[2]]) + cmp(x[[2]], y[[1]])
+  pmax(c1, c2)
+}
+
+pairs <- compare_vars(pairs, "foo", x_vars = c("first_name", "last_name"), fun = foo)
+
 
 
 system.time({
@@ -48,14 +89,6 @@ pairs <- compare_pairs(pairs, on = names(x)[1:8], comparators = list(
 ))
 })
 
-system.time({
-clpairs <- compare_pairs(clpairs, on = setdiff(names(x)[1:8], "postcode"), comparators = list(
-  last_name = jaro_winkler(),
-  street = jaro_winkler()
-), overwrite = TRUE)
-})
-
-names(x)[1:8]
 
 
 # foo <- compare_pairs(clpairs, on = names(x)[1:4], comparators = list(

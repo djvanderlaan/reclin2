@@ -13,7 +13,6 @@ Description: Functions to assist in performing probabilistic record linkage and
 URL: https://github.com/djvanderlaan/reclin2
 Depends:
     stats,
-    parallel,
     data.table,
     R (>= 3.6.0)
 Imports:
@@ -26,4 +25,5 @@ LinkingTo: Rcpp
 SystemRequirements: C++11
 License: GPL-3
 LazyLoad: yes
+Encoding: UTF-8
 RoxygenNote: 7.1.1

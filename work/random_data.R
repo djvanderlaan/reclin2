@@ -64,10 +64,6 @@ error_record_replace <- function(x, perr = 1) {
   }
 }
 
-
-
-
-
 random_data <- function(n1, n2, overlap, perr = 0.05) {
   n <- n1 + overlap*n2
   nhh <- n / 4

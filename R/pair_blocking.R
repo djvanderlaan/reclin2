@@ -2,11 +2,9 @@
 
 #' @import data.table
 #' @export
-pair_blocking <- function(x, y, on, cluster = NULL, add_xy = TRUE) {
+pair_blocking <- function(x, y, on, add_xy = TRUE) {
   x <- as.data.table(x)
   y <- as.data.table(y)
-  if (!missing(cluster) && !is.null(cluster))
-    return(cluster_pair_blocking(cluster, x, y, on))
   a <- x[, ..on]
   a$.x <- seq_len(nrow(a))
   b <- y[, ..on]

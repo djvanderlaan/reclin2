@@ -80,31 +80,3 @@ predict_problinkem.pairs <- function(pairs, model, type, binary, comparators, ..
   res
 }
 
-
-#' @importFrom parallel clusterCall
-predict_problinkem.cluster_pairs <- function(pairs, model, type, binary, 
-      comparators, new_name = NULL, ...) {
-  
-  tmp <- clusterCall(pairs$cluster, function(name, model, type, binary, 
-      comparators, new_name) {
-    if (!require("reclin2"))
-      stop("reclin2 needs to be installed on cluster nodes.")
-    env <- reclin_env[[name]]
-    pairs <- env$pairs
-    if (!is.null(new_name)) {
-      reclin_env[[new_name]] <- new.env()
-      env <- reclin_env[[new_name]]
-    }
-    p <- predict(model, newdata = pairs, type = type, binary = binary, 
-      comparators = comparators)
-    # TODO
-    # Example how compare_pairs handles new_name
-    # env$pairs <- compare_pairs(env$pairs, on = on, comparators = comparators, 
-    #   default_comparator = default_comparator, overwrite = overwrite)
-  }, name = pairs$name, model = model, type = type, binary = binary, 
-    comparators = comparators, new_name = new_name)
-
-  if (!missing(new_name) && !is.null(new_name)) pairs$name <- new_name
-  pairs
-}
-

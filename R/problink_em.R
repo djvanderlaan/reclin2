@@ -34,7 +34,7 @@
 #' @export
 problink_em <- function(patterns, mprobs0 = list(0.95), uprobs0 = list(0.02), 
     p0 = 0.05, tol = 1E-5) {
-  if (methods::is(patterns, "pairs") || methods::is(patterns, "cluster_pairs")) {
+  if (methods::is(patterns, "pairs")) {
     by <- attr(patterns, "compare_on")
     patterns <- tabulate_patterns(patterns, complete = TRUE)
   } else {
