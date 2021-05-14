@@ -1,7 +1,6 @@
 #!/bin/bash
 
 function build {
-  copy_lib
   document
   echo "Building package"
   R CMD build ./
@@ -25,7 +24,6 @@ function document {
 }
 
 function test {
-  copy_lib
   echo "Running tests"
   for file in tests/test*; do \
     Rscript -e "devtools::load_all(); source('$file')";\
