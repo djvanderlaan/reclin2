@@ -5,11 +5,15 @@
 \title{Calculate EM-estimates of m- and u-probabilities}
 \usage{
 problink_em(
+  formula,
+  data,
   patterns,
   mprobs0 = list(0.95),
   uprobs0 = list(0.02),
   p0 = 0.05,
-  tol = 1e-05
+  tol = 1e-05,
+  mprob_max = 0.999,
+  uprob_min = 1e-04
 )
 }
 \arguments{
@@ -25,6 +29,12 @@ should correspond to the names in \code{by_x} in \code{\link{compare_pairs}}.}
 
 \item{tol}{when the change in the m and u-probabilities is smaller than \code{tol}
 the algorithm is stopped.}
+
+\item{mprob_max}{maximum values of the estimated m-probabilities. Values equal to
+one can lead to numerical instabilities.}
+
+\item{uprob_min}{maximum values of the estimated m-probabilities. Values equal to
+zero can lead to numerical instabilities.}
 }
 \value{
 Returns an object of type \code{problink_em}. This is a list containing the

@@ -10,6 +10,10 @@
 #' @param p0 the initial estimate of the probability that a pair is a match.
 #' @param tol when the change in the m and u-probabilities is smaller than \code{tol}
 #'   the algorithm is stopped. 
+#' @param mprob_max maximum values of the estimated m-probabilities. Values equal to
+#'   one can lead to numerical instabilities.
+#' @param uprob_min maximum values of the estimated m-probabilities. Values equal to
+#'   zero can lead to numerical instabilities.
 #'   
 #' @return 
 #' Returns an object of type \code{problink_em}. This is a list containing the
@@ -32,14 +36,20 @@
 #' summary(model)
 #'
 #' @export
-problink_em <- function(patterns, mprobs0 = list(0.95), uprobs0 = list(0.02), 
-    p0 = 0.05, tol = 1E-5) {
-  if (methods::is(patterns, "pairs")) {
-    by <- attr(patterns, "compare_on")
-    patterns <- tabulate_patterns(patterns, complete = TRUE)
-  } else {
-    by <- utils::head(names(patterns), -1)
+problink_em <- function(formula, data, patterns, mprobs0 = list(0.95), 
+    uprobs0 = list(0.02), p0 = 0.05, tol = 1E-5, mprob_max = 0.999, 
+    uprob_min = 0.0001) {
+  if (missing(formula) && !missing(patterns)) {
+    formula = as.formula(paste0("~", paste0(head(names(patterns), -1), 
+      collapse ="+")))
   }
+  by <- if (length(formula) == 3) all.vars(formula[[3]]) else 
+    all.vars(formula)
+  if (!missing(data)) {
+    stopifnot(all(by %in% names(data)))
+    patterns <- tabulate_patterns(data, on = by, complete = TRUE)
+  } 
+  stopifnot(all(by %in% names(patterns)))
   # check and process input
   mprobs0 <- extend_to(by, mprobs0, 0.95)
   uprobs0 <- extend_to(by, uprobs0, 0.05)
@@ -67,8 +77,9 @@ problink_em <- function(patterns, mprobs0 = list(0.95), uprobs0 = list(0.02),
     for (col in by) {
       m             <- patterns[[col]]
       mprobs[[col]] <- sum(patterns$n*gm*m) / sum(patterns$n*gm)
+      if (mprobs[[col]] > mprob_max) mprobs[[col]] <- mprob_max
       uprobs[[col]] <- sum(patterns$n*gu*m) / sum(patterns$n*gu)
-      
+      if (uprobs[[col]] < uprob_min) uprobs[[col]] <- uprob_min
     }
     # check convergence
     eps <- 0
@@ -85,7 +96,6 @@ problink_em <- function(patterns, mprobs0 = list(0.95), uprobs0 = list(0.02),
   structure(list(mprobs=mprobs, uprobs=uprobs, p=p, patterns=patterns), 
     class="problink_em")
 }
-
 
 
 #' Summarise the results from \code{\link{problink_em}}
