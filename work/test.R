@@ -42,14 +42,41 @@ compare_pairs(pairs, vars, inplace = TRUE,
   comparators = list(last_name = jaro_winkler(0.85) ))
 
 
+# =============================================================================
+# Estimate EM-model and calculate weights
+
 tab <- tabulate_patterns(pairs, on = vars)
 
 
 f <- formula(~ last_name + street + number + first_name + dob_dy)
-
 
 m <- problink_em(f, patterns = tab)
 summary(m)
 
 f <- as.formula(paste0("~", paste0(vars, collapse = "+")))
 m <- problink_em(f, data = pairs)
+
+p <- predict(m, pairs = pairs, type = "all")
+# Add the predictions to the original pairs
+# TODO: do we need to put this functionality in predict as this is something 
+# that will be commonly done?
+pairs <- pairs[p, on = c(".x", ".y")]
+
+
+
+
+# Select pairs for linkage ------------------------------------------------
+
+select_threshold(pairs, "selected", "mpost", 0.0001, inplace = TRUE)
+
+select_greedy(pairs, "selected_greedy", "weight", preselect = "selected", 
+  inplace = TRUE)
+
+table(pairs$selected, pairs$selected_greedy)
+
+select_n_to_m(pairs, "selected_ntom", "weight", preselect = "selected", 
+  inplace = TRUE)
+
+table(pairs$selected, pairs$selected_ntom)
+
+

@@ -27,6 +27,7 @@
 #' Returns the \code{data.table} \code{pairs} with one or more columns added. 
 #' 
 #' @export
+#' 
 compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x, comparator = identical(), 
     x = attr(pairs, 'x'), y = attr(pairs, 'y'), inplace = FALSE) {
   xv <- x[pairs$.x, ..on_x]
@@ -46,7 +47,7 @@ compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x, comparat
   } else {
     if (inplace) pairs[, (variable) := res] else pairs[[variable]] <- res
   }
-  # Todo store comparison function and variables on which was compared
+  # TODO store comparison function and variables on which was compared
   if (inplace) invisible(pairs) else pairs
 }
 
