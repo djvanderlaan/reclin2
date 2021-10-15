@@ -7,7 +7,7 @@ tabulate_patterns <- function(pairs, on, comparators, complete = TRUE, ...) {
     # when using compare_vars or compare_pairs, the comparator is stored
     # as an attribute in the column; retreive those
     comparators <- lapply(pairs, attr, which = "comparator")
-    # remove elements with comparator
+    # remove elements without comparator
     comparators <- comparators[!sapply(comparators, is.null)]
   }
   if (missing(on) || is.null(on)) on <- names(comparators)
@@ -20,6 +20,8 @@ tabulate_patterns <- function(pairs, on, comparators, complete = TRUE, ...) {
     # want to modify the original dataset
   }
   tab <- pairs[, .(n = .N), by = on]
+  # Remove the pairs class; tab is no longer a set of pairs
+  class(tab) <- setdiff(class(tab), "pairs")
   # Add patterns not present in dataset
   if (complete) {
     possible_patterns <- lapply(tab[, ..on], function(x) {

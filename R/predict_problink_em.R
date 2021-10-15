@@ -10,40 +10,48 @@
 #'   See results for more information.
 #' @param binary convert comparison vectors to binary vectors using the 
 #'   comparison function in comparators. 
+#' @param add add the predictions to the original pairs object
 #' @param comparators a list of comparison functions (see \code{\link{compare_pairs}}). 
 #'   When missing \code{attr(pairs, 'comparators')} is used. 
 #' @param ... unused.
 #'   
 #' @return 
-#' In case of \code{type == "weights"} returns a vector (\code{\link{lvec}} or
-#' regular R-vector depending on the type of \code{pairs}). with the linkage weights. 
-#' In case of \code{type == "mpost"} returns a vector with the posterior m-probabilities
-#' (probability that a pair is a match). In case of \code{type == "probs"} returns a
-#' data.frame or \code{\link{ldat}} with the m- and u-probabilities and posterior
-#' m- and u probabilities. In case \code{type == "all"} returns a \code{data.frame} or 
-#' \code{\link{ldat}} with both probabilities and weights. 
+#' Returns a data.table with either the \code{.x} and \code{.y} columns from 
+#' \code{pairs} (when \code{add = FALSE}) or all columns of \code{pairs}. To these 
+#' columns are added: 
+#'
+#' \itemize{
+#' \item In case of \code{type = "weights"} a column \code{weights} with the calculated
+#'   weights.
+#' \item In case of \code{type = "mpost"} a column \code{mpost} with the calculated
+#'   posterior probabilities (probability that pair is a match given comparison vector.
+#' \item In case of \code{type = "prob"} the columns \code{mprob} and \code{uprob} with the
+#'   m and u-probabilites and \code{mpost} and \code{upost} with the posterior m- and
+#'   u-probabilities.
+#' \item In case of \code{type = "all"} all of the above.
+#' }
 #' 
 #' @export
 predict.problink_em <- function(object, pairs = newdata, newdata = NULL, 
     type = c("weights", "mpost", "probs", "all"), binary = FALSE, 
-    comparators, ...) {
+    add = FALSE, comparators, ...) {
   # Process input
   type <- match.arg(type)
   if (is.null(pairs)) pairs <- newdata
   if (is.null(pairs)) stop("Missing pairs or newdata.")
   if (missing(comparators)) comparators <- attr(pairs, "comparators")
   # Initialise end result and for-loop
-  predict_problinkem(pairs, object, type, binary, comparators) 
+  predict_problinkem(pairs, object, type, binary, add, comparators) 
 }
 
 
 
-predict_problinkem <- function(pairs, model, type, binary, comparators, ...) {
+predict_problinkem <- function(pairs, model, type, binary, add, comparators, ...) {
   UseMethod("predict_problinkem")
 }
 
 #' @import data.table
-predict_problinkem.pairs <- function(pairs, model, type, binary, comparators, ...) {
+predict_problinkem.pairs <- function(pairs, model, type, binary, add, comparators, ...) {
   on <- names(model$mprobs)
   # Initialise end result and for-loop
   weights <- rep(0, nrow(pairs))
@@ -65,7 +73,7 @@ predict_problinkem.pairs <- function(pairs, model, type, binary, comparators, ..
     uprobs  <- uprobs * pu
   }
   # Construct end result
-  res <- pairs[, .(.x, .y)]
+  res <- if (add) pairs else pairs[, .(.x, .y)]
   if (type == "weights") {
     res[, weights := weights]
   } else if (type == "mpost") {
