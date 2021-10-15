@@ -52,6 +52,7 @@ predict_problinkem <- function(pairs, model, type, binary, add, comparators, ...
 
 #' @import data.table
 predict_problinkem.pairs <- function(pairs, model, type, binary, add, comparators, ...) {
+  .x <- .y <- mpost <- mprob <- uprob <- upost <- weight <- NULL # To suppress R CMD check notes
   on <- names(model$mprobs)
   # Initialise end result and for-loop
   weights <- rep(0, nrow(pairs))
@@ -73,7 +74,7 @@ predict_problinkem.pairs <- function(pairs, model, type, binary, add, comparator
     uprobs  <- uprobs * pu
   }
   # Construct end result
-  res <- if (add) pairs else pairs[, .(.x, .y)]
+  res <- if (add) pairs else pairs[, list(.x, .y)]
   if (type == "weights") {
     res[, weights := weights]
   } else if (type == "mpost") {

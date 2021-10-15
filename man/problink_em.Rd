@@ -17,9 +17,14 @@ problink_em(
 )
 }
 \arguments{
-\item{patterns}{either a table of patterns (as output by 
-\code{\link{tabulate_patterns}}) or pairs with comparison columns (as 
-output by \code{\link{compare_pairs}}).}
+\item{formula}{a formula object with the variables for which to calculate the
+m-  and u-probabilities. Should be of the form \code{~ var1 + var2}.}
+
+\item{data}{data set with pairs on which to estimate the model. Alternatively
+one can use the \code{patterns} argument.}
+
+\item{patterns}{table of patterns (as output by 
+\code{\link{tabulate_patterns}}).}
 
 \item{mprobs0, uprobs0}{initial values of the m- and u-probabilities. These
 should be lists with numeric values. The names of the elements in the list

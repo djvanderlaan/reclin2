@@ -30,6 +30,7 @@
 #' 
 compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x, comparator = identical(), 
     x = attr(pairs, 'x'), y = attr(pairs, 'y'), inplace = FALSE) {
+  ..on_x <- ..on_y <- NULL  # To suppress R CMD check warnings
   xv <- x[pairs$.x, ..on_x]
   yv <- y[pairs$.y, ..on_y]
   # Compare

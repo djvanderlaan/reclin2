@@ -6,7 +6,7 @@ load_all()
 source("work/random_data.R")
 
 n <- 5000
-dta <- random_data(n1 = n, n2 = n*0.8, overlap = 0.2)
+dta <- random_data(n1 = n, n2 = n*0.8, overlap = 0.2, perr = 0.2)
 
 x <- as.data.table(dta[[1]])
 y <- as.data.table(dta[[2]])
@@ -71,6 +71,7 @@ select_n_to_m(pairs, "selected_ntom", "weight", preselect = "selected",
   inplace = TRUE)
 
 table(pairs$selected, pairs$selected_ntom)
+
 
 
 # =============================================================================

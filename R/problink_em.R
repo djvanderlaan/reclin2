@@ -1,9 +1,12 @@
 
 #' Calculate EM-estimates of m- and u-probabilities
 #'
-#' @param patterns either a table of patterns (as output by 
-#'   \code{\link{tabulate_patterns}}) or pairs with comparison columns (as 
-#'   output by \code{\link{compare_pairs}}).
+#' @param formula a formula object with the variables for which to calculate the
+#'   m-  and u-probabilities. Should be of the form \code{~ var1 + var2}. 
+#' @param data data set with pairs on which to estimate the model. Alternatively
+#'   one can use the \code{patterns} argument.
+#' @param patterns table of patterns (as output by 
+#'   \code{\link{tabulate_patterns}}).
 #' @param mprobs0,uprobs0 initial values of the m- and u-probabilities. These
 #'   should be lists with numeric values. The names of the elements in the list
 #'   should correspond to the names in \code{by_x} in \code{\link{compare_pairs}}. 
@@ -35,6 +38,8 @@
 #' model <- problink_em(pairs)
 #' summary(model)
 #'
+#' @importFrom stats as.formula
+#' @importFrom utils head
 #' @export
 problink_em <- function(formula, data, patterns, mprobs0 = list(0.95), 
     uprobs0 = list(0.02), p0 = 0.05, tol = 1E-5, mprob_max = 0.999, 

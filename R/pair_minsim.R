@@ -5,6 +5,7 @@
 pair_minsim <- function(x, y, on, minsim = 0.0, 
     comparators = list(default_comparator), default_comparator = identical(), 
     keep_simsum = TRUE, add_xy = TRUE) {
+  simsum <- ..var <- ..cmp <- NULL # To suppress R CMD check notes
   x <- as.data.table(x)
   y <- as.data.table(y)
   comparators <- extend_to(on, comparators, default = default_comparator) 

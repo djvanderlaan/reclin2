@@ -13,11 +13,10 @@
 #' score with a value of 0 indication complete difference and a value > 0 
 #' indicating similarity (often a value of 1 will indicate perfect similarity). 
 #' 
-#' Some methods, such a \code{\link{score_problink}} and 
-#' \code{\link{problink_em}}, can handle similarity scores, but also need 
-#' binary values (\code{0}/\code{FALSE} = complete dissimilarity; 
-#' \code{1}/\code{TRUE} = complete similarity). In order to allow for this the
-#' comparison function is called with one argument.
+#' Some methods, such as \code{\link{problink_em}}, can handle similarity
+#' scores, but also need binary values (\code{0}/\code{FALSE} = complete 
+#' dissimilarity; \code{1}/\code{TRUE} = complete similarity). In order to
+#' allow for this the comparison function is called with one argument.
 #' 
 #' When the comparison is called with one argument, it is passed the result of
 #' a previous comparison. The function should translate that result to a binary 

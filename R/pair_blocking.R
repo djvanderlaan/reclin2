@@ -3,6 +3,7 @@
 #' @import data.table
 #' @export
 pair_blocking <- function(x, y, on, add_xy = TRUE) {
+  .x <- .y <- NULL # To suppress R CMD check notes
   x <- as.data.table(x)
   y <- as.data.table(y)
   a <- x[, ..on]
