@@ -39,7 +39,13 @@ predict.problink_em <- function(object, pairs = newdata, newdata = NULL,
   type <- match.arg(type)
   if (is.null(pairs)) pairs <- newdata
   if (is.null(pairs)) stop("Missing pairs or newdata.")
-  if (missing(comparators)) comparators <- attr(pairs, "comparators")
+  if (missing(comparators) || is.null(comparators))  {
+    # when using compare_vars or compare_pairs, the comparator is stored
+    # as an attribute in the column; retreive those
+    comparators <- lapply(pairs, attr, which = "comparator")
+    # remove elements without comparator
+    comparators <- comparators[!sapply(comparators, is.null)]
+  }
   # Initialise end result and for-loop
   predict_problinkem(pairs, object, type, binary, add, comparators) 
 }
@@ -52,7 +58,6 @@ predict_problinkem <- function(pairs, model, type, binary, add, comparators, ...
 
 #' @import data.table
 predict_problinkem.pairs <- function(pairs, model, type, binary, add, comparators, ...) {
-  .x <- .y <- mpost <- mprob <- uprob <- upost <- weight <- NULL # To suppress R CMD check notes
   on <- names(model$mprobs)
   # Initialise end result and for-loop
   weights <- rep(0, nrow(pairs))

@@ -36,7 +36,6 @@
 #' @import data.table
 #' @export
 tabulate_patterns <- function(pairs, on, comparators, complete = TRUE, ...) {
-  ..on <- NULL # To suppress R CMD check notes
   # Process arguments
   if (missing(comparators) || is.null(comparators))  {
     # when using compare_vars or compare_pairs, the comparator is stored

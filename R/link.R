@@ -4,7 +4,6 @@
 link <- function(pairs, selection = NULL, all = FALSE, all_x = all, all_y = all, 
     x = attr(pairs, "x"), y = attr(pairs, "y"), suffixes = c(".x", ".y"),
     keep_from_pairs = c(".x", ".y")) {
-  ..vars <- .x <- .y <- NULL # To suppress R CMD check notes
   x$.x <- seq_len(nrow(x))
   y$.y <- seq_len(nrow(y))
   if (!missing(selection) && !is.null(selection)) {

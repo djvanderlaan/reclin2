@@ -43,15 +43,14 @@
 #' data("linkexample1", "linkexample2")
 #' pairs <- pair_blocking(linkexample1, linkexample2, "postcode")
 #' pairs <- compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
-#' pairs <- score_simsum(pairs)
+#' model <- problink_em(~ lastname + firstname + address + sex, data = pairs)
+#' pairs <- predict(model, pairs, type = "mpost", add = TRUE, binary = TRUE)
 #' 
-#' # Select pairs with a simsum > 5 and force one-to-one linkage
-#' pairs <- select_n_to_m(pairs, 0, var = "ntom")
-#' pairs <- select_greedy(pairs, 0, var = "greedy")
-#' table(pairs[c("ntom", "greedy")])
+#' # Select pairs with a mpost > 0.5 and force one-to-one linkage
+#' pairs <- select_n_to_m(pairs, "ntom", "mpost", 0.5)
+#' pairs <- select_greedy(pairs, "greedy", "mpost", 0.5)
+#' table(pairs$ntom, pairs$greedy)
 #' 
-#' \dontshow{gc()}
-#'
 #' @rdname select_n_to_m
 #' @export
 #' 

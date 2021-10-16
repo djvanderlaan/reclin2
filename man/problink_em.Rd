@@ -53,7 +53,7 @@ Calculate EM-estimates of m- and u-probabilities
 data("linkexample1", "linkexample2")
 pairs <- pair_blocking(linkexample1, linkexample2, "postcode")
 pairs <- compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
-model <- problink_em(pairs)
+model <- problink_em(~ lastname + firstname + address + sex, data = pairs)
 summary(model)
 
 }
