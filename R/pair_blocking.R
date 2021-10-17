@@ -4,9 +4,11 @@
 #' blocking variables are equal. 
 #'
 #' @param x first \code{data.frame}
-#' @param y second \code{data.frame}
+#' @param y second \code{data.frame}. Ignored when \code{deduplication = TRUE}.
 #' @param on the variables defining the blocks or strata for which 
 #'   all pairs of \code{x} and \code{y} will be generated.
+#' @param deduplication generate pairs from only \code{x}. Ignore \code{y}. This 
+#'   is usefull for deduplication of \code{x}.
 #' @param add_xy add \code{x} and \code{y} as attributes to the returned 
 #'   pairs. This makes calling some subsequent operations that need \code{x} and 
 #'   \code{y} (such as \code{\link{compare_pairs}} easier.
@@ -31,9 +33,10 @@
 #'
 #' @import data.table
 #' @export
-pair_blocking <- function(x, y, on, add_xy = TRUE) {
+pair_blocking <- function(x, y, on, deduplication = FALSE, add_xy = TRUE) {
   x <- as.data.table(x)
-  y <- as.data.table(y)
+  if (deduplication && !missing(y)) warning("y provided will be ignored.")
+  y <- if (deduplication) x else as.data.table(y)
   a <- x[, ..on]
   a[, .x := seq_len(nrow(a))]
   b <- y[, ..on]
@@ -41,8 +44,11 @@ pair_blocking <- function(x, y, on, add_xy = TRUE) {
   pairs <- merge(a, b, by = on, all.x = FALSE, all.y = FALSE, 
     allow.cartesian = TRUE)
   pairs[, (on) := NULL]
+  # In case of deduplication; ignode cases when .y <= .x
+  if (deduplication) pairs <- pairs[.y > .x]
   setattr(pairs, "class", c("pairs", class(pairs)))
   setattr(pairs, "blocking_on", on)
+  if (deduplication) setattr(pairs, "deduplication", TRUE)
   if (add_xy) {
     setattr(pairs, "x", x)
     setattr(pairs, "y", y)

@@ -5,7 +5,7 @@
 #' blocking variables are equal. 
 #'
 #' @param x first \code{data.frame}
-#' @param y second \code{data.frame}
+#' @param y second \code{data.frame}. Ignored when \code{deduplication = TRUE}.
 #' @param on the variables defining the blocks or strata for which 
 #'   all pairs of \code{x} and \code{y} will be generated.
 #' @param minsim minimal similarity score.
@@ -16,6 +16,8 @@
 #'   \code{comparators} is compares with the function \code{default_comparator}.
 #' @param keep_simsum add a variable \code{minsim} to the result with the similarity 
 #'   score of the pair.
+#' @param deduplication generate pairs from only \code{x}. Ignore \code{y}. This 
+#'   is usefull for deduplication of \code{x}.
 #' @param add_xy add \code{x} and \code{y} as attributes to the returned 
 #'   pairs. This makes calling some subsequent operations that need \code{x} and 
 #'   \code{y} (such as \code{\link{compare_pairs}} easier.
@@ -47,9 +49,10 @@
 #' @export
 pair_minsim <- function(x, y, on, minsim = 0.0, 
     comparators = list(default_comparator), default_comparator = identical(), 
-    keep_simsum = TRUE, add_xy = TRUE) {
+    keep_simsum = TRUE, deduplication = TRUE, add_xy = TRUE) {
   x <- as.data.table(x)
-  y <- as.data.table(y)
+  if (deduplication && !missing(y)) warning("y provided will be ignored.")
+  y <- if (deduplication) x else as.data.table(y)
   comparators <- extend_to(on, comparators, default = default_comparator) 
   ny <- nrow(y)
   nx <- nrow(x)
@@ -57,8 +60,9 @@ pair_minsim <- function(x, y, on, minsim = 0.0,
   nchunks <- max(ceiling(nx * ny/ max_size), 1L)
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*nchunks)
   idx <- split(seq_len(nrow(x)), group)
-  pairs <- lapply(idx, function(idx, x, y, on, minsim, comparators) {
+  pairs <- lapply(idx, function(idx, x, y, on, minsim, comparators, deduplication) {
     pairs <- CJ(.x = idx, .y = seq_len(nrow(y)))
+    if (deduplication) pairs <- pairs[.y > .x]
     pairs[, simsum := rep(0, nrow(pairs))]
     for (var in on) {
       cmp_fun <- comparators[[var]]
@@ -66,10 +70,12 @@ pair_minsim <- function(x, y, on, minsim = 0.0,
       pairs[, simsum := simsum + ..cmp]
     }
     pairs[simsum >= minsim]
-  }, x = x, y = y, on = on, minsim = minsim, comparators = comparators)
+  }, x = x, y = y, on = on, minsim = minsim, comparators = comparators, 
+    deduplication = deduplication)
   pairs <- rbindlist(pairs)
   if (!keep_simsum) pairs[, simsum := NULL]
   setattr(pairs, "class", c("pairs", class(pairs)))
+  if (deduplication) setattr(pairs, "deduplication", TRUE)
   if (add_xy) {
     setattr(pairs, "x", x)
     setattr(pairs, "y", y)
