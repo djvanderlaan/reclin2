@@ -1,3 +1,24 @@
+#' Get a subset of pairs to inspect
+#'
+#' @param pairs \code{\link{data.table}} with pairs.
+#' @param variable name of variable to base the selection on; should be a variable
+#'   with the similarity score of the pairs.
+#' @param threshold the threshold around which to select pairs. Used when position 
+#'   is not given.
+#' @param position select pairs around this position (based on order of 
+#'   \code{variable}), e.g. \code{position = 1} will select the pairs with the 
+#'   highest similarity score.
+#' @param n number of pairs to select. Pairs are selected symmetric around the 
+#'   theshold. 
+#' @param x \code{data.table} with one half of the pairs.
+#' @param y \code{data.table} with the other half of the pairs.
+#'
+#' @return 
+#' Returns a list with elements \code{pairs} with the selected pairs; 
+#' \code{x} records from \code{x} corresponding to the pairs; \code{y} records
+#' from \code{y} corresponding to the pairs; \code{position} position of the 
+#' selected pairs; \code{index} index of the pairs in \code{pairs}.
+#'
 #' @export
 get_inspect_pairs <- function(pairs, variable, threshold, position = NULL, 
     n = 11,  x = attr(pairs, 'x'), y = attr(pairs, 'y')) {

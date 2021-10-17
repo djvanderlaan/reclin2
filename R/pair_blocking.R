@@ -21,6 +21,10 @@
 #' \code{.x} and \code{.y}, is returned. Columns \code{.x} and \code{.y} are 
 #' row numbers from \code{data.frame}s \code{.x} and \code{.y} respectively. 
 #'
+#' @seealso
+#' \code{\link{pair}} and \code{\link{pair_minsim}} are other methods
+#' to generate pairs. 
+#'
 #' @examples
 #' data("linkexample1", "linkexample2")
 #' pairs <- pair_blocking(linkexample1, linkexample2, "postcode")

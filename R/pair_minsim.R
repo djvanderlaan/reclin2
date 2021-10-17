@@ -1,5 +1,48 @@
 
-
+#' Generate pairs with a minimal similarity
+#'
+#' Generates all combinations of records from \code{x} and \code{y} where the 
+#' blocking variables are equal. 
+#'
+#' @param x first \code{data.frame}
+#' @param y second \code{data.frame}
+#' @param on the variables defining the blocks or strata for which 
+#'   all pairs of \code{x} and \code{y} will be generated.
+#' @param minsim minimal similarity score.
+#' @param comparators named list of functions with which the variables are compared. 
+#'   This function should accept two vectors. Function should either return a vector
+#'   or a \code{data.table} with multiple columns.
+#' @param default_comparator variables for which no comparison function is defined using
+#'   \code{comparators} is compares with the function \code{default_comparator}.
+#' @param keep_simsum add a variable \code{minsim} to the result with the similarity 
+#'   score of the pair.
+#' @param add_xy add \code{x} and \code{y} as attributes to the returned 
+#'   pairs. This makes calling some subsequent operations that need \code{x} and 
+#'   \code{y} (such as \code{\link{compare_pairs}} easier.
+#'
+#' @details
+#' Generating (all) pairs of the records of two data sets, is usually the first 
+#' step when linking the two data sets. However, this often results in a too 
+#' large number of records. \code{pair_minsim} will only keep pairs with a 
+#' similarity score equal or larger than \code{minsim}. The similarity score is
+#' calculated by summing the results of the comparators for all variables 
+#' of \code{on}.
+#'  
+#' @return 
+#' A \code{\link{data.table}} with two columns, 
+#' \code{.x} and \code{.y}, is returned. Columns \code{.x} and \code{.y} are 
+#' row numbers from \code{data.frame}s \code{.x} and \code{.y} respectively. 
+#'
+#' @seealso
+#' \code{\link{pair}} and \code{\link{pair_blocking}} are other methods
+#' to generate pairs. 
+#'
+#' @examples
+#' data("linkexample1", "linkexample2")
+#' pairs <- pair_minsim(linkexample1, linkexample2, 
+#'    on = c("postcode", "address"), minsim = 1)
+#' # Either address or postcode has to match to keep a pair
+#'
 #' @import data.table
 #' @export
 pair_minsim <- function(x, y, on, minsim = 0.0, 

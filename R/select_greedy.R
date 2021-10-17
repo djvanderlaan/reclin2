@@ -20,6 +20,3 @@ select_greedy <- function(pairs, variable, score, threshold, preselect = NULL,
 
 
 
-
-
-
