@@ -12,13 +12,14 @@ pair_minsim(
   comparators = list(default_comparator),
   default_comparator = identical(),
   keep_simsum = TRUE,
+  deduplication = FALSE,
   add_xy = TRUE
 )
 }
 \arguments{
 \item{x}{first \code{data.frame}}
 
-\item{y}{second \code{data.frame}}
+\item{y}{second \code{data.frame}. Ignored when \code{deduplication = TRUE}.}
 
 \item{on}{the variables defining the blocks or strata for which 
 all pairs of \code{x} and \code{y} will be generated.}
@@ -34,6 +35,9 @@ or a \code{data.table} with multiple columns.}
 
 \item{keep_simsum}{add a variable \code{minsim} to the result with the similarity 
 score of the pair.}
+
+\item{deduplication}{generate pairs from only \code{x}. Ignore \code{y}. This 
+is usefull for deduplication of \code{x}.}
 
 \item{add_xy}{add \code{x} and \code{y} as attributes to the returned 
 pairs. This makes calling some subsequent operations that need \code{x} and 

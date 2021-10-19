@@ -4,12 +4,15 @@
 \alias{pair}
 \title{Generate all possible pairs}
 \usage{
-pair(x, y, add_xy = TRUE)
+pair(x, y, deduplication = FALSE, add_xy = TRUE)
 }
 \arguments{
 \item{x}{first \code{data.frame}}
 
-\item{y}{second \code{data.frame}}
+\item{y}{second \code{data.frame}. Ignored when \code{deduplication = TRUE}.}
+
+\item{deduplication}{generate pairs from only \code{x}. Ignore \code{y}. This 
+is usefull for deduplication of \code{x}.}
 
 \item{add_xy}{add \code{x} and \code{y} as attributes to the returned 
 pairs. This makes calling some subsequent operations that need \code{x} and 

@@ -4,15 +4,18 @@
 \alias{pair_blocking}
 \title{Generate pairs using simple blocking}
 \usage{
-pair_blocking(x, y, on, add_xy = TRUE)
+pair_blocking(x, y, on, deduplication = FALSE, add_xy = TRUE)
 }
 \arguments{
 \item{x}{first \code{data.frame}}
 
-\item{y}{second \code{data.frame}}
+\item{y}{second \code{data.frame}. Ignored when \code{deduplication = TRUE}.}
 
 \item{on}{the variables defining the blocks or strata for which 
 all pairs of \code{x} and \code{y} will be generated.}
+
+\item{deduplication}{generate pairs from only \code{x}. Ignore \code{y}. This 
+is usefull for deduplication of \code{x}.}
 
 \item{add_xy}{add \code{x} and \code{y} as attributes to the returned 
 pairs. This makes calling some subsequent operations that need \code{x} and 

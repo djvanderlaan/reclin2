@@ -49,7 +49,7 @@
 #' @export
 pair_minsim <- function(x, y, on, minsim = 0.0, 
     comparators = list(default_comparator), default_comparator = identical(), 
-    keep_simsum = TRUE, deduplication = TRUE, add_xy = TRUE) {
+    keep_simsum = TRUE, deduplication = FALSE, add_xy = TRUE) {
   x <- as.data.table(x)
   if (deduplication && !missing(y)) warning("y provided will be ignored.")
   y <- if (deduplication) x else as.data.table(y)

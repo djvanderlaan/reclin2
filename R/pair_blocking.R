@@ -38,9 +38,9 @@ pair_blocking <- function(x, y, on, deduplication = FALSE, add_xy = TRUE) {
   if (deduplication && !missing(y)) warning("y provided will be ignored.")
   y <- if (deduplication) x else as.data.table(y)
   a <- x[, ..on]
-  a[, .x := seq_len(nrow(a))]
+  a[, .x := .I]
   b <- y[, ..on]
-  b[, .y := seq_len(nrow(b))]
+  b[, .y := .I]
   pairs <- merge(a, b, by = on, all.x = FALSE, all.y = FALSE, 
     allow.cartesian = TRUE)
   pairs[, (on) := NULL]
