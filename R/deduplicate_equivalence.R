@@ -25,7 +25,8 @@ deduplicate_equivalence <- function(pairs, variable, selection,
     }
   } else selection <- rep(TRUE, nrow(pairs))
   x <- copy(x)
-  x[, (variable) := equivalence(.I, pairs$.x, pairs$.y)]
+  x[, (variable) := equivalence(.I, pairs$.x[selection], 
+    pairs$.y[selection])]
   x[]
 }
 

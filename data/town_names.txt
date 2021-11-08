@@ -159,7 +159,7 @@
 "nw.amsterdam"	"Nieuw Amsterdam"
 "pernis/rotterdam"	"Pernis Rotterdam"
 "rotterdam-ommoord"	"Rotterdam"
-"rotterdm"	"Amsterdam"
+"rotterdm"	"Rotterdam"
 ".rotterdam"	"Rotterdam"
 "amsterdam   (ijburg)"	"Amsterdam"
 "amsterdam (z-o)"	"Amsterdam"
