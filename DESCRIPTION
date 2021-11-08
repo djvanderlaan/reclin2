@@ -20,7 +20,10 @@ Imports:
     methods,
     lpSolve,
     Rcpp
+Suggests:
+    simplermarkdown
 LinkingTo: Rcpp
+VignetteBuilder: simplermarkdown
 SystemRequirements: C++11
 License: GPL-3
 LazyLoad: yes
