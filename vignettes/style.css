@@ -1,0 +1,49 @@
+
+
+body {
+  max-width: 50rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: system-ui;
+  color: lightgray;
+  background: #555555;
+}
+p, li {
+  text-align: justify;
+}
+pre {
+  background: #444;
+  padding: 0.5rem;
+}
+h1, h2, h3, h4, h5 {
+  color: orange;
+  font-weight: bold;
+}
+h4, h5 {
+  color: inherit;
+}
+h2 {
+  margin-top: 3rem;
+}
+a {
+  color: orange;
+}
+a:hover {
+  color: lightblue;
+}
+pre code {
+  color: white;
+  background: inherit;
+  padding: 0;
+}
+code {
+  color: #e5c892;
+  background: #444;
+  padding: 0.2rem;
+}
+
+/* Specific styling */
+p.author {
+  font-weight : bold;
+  color: orange;
+}
