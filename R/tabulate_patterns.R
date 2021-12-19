@@ -60,6 +60,7 @@ tabulate_patterns <- function(pairs, on, comparators, complete = TRUE, ...) {
   if (complete) {
     possible_patterns <- lapply(tab[, ..on], function(x) {
       u <- unique(x)
+      if (is.logical(u)) u <- unique(c(u, c(TRUE, FALSE)))
       if (is.factor(x)) union(x, levels(x)) else u
     })
     possible_patterns <- do.call(CJ, possible_patterns)

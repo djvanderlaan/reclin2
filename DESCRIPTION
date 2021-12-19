@@ -11,13 +11,11 @@ Description: Functions to assist in performing probabilistic record linkage and
     linkage.
 URL: https://github.com/djvanderlaan/reclin2
 Depends:
-    stats,
     data.table,
     R (>= 3.6.0)
 Imports:
     stringdist,
     utils,
-    methods,
     lpSolve,
     Rcpp
 Suggests:

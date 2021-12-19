@@ -1,236 +1,148 @@
 <!--
 %\VignetteEngine{simplermarkdown::mdweave_to_html}
-%\VignetteIndexEntry{Introduction to reclin2}
+%\VignetteIndexEntry{Record linkage using machine learning}
 -->
 ---
-title: Introduction to reclin2
+title: Record linkage using machine learning
 author: Jan van der Laan
 css: "style.css"
 ---
 
-## Introduction
 
-`reclin2` implements methodology for linking records based on inexact keys. It
-allows for maximum flexibility by giving users full control over each step of
-the linking procedure.  The package is built with performance and scalability
-in mind: the core algorithms have been implemented in `C++`. 
+In this example we will show how `reclin2` can be used in combination with
+machine learning to perform record linkage. We will use the same example as in
+the introduction vignette and will skip over some of the initial steps in the
+linkage project. We will use plain logistic regression. Not the most
+sophisticated machine learning algorithm, but for the simplistic example more
+than enough. Other algorithms are easily substituted.
+
+When performing record linkage, we will compare combinations of records from
+both datasets. After comparison we end up with a large dataset of pairs with
+properties of these pairs (the comparison vectors). The goal of record linkage
+is to divide these pairs into two groups: one group with pairs where both
+records in the pair belong to the same object, the matching set,  and one group
+where both records in the pair do not belong to the same object, the unmatched
+set. Record linkage is, therefore, a classification problem and when we know for
+some of the pairs if they belong to the matching set or the unmatching set, we
+can use that to train a supervised classification method.
+
+
+# Generate the pairs and compare
+
+First we have to generate all pairs and compare these. This is similar as in
+regular probabilistic linkage.
 
 ```{.R}
 library(reclin2)
-```
 
-We will work with a pair of data sets with artificial data. They are tiny, but
-that allows us to see what happens. In this example we will perform 'classic'
-probabilistic record linkage. When some known true links are known it is also
-possible to use machine learning methods. This is illustrated in another
-vignette. 
-
-```{.R}
 data("linkexample1", "linkexample2")
 print(linkexample1)
 print(linkexample2)
-```
 
-We have two data sets with personal information. The second data set contains a
-lot of errors, but we will try to link the second data set to the first.
 
-## Step 1: generate pairs
-
-In principle linkage consists of comparing each combination of records from the
-two data sets and determine which of those combinations (or pairs as we will
-call them below) belong to the same entity. In case of a perfect linkage key, it
-is of course, not necessary to compare all combinations of records, but when
-the linkage keys are imperfect and contain errors, it is in principle necessary
-to compare all pairs.
-
-However, comparing all pairs can result in an intractable number of
-pairs: when linking two data sets with a million records there are $10^{12}$
-possible pairs. Therefore, some sort of reduction of the possible pairs is
-usually applied. In the example below, we apply *blocking*, which means that
-pairs are only generated when they agree on the blocking variable (in this case
-the postcode). This means that pairs of records that disagree on the blocking
-variable are not considered. Therefore, one will only use variables that can
-be considered without errors as blocking variable, or link multiple times with
-different blocking variables and combine both data sets.
-
-The first step in (probabilistic) linkage is, therefore, generating all pairs:
-```{.R}
 pairs <- pair_blocking(linkexample1, linkexample2, "postcode")
-print(pairs)
-```
 
-As you can see, record 1 from `x` (the first data set) is compared to records
-1, 2 and 3 from `y`. Also note that `reclin2` uses the `data.table` package to
-efficiently perform some of the computations. Therefore, the `pairs` object is a
-`data.table`. 
-
-Other functions to generate pairs are:
-
-- `pair`: generate all possible pairs
-- `pairs_minsim`: generate pairs that have minimum similarity score (e.g. should
-  agree on at least one variable in a set of given variables). Can be
-  computationally intensive as all records have to be compared. 
-
-## Step 2: compare pairs
-
-We can now compare the records on their linkage keys:
-
-```{.R}
-pairs <- compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"))
-print(pairs)
-```
-
-As you can see, we don't need to pass the original data sets although the
-variables `lastname` etc. are from those original data sets. This is because a
-copy of the original data sets are stored with the pairs object `pairs` (and should
-you be worrying about memory: as long as the original data sets are not
-modified the data sets are not actually copied).
-
-In the example above the result of `compare_pairs` was assigned back to `pairs`.
-When working with large datasets it can be more efficient to modify `pairs` 
-in place preventing unnecessary copies. This behaviour can be switched on using
-the `inplace` argument which is accepted by most functions.
-
-```{.R}
 compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"), 
-  inplace = TRUE)
+  inplace = TRUE, comparators = list(lastname = jaro_winkler(), 
+  firstname = jaro_winkler(), address = jaro_winkler()))
 print(pairs)
 ```
 
-The default comparison function returns `TRUE` when the linkage keys agree and
-false when they don't. However, when looking at the original data sets, we can
-see that most of our linkage keys are string variables that contain typing
-errors. The quality of our linkage could be improved if we could use a
-similarity score to compare the two strings: a high score means that the two
-strings are very similar a value close to zero means that the strings are very
-different.
-
-Below we use the `jaro_winkler` similarity score to compare all fields:
+On of the things we run into, is that the variable `sex` has missing values. We
+could set these to `FALSE` (this is what is done when calling `problink_em`
+during estimation of the model), but with machine learning we could also include
+these as a separate category. For that we first need to define a custom
+comparison function.
 
 ```{.R}
-compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"),
-  default_comparator = jaro_winkler(0.9), inplace = TRUE)
+na_as_class <- function(x, y) {
+  factor(
+    ifelse(is.na(x) | is.na(y), 2L, (y == x)*1L),
+    levels = 0:2, labels = c("eq", "uneq", "mis"))
+}
+```
+
+We then remove the old variable `sex` (otherwise `compare_pairs` will complain
+that we cannot assign a factor to a logical vector) and compare the pairs again
+with the new comparison function.
+
+
+```{.R}
+pairs[, sex := NULL]
+
+compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"), 
+  inplace = TRUE, comparators = list(lastname = jaro_winkler(), 
+  firstname = jaro_winkler(), address = jaro_winkler(), sex = na_as_class))
 print(pairs)
 ```
 
-The function `compare_vars` offers more flexibility than `compare_pairs`. It can
-for example compare multiple variables at the same time (e.g. compare birth day
-and month allowing for swaps) or generate multiple results from comparing on one
-variable.
+# Estimate the model and use the model to classify the pairs
 
-## Step 3: score pairs
+In order to estimate the model we need some pairs for which we know the truth.
+One way of obtaining this information is by reviewing some of the pairs. 
+The number of pairs will generally grow with $O(N^2)$ with $N$ the size of the
+smallest dataset. The number of matches in these pairs is usually $O(N)$.
+Therefore, the fraction of matches in the pairs is $O(1/N)$ and therefore
+usually very small. Therefore, when sampling records for review it is usually a
+good idea to not sample the pairs completely random, but, for example,
+oversample pairs that agree on more variables. 
 
-The next step in the process, is to determine which pairs of records belong to
-the same entity and which do not. There are numerous ways to do this. One
-possibility is to label some of the pairs as match or no match, and use some
-machine learning algorithm to predict the match status using the comparison
-vectors. Another, method, is to score the pairs based on the comparison vectors
-and select those with a score above some threshold. The simplest way to score
-the pairs, is to calculate the sum of the comparison vectors. That is what
-`score_simsum` does:
+Another way of getting a training dataset is when additional information is
+available. For example, when linking a dataset to a population register for some
+of the records in the dataset an official id might be available. For these
+records the true match status can be determined. This is what we will simulate
+in the example below. Let's assume we know from three of the records in
+`linkexample2` the `id`:
 
 ```{.R}
-#pairs <- score_simsum(p, var = "simsum")
-#print(pairs)
+linkexample2$known_id <- linkexample2$id
+linkexample2$known_id[c(2,5)] <- NA
+setDT(linkexample2)
 ```
 
-The disadvantage of `score_simsum` is that it doesn't take into account that
-the amount of information in agreement or disagreement on a variable depends
-on the variable. For example, agreement on sex doesn't tell us much: when
-our data sets contain 50% men an 50% women, there is a 50% chance that two
-random records agree on sex. On the other hand the probability that two random
-records agree on last name is much lower. Therefore, agreement on last name makes
-it much more likely that the two records belong to the same entity.
-
-This is what the probabilistic linkage framework initially formalised by Fellegi
-and Sunter tries to do. The function `problink_em` uses an EM-algorithm to
-estimate the so called m- and u-probabilities for each of the linkage variables.
-The m-probability is the probability that two records concerning the same entity
-agree on the linkage variable; this means that the m-probability corresponds to
-the probability that there is an error in the linkage variables.
-The u-probability is the probability that two records belonging to different
-entities agree on a variable. For a variable with few categories (such as sex)
-this probability will be large, while for a variable with a large number of
-categories (such as last name) this probability will be small.
-
+We the know for these records the true match status in the pairs. Below we add
+this to the pairs:
 ```{.R}
-m <- problink_em(~ lastname + firstname + address + sex, data = pairs)
-print(m)
+compare_vars(pairs, "y", on_x = "id", on_y = "known_id", y = linkexample2, inplace = TRUE)
 ```
-
-These m- and u-probabilities can be used to score the pairs:
-
+Note that we supply `y = linkexample2` in the call. This is needed as the copy
+of `linkexample2` stored with `pairs` does not contain the `known_id` column. We
+can also add the true status for all records to measure the performance of the
+linkage in the end
 ```{.R}
-pairs <- predict(m, pairs = pairs, add = TRUE)
+compare_vars(pairs, "y_true", on_x = "id", on_y = "id", inplace = TRUE)
 print(pairs)
 ```
 
-With `add = TRUE` the predictions are added to the `pairs` object.  The higher
-the weight the more likely the two pairs belong to the same entity/are a match.
-
-The prediction function can also return the m- and u-probabilities and the 
-posterior m- and u-probabilities.
-
-## Step 4: select pairs
-
-The final step is to select the pairs that are considered to belong to the
-same entities. The simplest method is to select all pairs above a certain
-threshold
+We now have all of the information needed to estimate our (machine learning)
+model. Note that this will give a bunch of warnings as we estimating six
+parameters with only eleven observations and the parameters will not be reliably
+estimated.
 
 ```{.R}
-pairs <- select_threshold(pairs, "threshold", score = "weights", threshold = 8)
-print(pairs)
+m <- glm(y ~ lastname + firstname + address + sex, data = pairs, family = binomial())
 ```
 
-The select functions add a (logical) variable to the data set indicating
-whether a pairs is selected or not.
+And then we can add the prediction to `pairs` and check how well we have done:
 
-In this case we know which records truly belong to each other. We can use that
-to evaluate the linkage:
 ```{.R}
-pairs <- compare_vars(pairs, "truth", on_x = "id", on_y = "id")
-print(pairs)
-```
-```{.R}
-table(pairs$truth, pairs$threshold)
+pairs[, prob := predict(m, type = "response", newdata = pairs)]
+pairs[, select := prob > 0.5]
+table(pairs$select > 0.5, pairs$y_true)
 ```
 
-We see that three of the four matches that should have been found have indeed
-been found (the recall is 3/4) and we have one false link (sensitivity is 1/4).
+Given the small size of the dataset we have to estimate the model on, this is
+not too bad. 
 
-Using a threshold, does not take into account the fact that often we know that
-one record from the first data set can be linked to at most one record from the
-second data set and vice versa. If we make the threshold low enough we have more
-links than records in either data set. `reclin` contains two functions that
-force one-to-one linkage: `select_greedy` and `select_n_to_m`. The first is
-fast (it selects pairs starting from the highest score; pairs are only selected
-when each of the records in a pair have not been selected previously); the
-second is slower, but can lead to better results (it tries to optimise to total
-score of the selected records under the restriction that each record can be
-selected only once):
 
+# Create the linked data set
+
+We now know which pairs are to be linked, but we still have to actually link
+them. `link` does that (the optional arguments `all_x` and `all_y` control the
+type of linkage):
 
 ```{.R}
-pairs <- select_greedy(pairs, "weights", variable = "greedy", threshold = 0)
-table(pairs$truth, pairs$greedy)
-```
-
-
-```{.R}
-pairs <- select_n_to_m(pairs, "weights", variable = "ntom", threshold = 0)
-table(pairs$truth, pairs$ntom)
-```
-
-Perfection!
-
-## The final, last step
-
-The real final step is to create the linked data set. We now know which pairs
-are to be linked, but we still have to actually link them. `link` does that (the
-optional arguments `all_x` and `all_y` control the type of linkage):
-
-```{.R}
-linked_data_set <- link(pairs, selection = "ntom")
+linked_data_set <- link(pairs, selection = "select", all_y = TRUE)
 print(linked_data_set)
 ```
 
