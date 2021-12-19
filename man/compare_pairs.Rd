@@ -14,6 +14,17 @@ compare_pairs(
   inplace = FALSE,
   ...
 )
+
+compare_pairs(
+  pairs,
+  on,
+  comparators = list(default_comparator),
+  default_comparator = identical(),
+  x = attr(pairs, "x"),
+  y = attr(pairs, "y"),
+  inplace = FALSE,
+  ...
+)
 }
 \arguments{
 \item{pairs}{\code{\link{data.table}} with pairs. Should contain the columns 

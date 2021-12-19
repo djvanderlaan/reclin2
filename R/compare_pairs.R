@@ -24,7 +24,16 @@
 #' @return
 #' Returns the \code{data.table} \code{pairs} with one or more columns added. 
 #' 
+#' @rdname compare_pairs
 #' @export 
+compare_pairs <- function(pairs, on, comparators = list(default_comparator), 
+    default_comparator = identical(), ...) {
+  UseMethod("compare_pairs", pairs)
+}
+
+
+#' @rdname compare_pairs
+#' @export
 compare_pairs <- function(pairs, on, comparators = list(default_comparator), 
     default_comparator = identical(), x = attr(pairs, 'x'), y = attr(pairs, 'y'), 
     inplace = FALSE, ...) {
