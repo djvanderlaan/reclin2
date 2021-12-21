@@ -1,4 +1,3 @@
-
 #' Calculate weights and probabilities for pairs
 #' 
 #' @param object an object of type \code{problink_em} as produced by 
@@ -39,13 +38,8 @@ predict.problink_em <- function(object, pairs = newdata, newdata = NULL,
   type <- match.arg(type)
   if (is.null(pairs)) pairs <- newdata
   if (is.null(pairs)) stop("Missing pairs or newdata.")
-  if (missing(comparators) || is.null(comparators))  {
-    # when using compare_vars or compare_pairs, the comparator is stored
-    # as an attribute in the column; retreive those
-    comparators <- lapply(pairs, attr, which = "comparator")
-    # remove elements without comparator
-    comparators <- comparators[!sapply(comparators, is.null)]
-  }
+  if (missing(comparators) || is.null(comparators))  
+    comparators <- get_comparators(pairs)
   # Initialise end result and for-loop
   predict_problinkem(pairs, object, type, binary, add, comparators) 
 }
