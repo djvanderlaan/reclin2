@@ -51,7 +51,7 @@ problink_em <- function(formula, data, patterns, mprobs0 = list(0.95),
   by <- if (length(formula) == 3) all.vars(formula[[3]]) else 
     all.vars(formula)
   if (!missing(data)) {
-    stopifnot(all(by %in% names(data)))
+    #stopifnot(all(by %in% names(data)))
     patterns <- tabulate_patterns(data, on = by, complete = TRUE)
   } 
   stopifnot(all(by %in% names(patterns)))

@@ -2,6 +2,7 @@
 % Please edit documentation in R/compare_pairs.R
 \name{compare_pairs}
 \alias{compare_pairs}
+\alias{compare_pairs.pairs}
 \title{Compare pairs on a set of variables common in both data sets}
 \usage{
 compare_pairs(
@@ -9,13 +10,10 @@ compare_pairs(
   on,
   comparators = list(default_comparator),
   default_comparator = identical(),
-  x = attr(pairs, "x"),
-  y = attr(pairs, "y"),
-  inplace = FALSE,
   ...
 )
 
-compare_pairs(
+\method{compare_pairs}{pairs}(
   pairs,
   on,
   comparators = list(default_comparator),
@@ -39,14 +37,14 @@ or a \code{data.table} with multiple columns.}
 \item{default_comparator}{variables for which no comparison function is defined using
 \code{comparators} is compares with the function \code{default_comparator}.}
 
+\item{...}{Ignored for now}
+
 \item{x}{\code{data.table} with one half of the pairs.}
 
 \item{y}{\code{data.table} with the other half of the pairs.}
 
 \item{inplace}{logical indicating whether \code{pairs} should be modified in place. When
 pairs is large this can be more efficient.}
-
-\item{...}{Ignored for now}
 }
 \value{
 Returns the \code{data.table} \code{pairs} with one or more columns added.

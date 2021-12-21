@@ -61,14 +61,20 @@ compare_pairs(clpairs, vars,
 # Estimate EM-model and calculate weights
 
 tab <- tabulate_patterns(pairs, on = vars)
+cltab <- tabulate_patterns(clpairs, on = vars)
 
 f <- formula(~ last_name + street + number + first_name + dob_dy)
 
 m <- problink_em(f, patterns = tab)
 summary(m)
 
+clm <- problink_em(f, patterns = cltab)
+summary(clm)
+
+
 f <- as.formula(paste0("~", paste0(vars, collapse = "+")))
 m <- problink_em(f, data = pairs)
+clm <- problink_em(f, data = clpairs)
 
 # Add the predictions to the original pairs
 pairs <- predict(m, pairs = pairs, type = "all", add = TRUE)
