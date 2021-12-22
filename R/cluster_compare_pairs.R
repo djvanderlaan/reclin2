@@ -1,4 +1,4 @@
-
+#' @rdname compare_pairs
 #' @importFrom parallel clusterCall
 #' @export
 compare_pairs.cluster_pairs <- function(pairs, on, 

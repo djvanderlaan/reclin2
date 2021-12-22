@@ -1,4 +1,3 @@
-
 #' Generate pairs with a minimal similarity
 #'
 #' Generates all combinations of records from \code{x} and \code{y} where the 

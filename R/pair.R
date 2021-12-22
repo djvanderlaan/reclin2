@@ -1,4 +1,3 @@
-
 #' Generate all possible pairs
 #'
 #' Generates all combinations of records from \code{x} and \code{y}.

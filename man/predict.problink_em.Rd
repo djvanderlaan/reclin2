@@ -12,6 +12,7 @@
   binary = FALSE,
   add = FALSE,
   comparators,
+  new_name = NULL,
   ...
 )
 }
@@ -30,17 +31,20 @@ See results for more information.}
 \item{binary}{convert comparison vectors to binary vectors using the 
 comparison function in comparators.}
 
-\item{add}{add the predictions to the original pairs object}
+\item{add}{add the predictions to the original pairs object.}
 
 \item{comparators}{a list of comparison functions (see \code{\link{compare_pairs}}). 
 When missing \code{attr(pairs, 'comparators')} is used.}
 
+\item{new_name}{name of new object to assign the pairs to on the cluster
+nodes (only relevant when pairs is of type \code{cluster_pairs}.}
+
 \item{...}{unused.}
 }
 \value{
-Returns a data.table with either the \code{.x} and \code{.y} columns from 
-\code{pairs} (when \code{add = FALSE}) or all columns of \code{pairs}. To these 
-columns are added: 
+When \code{pairs} is of type \code{pairs}, returns a data.table with either
+the \code{.x} and \code{.y} columns from  \code{pairs} (when \code{add = FALSE}) 
+or all columns of \code{pairs}. To these columns are added: 
 
 \itemize{
 \item In case of \code{type = "weights"} a column \code{weights} with the calculated
@@ -52,6 +56,11 @@ columns are added:
   u-probabilities.
 \item In case of \code{type = "all"} all of the above.
 }
+
+In case of \code{compare_pairs.cluster_pairs}, \code{compare_pair.pairs} is called on
+each cluster node and the resulting pairs are assigned to \code{new_name} in
+the environment \code{reclin_env}. When \code{new_name} is not given (or
+equal to NULL) the original pairs on the nodes are overwritten.
 }
 \description{
 Calculate weights and probabilities for pairs

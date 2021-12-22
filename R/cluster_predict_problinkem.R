@@ -1,5 +1,4 @@
-
-
+#' @importFrom stats predict
 #' @importFrom parallel clusterCall
 predict_problinkem.cluster_pairs <- function(pairs, model, type, binary, add, 
     comparators, new_name = NULL, ...) {

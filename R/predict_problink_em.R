@@ -9,15 +9,17 @@
 #'   See results for more information.
 #' @param binary convert comparison vectors to binary vectors using the 
 #'   comparison function in comparators. 
-#' @param add add the predictions to the original pairs object
+#' @param add add the predictions to the original pairs object.
 #' @param comparators a list of comparison functions (see \code{\link{compare_pairs}}). 
 #'   When missing \code{attr(pairs, 'comparators')} is used. 
+#' @param new_name name of new object to assign the pairs to on the cluster
+#'   nodes (only relevant when pairs is of type \code{cluster_pairs}.
 #' @param ... unused.
 #'   
 #' @return 
-#' Returns a data.table with either the \code{.x} and \code{.y} columns from 
-#' \code{pairs} (when \code{add = FALSE}) or all columns of \code{pairs}. To these 
-#' columns are added: 
+#' When \code{pairs} is of type \code{pairs}, returns a data.table with either
+#' the \code{.x} and \code{.y} columns from  \code{pairs} (when \code{add = FALSE}) 
+#' or all columns of \code{pairs}. To these columns are added: 
 #'
 #' \itemize{
 #' \item In case of \code{type = "weights"} a column \code{weights} with the calculated
@@ -30,20 +32,23 @@
 #' \item In case of \code{type = "all"} all of the above.
 #' }
 #' 
+#' In case of \code{compare_pairs.cluster_pairs}, \code{compare_pair.pairs} is called on
+#' each cluster node and the resulting pairs are assigned to \code{new_name} in
+#' the environment \code{reclin_env}. When \code{new_name} is not given (or
+#' equal to NULL) the original pairs on the nodes are overwritten.
+#' 
 #' @export
 predict.problink_em <- function(object, pairs = newdata, newdata = NULL, 
     type = c("weights", "mpost", "probs", "all"), binary = FALSE, 
-    add = FALSE, comparators, ...) {
+    add = FALSE, comparators, new_name = NULL, ...) {
   # Process input
   type <- match.arg(type)
   if (is.null(pairs)) pairs <- newdata
   if (is.null(pairs)) stop("Missing pairs or newdata.")
   if (missing(comparators) || is.null(comparators))  
     comparators <- get_comparators(pairs)
-  # Initialise end result and for-loop
-  predict_problinkem(pairs, object, type, binary, add, comparators) 
+  predict_problinkem(pairs, object, type, binary, add, comparators, new_name, ...) 
 }
-
 
 
 predict_problinkem <- function(pairs, model, type, binary, add, comparators, ...) {

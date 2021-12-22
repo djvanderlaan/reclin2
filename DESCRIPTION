@@ -15,9 +15,11 @@ Depends:
     R (>= 3.6.0)
 Imports:
     stringdist,
+    stats,
     utils,
     lpSolve,
-    Rcpp
+    Rcpp,
+    parallel
 Suggests:
     simplermarkdown
 LinkingTo: Rcpp

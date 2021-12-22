@@ -12,6 +12,8 @@
 #' @param y \code{data.table} with the other half of the pairs.
 #' @param inplace logical indicating whether \code{pairs} should be modified in place. When
 #'   pairs is large this can be more efficient.
+#' @param new_name name of new object to assign the pairs to on the cluster
+#'   nodes.
 #' @param ... Ignored for now
 #'
 #' @details
@@ -22,7 +24,13 @@
 #' the \code{data.table} returned by \code{comparator} (separated by "_"). 
 #' 
 #' @return
-#' Returns the \code{data.table} \code{pairs} with one or more columns added. 
+#' Returns the \code{data.table} \code{pairs} with one or more columns added in
+#' case of \code{compare_pairs.pairs}. 
+#' 
+#' In case of \code{compare_pairs.cluster_pairs}, \code{compare_pair.pairs} is called on
+#' each cluster node and the resulting pairs are assigned to \code{new_name} in
+#' the environment \code{reclin_env}. When \code{new_name} is not given (or
+#' equal to NULL) the original pairs on the nodes are overwritten.
 #' 
 #' @rdname compare_pairs
 #' @export 

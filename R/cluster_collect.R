@@ -1,5 +1,21 @@
-
-
+#' Collect pairs from cluster nodes
+#'
+#' @param pairs an object or type \code{cluster_pairs} as created for example by
+#'   \code{\link{cluster_pair}}.
+#' @param clear remove the pairs from the cluster nodes
+#'
+#' @return
+#' Returns an object of type \code{pairs} which is a \code{data.table}. This
+#' object can be used as a regular (non-cluster) set of pairs
+#' 
+#' @examples
+#' library(parallel)
+#' data("linkexample1", "linkexample2")
+#' cl <- makeCluster(2)
+#' pairs <- cluster_pair(cl, linkexample1, linkexample2)
+#' local_pairs <- cluster_collect(pairs, clear = TRUE)
+#' stopCluster(cl)
+#'
 #' @importFrom parallel clusterCall
 #' @import data.table
 #' @export
