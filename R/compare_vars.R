@@ -1,4 +1,3 @@
-
 #' Compare pairs on given variables
 #'
 #' @param pairs \code{\link{data.table}} with pairs. Should contain the columns 
@@ -27,7 +26,6 @@
 #' Returns the \code{data.table} \code{pairs} with one or more columns added. 
 #' 
 #' @export
-#' 
 compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x, comparator = identical(), 
     x = attr(pairs, 'x'), y = attr(pairs, 'y'), inplace = FALSE) {
   xv <- x[pairs$.x, ..on_x]
@@ -39,7 +37,7 @@ compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x, comparat
   attr(res, "on_x") <- on_x
   attr(res, "on_y") <- on_y
   # Assign result of comparison to pairs
-  if (is.data.table(res)) {
+  if (is.data.table(res) || is.data.frame(res)) {
     for (col in names(res)) {
       v <- paste0(variable, "_", col)
       if (inplace) pairs[, (v) := res[[col]]] else pairs[[v]] <- res[[col]]
@@ -47,7 +45,7 @@ compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x, comparat
   } else {
     if (inplace) pairs[, (variable) := res] else pairs[[variable]] <- res
   }
-  # TODO store comparison function and variables on which was compared
+  # TODO: store comparison function and variables on which was compared
   if (inplace) invisible(pairs) else pairs
 }
 
