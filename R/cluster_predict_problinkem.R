@@ -17,11 +17,17 @@ predict_problinkem.cluster_pairs <- function(pairs, model, type, binary, add,
       reclin_env[[new_name]] <- new.env()
       env <- reclin_env[[new_name]]
     }
+    # TODO: handle new_name
     p <- predict(model, newdata = pairs, type = type, binary = binary, 
       add = TRUE, comparators = comparators)
   }, name = pairs$name, model = model, type = type, binary = binary, 
     comparators = comparators, new_name = new_name)
-  if (!missing(new_name) && !is.null(new_name)) pairs$name <- new_name
-  pairs
+  # Return
+  if (!missing(new_name) && !is.null(new_name)) {
+    pairs$name <- new_name
+    pairs
+  } else {
+    invisible(pairs)
+  }
 }
 

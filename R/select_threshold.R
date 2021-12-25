@@ -12,6 +12,8 @@
 #'   threshold are selected. 
 #' @param inplace logical indicating whether \code{pairs} should be modified in place. When
 #'   pairs is large this can be more efficient.
+#' @param new_name name of new object to assign the pairs to on the cluster
+#'   nodes.
 #' @param ... ignored
 #'
 #' @return
@@ -24,12 +26,35 @@
 #' pairs <- compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
 #' model <- problink_em(~ lastname + firstname + address + sex, data = pairs)
 #' pairs <- predict(model, pairs, type = "mpost", add = TRUE, binary = TRUE)
-#' 
 #' # Select pairs with a mpost > 0.5
-#' pairs <- select_threshold(pairs, "selected", "mpost", 0.5, inplace = TRUE)
+#' select_threshold(pairs, "selected", "mpost", 0.5, inplace = TRUE)
+#'
+#' # Example using cluster;
+#' # In general the syntax is exactly the same except for the first call to 
+#' # to cluster_pair. Note the in general `inplace = TRUE` is implied when
+#' # working with a cluster; therefore the assignment back to pairs can be 
+#' # omitted (also not a problem if it is not).
+#' library(parallel)
+#' data("linkexample1", "linkexample2")
+#' cl <- makeCluster(2)
+#' pairs <- cluster_pair(cl, linkexample1, linkexample2)
+#' compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
+#' model <- problink_em(~ lastname + firstname + address + sex, data = pairs)
+#' predict(model, pairs, type = "mpost", add = TRUE, binary = TRUE)
+#' # Select pairs with a mpost > 0.5
+#' # Unlike the regular pairs: inplace = TRUE is implied here
+#' select_threshold(pairs, "selected", "mpost", 0.5)
+#' stopCluster(cl)
 #' 
+#' @rdname select_threshold
 #' @export
-select_threshold <- function(pairs, variable, score, threshold, 
+select_threshold <- function(pairs, variable, score, threshold, ...) {
+  UseMethod("select_threshold")
+}
+
+#' @rdname select_threshold
+#' @export
+select_threshold.pairs <- function(pairs, variable, score, threshold, 
     inplace = FALSE, ...) {
   if (is.character(score)) {
     stopifnot(score %in% names(pairs))

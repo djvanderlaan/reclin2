@@ -4,11 +4,14 @@
 \alias{cluster_collect}
 \title{Collect pairs from cluster nodes}
 \usage{
-cluster_collect(pairs, clear = FALSE)
+cluster_collect(pairs, select = NULL, clear = FALSE)
 }
 \arguments{
 \item{pairs}{an object or type \code{cluster_pairs} as created for example by
 \code{\link{cluster_pair}}.}
+
+\item{select}{the name of a logical column that is used to select the pairs
+that will be collected}
 
 \item{clear}{remove the pairs from the cluster nodes}
 }
@@ -23,8 +26,17 @@ Collect pairs from cluster nodes
 library(parallel)
 data("linkexample1", "linkexample2")
 cl <- makeCluster(2)
-pairs <- cluster_pair(cl, linkexample1, linkexample2)
-local_pairs <- cluster_collect(pairs, clear = TRUE)
-stopCluster(cl)
 
+pairs <- cluster_pair(cl, linkexample1, linkexample2)
+local_pairs <- cluster_collect(pairs, clear = FALSE)
+
+compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
+model <- problink_em(~ lastname + firstname + address + sex, data = pairs)
+predict(model, pairs, type = "mpost", add = TRUE, binary = TRUE)
+# Select pairs with a mpost > 0.5
+select_threshold(pairs, "selected", "mpost", 0.5)
+# Collect the selected pairs
+local_pairs <- cluster_collect(pairs, "selected")
+
+stopCluster(cl)
 }

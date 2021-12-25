@@ -1,13 +1,15 @@
 cluster
 ==============================================================
 
-- [ ] `select_pairs` / `cluster_select_threshold`
-- [ ] `cluster_collect` should accept a selection column and only return
+- [X] `predict.cluster_pairs`
+- [X] `select_pairs` / `cluster_select_threshold`
+- [ ] `add_from_x` and `add_from_y`. 
+- [X] `cluster_collect` should accept a selection column and only return
   selected pairs.
 - [ ] `compare_vars`
+- [ ] `select_n_to_m` and `select_greedy` give error and help when applied to
+  cluster pairs.
 - [ ] a generic predict routine: pass it a model and it will call predict on
   each node and add the results to the pairs. This can be used in combination
   with other machine learning methods.
-- [ ] `add_from_x` and `add_from_y`. 
-
 

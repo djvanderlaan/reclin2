@@ -78,12 +78,14 @@ clm <- problink_em(f, data = clpairs)
 
 # Add the predictions to the original pairs
 pairs <- predict(m, pairs = pairs, type = "all", add = TRUE)
+clpairs <- predict(m, pairs = clpairs, type = "all", add = TRUE)
 
 
 # =============================================================================
 # Select pairs for linkage
 
 select_threshold(pairs, "selected", "mpost", 0.0001, inplace = TRUE)
+select_threshold(clpairs, "selected", "mpost", 0.0001, inplace = TRUE)
 
 select_greedy(pairs, "selected_greedy", "weight", preselect = "selected", 
   inplace = TRUE)
