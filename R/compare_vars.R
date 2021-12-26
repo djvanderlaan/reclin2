@@ -16,6 +16,9 @@
 #' @param y \code{data.table} with the other half of the pairs.
 #' @param inplace logical indicating whether \code{pairs} should be modified in place. When
 #'   pairs is large this can be more efficient.
+#' @param new_name name of new object to assign the pairs to on the cluster
+#'   nodes.
+#' @param ... Used to pass additional arguments to methods
 #'
 #' @details
 #' When \code{comparator} returns a \code{data.table} multiple columns are added to \code{pairs}. 
@@ -26,8 +29,17 @@
 #' Returns the \code{data.table} \code{pairs} with one or more columns added. 
 #' 
 #' @export
-compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x, comparator = identical(), 
-    x = attr(pairs, 'x'), y = attr(pairs, 'y'), inplace = FALSE) {
+compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x, 
+    comparator = identical(), ...) {
+  UseMethod("compare_vars")
+}
+
+
+#' @rdname compare_vars
+#' @export
+compare_vars.pairs <- function(pairs, variable, on_x = variable, on_y = on_x, 
+    comparator = identical(), x = attr(pairs, 'x'), y = attr(pairs, 'y'), 
+    inplace = FALSE, ...) {
   xv <- x[pairs$.x, ..on_x]
   yv <- y[pairs$.y, ..on_y]
   # Compare

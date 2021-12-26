@@ -2,7 +2,9 @@
 % Please edit documentation in R/select_greedy.R, R/select_n_to_m.R
 \name{select_greedy}
 \alias{select_greedy}
+\alias{select_greedy.pairs}
 \alias{select_n_to_m}
+\alias{select_n_to_m.pairs}
 \title{Select matching pairs enforcing one-to-one linkage}
 \usage{
 select_greedy(
@@ -13,12 +15,35 @@ select_greedy(
   preselect = NULL,
   id_x = NULL,
   id_y = NULL,
+  ...
+)
+
+\method{select_greedy}{pairs}(
+  pairs,
+  variable,
+  score,
+  threshold,
+  preselect = NULL,
+  id_x = NULL,
+  id_y = NULL,
   x = attr(pairs, "x"),
   y = attr(pairs, "y"),
-  inplace = FALSE
+  inplace = FALSE,
+  ...
 )
 
 select_n_to_m(
+  pairs,
+  variable,
+  score,
+  threshold,
+  preselect = NULL,
+  id_x = NULL,
+  id_y = NULL,
+  ...
+)
+
+\method{select_n_to_m}{pairs}(
   pairs,
   variable,
   score,
