@@ -36,8 +36,15 @@ cluster_collect <- function(pairs, select = NULL, clear = FALSE) {
     env <- reclin_env[[name]]
     pairs <- env$pairs
     x <- attr(pairs, "x")
-    if (!is.null(select)) 
-      pairs <- pairs[eval(select) == TRUE]
+    if (!is.null(select)) {
+      # Workaroudn for the issue that if select exists as a column in 
+      # pairs; then pairs[get(select) == TRUE] doesn't work; we now
+      # only have an issue if a user has a column named ...reclintmp;
+      # TODO: with data.table 1.14.3 (unreleased at the moment) we can
+      # use the env argument
+      ....reclintmp <- select
+      pairs <- pairs[get(....reclintmp) == TRUE]
+    }
     pairs$.x <- x$.id[pairs$.x]
     if (clear) {
       env$pairs <- NULL

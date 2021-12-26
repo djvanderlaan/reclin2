@@ -50,6 +50,24 @@
 #' pairs <- select_greedy(pairs, "greedy", "mpost", 0.5)
 #' table(pairs$ntom, pairs$greedy)
 #' 
+#' # The same example as above using a cluster;
+#' library(parallel)
+#' cl <- makeCluster(2)
+#' pairs <- cluster_pair_blocking(cl, linkexample1, linkexample2, "postcode")
+#' compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
+#' model <- problink_em(~ lastname + firstname + address + sex, data = pairs)
+#' predict(model, pairs, type = "mpost", add = TRUE, binary = TRUE)
+#' # Select pairs with a mpost > 0.5 and force one-to-one linkage
+#' # select_n_to_m and select_greedy only work on pairs that are local; 
+#' # therefore we first collect the pairs
+#' select_threshold(pairs, "selected", "mpost", 0.5)
+#' local_pairs <- cluster_collect(pairs, "selected")
+#' local_pairs <- select_n_to_m(local_pairs, "ntom", "mpost", 0.5)
+#' local_pairs <- select_greedy(local_pairs, "greedy", "mpost", 0.5)
+#' table(local_pairs$ntom, local_pairs$greedy)
+#' 
+#' stopCluster(cl)
+#' 
 #' @rdname select_n_to_m
 #' @export
 select_n_to_m <- function(pairs, variable, score, threshold, preselect = NULL, 
@@ -61,7 +79,7 @@ select_n_to_m <- function(pairs, variable, score, threshold, preselect = NULL,
 #' @export
 select_n_to_m.pairs <- function(pairs, variable, score, threshold, preselect = NULL, 
     id_x = NULL, id_y = NULL, x = attr(pairs, "x"), y = attr(pairs, "y"), 
-    inplace = FALSE) {
+    inplace = FALSE, ...) {
   prep <- select_preprocess(pairs, score = score, threshold = threshold, 
     preselect = preselect, id_x = id_x, id_y = id_y, x = x, y = y)
   sel_ind <- match_n_to_m(prep$.x, prep$.y, prep$score, n = 1, m = 1)
