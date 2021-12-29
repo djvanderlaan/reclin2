@@ -9,7 +9,8 @@ cluster
 - [X] `compare_vars`
 - [X] `select_n_to_m` and `select_greedy` give error and help when applied to
   cluster pairs.
-- [ ] a generic predict routine: pass it a model and it will call predict on
+- [X] a generic predict routine: pass it a model and it will call predict on
   each node and add the results to the pairs. This can be used in combination
   with other machine learning methods.
+- [ ] vignette
 
