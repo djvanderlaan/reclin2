@@ -10,7 +10,7 @@ check: build
 document:
 	R -e "roxygen2::roxygenise()"
 
-vignettes:
+vignettes: build
 	cd work && tar -xzf `ls reclin2*.tar.gz | sort | tail -n 1` && \
 	  rm -r -f ../inst/doc && \
 	  mkdir -p ../inst && \
