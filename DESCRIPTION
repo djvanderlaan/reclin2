@@ -1,7 +1,7 @@
 Package: reclin2
 Type: Package
 Title: Record Linkage Toolkit
-Version: 0.0.1
+Version: 0.1.0
 Author: Jan van der Laan
 Maintainer: Jan van der Laan <r@eoos.dds.nl>
 Description: Functions to assist in performing probabilistic record linkage and
