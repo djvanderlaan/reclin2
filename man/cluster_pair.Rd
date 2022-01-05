@@ -15,7 +15,7 @@ from \code{parallel} or \code{\link[snow]{makeCluster}} from \code{snow}.}
 \item{y}{second \code{data.frame}. Ignored when \code{deduplication = TRUE}.}
 
 \item{deduplication}{generate pairs from only \code{x}. Ignore \code{y}. This 
-is usefull for deduplication of \code{x}.}
+is useful for deduplication of \code{x}.}
 
 \item{name}{the name of the resulting object to create locally on the different
 R processes.}

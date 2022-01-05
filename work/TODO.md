@@ -12,5 +12,5 @@ cluster
 - [X] a generic predict routine: pass it a model and it will call predict on
   each node and add the results to the pairs. This can be used in combination
   with other machine learning methods.
-- [ ] vignette
+- [X] vignette
 
