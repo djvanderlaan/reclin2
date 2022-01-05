@@ -34,7 +34,7 @@ pair <- function(x, y, deduplication = FALSE, add_xy = TRUE) {
   if (deduplication && !missing(y)) warning("y provided will be ignored.")
   y <- if (deduplication) x else as.data.table(y)
   pairs <- CJ(.x = seq_len(nrow(x)), .y = seq_len(nrow(y)))
-  # In case of deduplication; ignode cases when .y <= .x
+  # In case of deduplication; ignore cases when .y <= .x
   if (deduplication) pairs <- pairs[.y > .x]
   setattr(pairs, "class", c("pairs", class(pairs)))
   if (deduplication) setattr(pairs, "deduplication", TRUE)

@@ -125,34 +125,17 @@ The next step in the process, is to determine which pairs of records belong to
 the same entity and which do not. There are numerous ways to do this. One
 possibility is to label some of the pairs as match or no match, and use some
 machine learning algorithm to predict the match status using the comparison
-vectors. Another, method, is to score the pairs based on the comparison vectors
-and select those with a score above some threshold. The simplest way to score
-the pairs, is to calculate the sum of the comparison vectors. That is what
-`score_simsum` does:
-
-```{.R}
-#pairs <- score_simsum(p, var = "simsum")
-#print(pairs)
-```
-
-The disadvantage of `score_simsum` is that it doesn't take into account that
-the amount of information in agreement or disagreement on a variable depends
-on the variable. For example, agreement on sex doesn't tell us much: when
-our data sets contain 50% men an 50% women, there is a 50% chance that two
-random records agree on sex. On the other hand the probability that two random
-records agree on last name is much lower. Therefore, agreement on last name makes
-it much more likely that the two records belong to the same entity.
-
-This is what the probabilistic linkage framework initially formalised by Fellegi
-and Sunter tries to do. The function `problink_em` uses an EM-algorithm to
-estimate the so called m- and u-probabilities for each of the linkage variables.
-The m-probability is the probability that two records concerning the same entity
-agree on the linkage variable; this means that the m-probability corresponds to
-the probability that there is an error in the linkage variables.
-The u-probability is the probability that two records belonging to different
-entities agree on a variable. For a variable with few categories (such as sex)
-this probability will be large, while for a variable with a large number of
-categories (such as last name) this probability will be small.
+vectors. Traditionally, the probabilistic linkage framework initially formalised
+by Fellegi and Sunter tries is used. The function `problink_em` uses an
+EM-algorithm to estimate the so called m- and u-probabilities for each of the
+linkage variables.  The m-probability is the probability that two records
+concerning the same entity agree on the linkage variable; this means that the
+m-probability corresponds to the probability that there is an error in the
+linkage variables.  The u-probability is the probability that two records
+belonging to different entities agree on a variable. For a variable with few
+categories (such as sex) this probability will be large, while for a variable
+with a large number of categories (such as last name) this probability will be
+small.
 
 ```{.R}
 m <- problink_em(~ lastname + firstname + address + sex, data = pairs)

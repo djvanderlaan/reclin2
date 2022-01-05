@@ -44,7 +44,7 @@ pair_blocking <- function(x, y, on, deduplication = FALSE, add_xy = TRUE) {
   pairs <- merge(a, b, by = on, all.x = FALSE, all.y = FALSE, 
     allow.cartesian = TRUE)
   pairs[, (on) := NULL]
-  # In case of deduplication; ignode cases when .y <= .x
+  # In case of deduplication; ignore cases when .y <= .x
   if (deduplication) pairs <- pairs[.y > .x]
   setattr(pairs, "class", c("pairs", class(pairs)))
   setattr(pairs, "blocking_on", on)
