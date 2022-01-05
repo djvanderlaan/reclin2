@@ -57,7 +57,6 @@ compare_vars.pairs <- function(pairs, variable, on_x = variable, on_y = on_x,
   } else {
     if (inplace) pairs[, (variable) := res] else pairs[[variable]] <- res
   }
-  # TODO: store comparison function and variables on which was compared
   if (inplace) invisible(pairs) else pairs
 }
 
