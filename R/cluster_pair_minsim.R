@@ -62,9 +62,9 @@
 cluster_pair_minsim<- function(cluster, x, y, on, minsim = 0.0, 
     comparators = list(default_comparator), default_comparator = identical(), 
     keep_simsum = TRUE, deduplication = FALSE, name = "default") {
-  # TODO: handle deduplication
   x <- as.data.table(x)
-  y <- as.data.table(y)
+  if (deduplication && !missing(y)) warning("y provided will be ignored.")
+  y <- if (deduplication) x else as.data.table(y)
   # Split x into a length(cluster) groups
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*length(cluster))
   group <- sample(group)
@@ -72,9 +72,8 @@ cluster_pair_minsim<- function(cluster, x, y, on, minsim = 0.0,
   x <- split(x, group)
   for (i in seq_along(x)) x[[i]]$.id <- idx[[i]]
   # Copy data to cluster
-  clusterApply(cluster, x, function(name, x, y, on, minsim = minsim, 
-      comparators = comparators, default_comparator = default_comparator, 
-      keep_simsum = keep_simsum) {
+  clusterApply(cluster, x, function(name, x, y, on, minsim, comparators, 
+      default_comparator, keep_simsum, deduplication) {
     if (!require("reclin2"))
       stop("reclin2 needs to be installed on cluster nodes.")
     # environment in which to store all data
@@ -86,9 +85,16 @@ cluster_pair_minsim<- function(cluster, x, y, on, minsim = 0.0,
     reclin_env[[name]]$pairs <- pair_minsim(x, y, on = on, minsim = minsim, 
       comparators = comparators, default_comparator = default_comparator, 
       keep_simsum = keep_simsum)
+    # Handle deduplication; we cannot use the deduplication argument of 
+    # the pair function
+    if (deduplication) {
+      ids <- x$.id[ reclin_env[[name]]$pairs$.x ]
+      reclin_env[[name]]$pairs <- reclin_env[[name]]$pairs[.y > ids]
+    }
     TRUE
   }, name = name, y = y, on = on, minsim = minsim, comparators = comparators, 
-    default_comparator = default_comparator, keep_simsum = keep_simsum)
+    default_comparator = default_comparator, keep_simsum = keep_simsum,
+    deduplication = deduplication)
   structure(list(cluster = cluster, name = name), class = "cluster_pairs")
 }
 

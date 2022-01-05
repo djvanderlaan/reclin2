@@ -47,9 +47,9 @@
 #' @import data.table
 #' @export
 cluster_pair_blocking <- function(cluster, x, y, on, deduplication = FALSE, name = "default") {
-  # TODO: handle deduplication
   x <- as.data.table(x)
-  y <- as.data.table(y)
+  if (deduplication && !missing(y)) warning("y provided will be ignored.")
+  y <- if (deduplication) x else as.data.table(y)
   # Split x into a length(cluster) groups
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*length(cluster))
   group <- sample(group)
@@ -57,7 +57,7 @@ cluster_pair_blocking <- function(cluster, x, y, on, deduplication = FALSE, name
   x <- split(x, group)
   for (i in seq_along(x)) x[[i]]$.id <- idx[[i]]
   # Copy data to cluster
-  clusterApply(cluster, x, function(name, x, y, on) {
+  clusterApply(cluster, x, function(name, x, y, on, deduplication) {
     if (!require("reclin2"))
       stop("reclin2 needs to be installed on cluster nodes.")
     # environment in which to store all data
@@ -67,8 +67,14 @@ cluster_pair_blocking <- function(cluster, x, y, on, deduplication = FALSE, name
       warning("'", name, "' already exists; overwriting.")
     reclin_env[[name]] <- new.env()
     reclin_env[[name]]$pairs <- pair_blocking(x, y, on)
+    # Handle deduplication; we cannot use the deduplication argument of 
+    # the pair function
+    if (deduplication) {
+      ids <- x$.id[ reclin_env[[name]]$pairs$.x ]
+      reclin_env[[name]]$pairs <- reclin_env[[name]]$pairs[.y > ids]
+    }
     TRUE
-  }, name = name, y = y, on = on)
+  }, name = name, y = y, on = on, deduplication = deduplication)
   structure(list(cluster = cluster, name = name), class = "cluster_pairs", 
     blocking_on = on)
 }
