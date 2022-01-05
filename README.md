@@ -25,10 +25,10 @@ this data.
 
 Many of the features can be found in the vignettes of the package:
 
-- [Introduction to reclin2](https://htmlpreview.github.io/?https://github.com/djvanderlaan/reclin2/blob/parallel/inst/doc/introduction.html)
-- [Record linkage using machine learning](https://htmlpreview.github.io/?https://github.com/djvanderlaan/reclin2/blob/parallel/inst/doc/record_linkage_using_machine_learning.html)
-- [Deduplication using reclin2](https://htmlpreview.github.io/?https://github.com/djvanderlaan/reclin2/blob/parallel/inst/doc/deduplication.html)
-- [Using a cluster for record linkage](https://htmlpreview.github.io/?https://github.com/djvanderlaan/reclin2/blob/parallel/inst/doc/using_a_cluster_for_record_linkage.html)
+- [Introduction to reclin2](https://htmlpreview.github.io/?https://github.com/djvanderlaan/reclin2/blob/master/inst/doc/introduction.html)
+- [Record linkage using machine learning](https://htmlpreview.github.io/?https://github.com/djvanderlaan/reclin2/blob/master/inst/doc/record_linkage_using_machine_learning.html)
+- [Deduplication using reclin2](https://htmlpreview.github.io/?https://github.com/djvanderlaan/reclin2/blob/master/inst/doc/deduplication.html)
+- [Using a cluster for record linkage](https://htmlpreview.github.io/?https://github.com/djvanderlaan/reclin2/blob/master/inst/doc/using_a_cluster_for_record_linkage.html)
 
 
 
