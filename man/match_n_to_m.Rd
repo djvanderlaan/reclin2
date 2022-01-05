@@ -22,6 +22,10 @@ y.}
 \item{m}{an integer. Each element of y can be linked to at most m elements of
 y.}
 }
+\value{
+A logical vector with the same length as \code{x} indicating the selected 
+records.
+}
 \description{
 Force n to m matching on a set of pairs
 }

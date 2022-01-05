@@ -108,6 +108,10 @@ problink_em <- function(formula, data, patterns, mprobs0 = list(0.95),
 #' @param object the \code{\link{problink_em}} object.
 #' @param ... ignored;
 #' 
+#' @return
+#' Returns the original \code{object} with a \code{data.frame} with the patterns
+#' and corresponding m-, u-probabilities and weights added. 
+#'
 #' @export
 summary.problink_em <- function(object, ...) {
   # calculate the posterior probabilities

@@ -11,6 +11,10 @@
 
 \item{...}{ignored;}
 }
+\value{
+Returns the original \code{object} with a \code{data.frame} with the patterns
+and corresponding m-, u-probabilities and weights added.
+}
 \description{
 Summarise the results from \code{\link{problink_em}}
 }
