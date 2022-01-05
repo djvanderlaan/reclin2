@@ -8,7 +8,7 @@ Description: Functions to assist in performing probabilistic record linkage and
     deduplication: generating pairs, comparing records, em-algorithm for
     estimating m- and u-probabilities, forcing one-to-one matching. Can also be
     used for pre- and post-processing for machine learning methods for record
-    linkage.
+    linkage. Focus is on memory, CPU performance and flexibility. 
 URL: https://github.com/djvanderlaan/reclin2
 Depends:
     data.table,

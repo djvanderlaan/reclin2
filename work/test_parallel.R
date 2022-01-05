@@ -78,7 +78,9 @@ clm <- problink_em(f, data = clpairs)
 
 # Add the predictions to the original pairs
 pairs <- predict(m, pairs = pairs, type = "all", add = TRUE)
-clpairs <- predict(m, pairs = clpairs, type = "all", add = TRUE)
+
+tmp <- predict(clm, pairs = clpairs, new_name = "foo", add = TRUE)
+clpairs <- predict(clm, pairs = clpairs, type = "all", add = TRUE)
 
 
 # =============================================================================

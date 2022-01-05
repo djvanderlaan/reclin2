@@ -13,4 +13,6 @@ cluster
   each node and add the results to the pairs. This can be used in combination
   with other machine learning methods.
 - [X] vignette
+- [X] check spelling errors and description in Description
+- [ ] update README
 
