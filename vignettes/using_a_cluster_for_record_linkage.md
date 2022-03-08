@@ -223,4 +223,9 @@ cluster_modify_pairs(pairs, function(pairs, model, ...) {
 }, model = mglm)
 ```
 
+And stop the cluster.
+```{.R}
+stopCluster(cl)
+```
+
 

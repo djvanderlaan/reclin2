@@ -42,6 +42,11 @@ used for making unique the names of columns in the result.}
 \item{keep_from_pairs}{character vector with names of variables in \code{pairs}
 that should be included in the output.}
 }
+\value{
+Returns a \code{data.table} containing records from \code{x} and \code{y} and
+\code{pairs}. Columns that occur both in \code{x} and \code{y} gain a suffix
+indicating from which data set they are.
+}
 \description{
 Use the selected pairs to generate a linked data set
 }

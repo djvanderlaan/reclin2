@@ -159,10 +159,11 @@ for (i in seq_along(thresholds)) {
 The results are plotted in the figure below.
 
 ```{.R fun=output_figure name="fig2"}
-par(mfrow = c(2,2))
+opar = par(mfrow = c(2,2))
 plot(thresholds, sizes)
 plot(thresholds, nerrors)
 plot(sizes, nerrors)
+par(opar)
 ```
 
 We can see that as the threshold decreases the number of errors increases and

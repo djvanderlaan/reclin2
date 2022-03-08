@@ -18,6 +18,10 @@
 #' \code{y} is matched at most \code{m} elements of \code{x}. It tries to select 
 #' elements in such a way that the total weight \code{w} of the selected 
 #' elements is maximised. 
+#'
+#' @return
+#' A logical vector with the same length as \code{x} indicating the selected 
+#' records.
 #' 
 #' @examples
 #' d <- data.frame(x=c(1,1,1,2,2,3,3), y=c(1,2,3,4,5,6,7), w=1:7)

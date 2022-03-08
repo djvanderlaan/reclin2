@@ -9,7 +9,9 @@
 #' @details 
 #' Pairs with the highest weight are selected as long a neither the lhs as the
 #' rhs are already selected in a pair with a higher weight. 
-#' 
+#'
+#' @return
+#' A logical vector with the same length as \code{x}. 
 #' 
 #' @useDynLib reclin2
 #' @import Rcpp

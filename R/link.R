@@ -20,6 +20,11 @@
 #' @details 
 #' Uses the selected pairs to link the two data sets to each other. Renames 
 #' variables that are in both data sets.  
+#'
+#' @return
+#' Returns a \code{data.table} containing records from \code{x} and \code{y} and
+#' \code{pairs}. Columns that occur both in \code{x} and \code{y} gain a suffix
+#' indicating from which data set they are. 
 #'   
 #' @export
 #' 

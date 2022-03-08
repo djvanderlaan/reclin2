@@ -13,6 +13,9 @@ greedy(x, y, weight)
 
 \item{weight}{weight of pair}
 }
+\value{
+A logical vector with the same length as \code{x}.
+}
 \description{
 Greedy one-to-one matching of pairs
 }
