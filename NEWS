@@ -1,0 +1,10 @@
+
+CHANGES IN RECLIN2 0.1.2:
+
+  NEW FEATURES:
+
+  BUG FIXES:
+
+  - `pairs_minsim` gave an error when the number of records squared is larger 
+    the maximum integer value.
+
