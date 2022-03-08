@@ -56,7 +56,7 @@ pair_minsim <- function(x, y, on, minsim = 0.0,
   ny <- nrow(y)
   nx <- nrow(x)
   max_size <- 1E7
-  nchunks <- max(ceiling(nx * ny/ max_size), 1L)
+  nchunks <- max(ceiling(nx * (ny/ max_size)), 1L)
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*nchunks)
   idx <- split(seq_len(nrow(x)), group)
   pairs <- lapply(idx, function(idx, x, y, on, minsim, comparators, deduplication) {
