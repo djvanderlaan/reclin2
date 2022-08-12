@@ -56,6 +56,8 @@ cluster_collect <- function(pairs, select = NULL, clear = FALSE) {
   # x has been split; combine again into one dataset and add to pairs
   x <- lapply(tmp, function(d) attr(d, "x"))
   x <- rbindlist(x)
+  # make sure x is put back in correct order
+  x <- x[order(.id)]
   attr(p, "x") <- x
   # Build a list of attributes we want to copy from the data.tables in tmp to 
   # the new pairs list
