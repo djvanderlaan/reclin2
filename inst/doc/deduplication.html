@@ -6,74 +6,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Jan van der Laan" />
   <title>Deduplication using reclin2</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-  <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
   <style type="text/css">
 body {
@@ -122,6 +123,22 @@ p.author {
 font-weight : bold;
 color: orange;
 }
+
+code {
+color : lightgray;
+}
+code span.op {
+color: #888888;
+}
+code span.kw {
+color: #30bd58;
+}
+code span.st {
+color: #76a9db; }
+code span.dv, code span.ot {
+color: #7fd0a8; }
+code span.dt {
+color: #ee8c70; }
 </style>
 </head>
 <body>
@@ -134,59 +151,59 @@ color: orange;
 %\VignetteIndexEntry{Deduplication using reclin2}
 -->
 <p>We are going to work with the dataset <code>town_name</code> included in the package. The dataset contains a collection of town names as observed in administrative dataset. The first column <code>name</code> contains the names as observed. The second column <code>official_name</code> the official town name. We are going to assume that the second column is not available (or only for a part of the observations). The goal is to recode the 584 town names into a smaller set of town names knowing that most of the observed town names are actually misspelled versions of a smaller set of town names. We could also have solved the problem differently by linking the observed town names to a dataset containing all official town names. Often cleaning up these kind of misspellings is a first step in an actual linkage process. By first cleaning up the town names, subsequent use of the variable is easier and can lead to better quality linkage.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(reclin2)</a>
-<a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="op">&gt;</span><span class="st"> </span><span class="kw">data</span>(town_names)</a>
-<a class="sourceLine" id="cb1-4" title="4"></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(town_names)</a>
-<a class="sourceLine" id="cb1-6" title="6">                name official_name</a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="dv">1</span>       alblasserdam  Alblasserdam</a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="dv">2</span>          amsterdam     Amsterdam</a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="dv">3</span>     amsterdam<span class="op">-</span>z.o.     Amsterdam</a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="dv">4</span> amsterdam<span class="op">-</span>zuidoost     Amsterdam</a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="dv">5</span>      amsterdam z<span class="op">-</span>o     Amsterdam</a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="dv">6</span>     amsterdam z.o.     Amsterdam</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">library</span>(reclin2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">data</span>(town_names)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">head</span>(town_names)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>                name official_name</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="dv">1</span>       alblasserdam  Alblasserdam</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="dv">2</span>          amsterdam     Amsterdam</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="dv">3</span>     amsterdam<span class="op">-</span>z.o.     Amsterdam</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="dv">4</span> amsterdam<span class="op">-</span>zuidoost     Amsterdam</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="dv">5</span>      amsterdam z<span class="op">-</span>o     Amsterdam</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="dv">6</span>     amsterdam z.o.     Amsterdam</span></code></pre></div>
 <p>When performing deduplication we will link a dataset to itself and will try to link different records belonging to the same object. When a dataset to itself, it is not necessary to both compare record <em>i</em> to <em>j</em> and <em>j</em> to <em>i</em> and we certainly do not want to compare a record to itself. The option <code>deduplication</code> of the <code>pair_</code> functions makes sure that only the needed pairs are generated. This is a small dataset so we can easily generate all pairs:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="op">&gt;</span><span class="st"> </span>pairs &lt;-<span class="st"> </span><span class="kw">pair</span>(town_names, <span class="dt">deduplication =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-2" title="2"></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(pairs)</a>
-<a class="sourceLine" id="cb2-4" title="4">  First data set<span class="op">:</span><span class="st">  </span><span class="dv">584</span> records</a>
-<a class="sourceLine" id="cb2-5" title="5">  Second data set<span class="op">:</span><span class="st"> </span><span class="dv">584</span> records</a>
-<a class="sourceLine" id="cb2-6" title="6">  Total number of pairs<span class="op">:</span><span class="st"> </span><span class="dv">170</span> <span class="dv">236</span> pairs</a>
-<a class="sourceLine" id="cb2-7" title="7"></a>
-<a class="sourceLine" id="cb2-8" title="8">         .x  .y</a>
-<a class="sourceLine" id="cb2-9" title="9">     <span class="dv">1</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">2</span></a>
-<a class="sourceLine" id="cb2-10" title="10">     <span class="dv">2</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">3</span></a>
-<a class="sourceLine" id="cb2-11" title="11">     <span class="dv">3</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">4</span></a>
-<a class="sourceLine" id="cb2-12" title="12">     <span class="dv">4</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">5</span></a>
-<a class="sourceLine" id="cb2-13" title="13">     <span class="dv">5</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">6</span></a>
-<a class="sourceLine" id="cb2-14" title="14">    <span class="op">---</span><span class="st">        </span></a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="dv">170232</span><span class="op">:</span><span class="st"> </span><span class="dv">581</span> <span class="dv">583</span></a>
-<a class="sourceLine" id="cb2-16" title="16"><span class="dv">170233</span><span class="op">:</span><span class="st"> </span><span class="dv">581</span> <span class="dv">584</span></a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="dv">170234</span><span class="op">:</span><span class="st"> </span><span class="dv">582</span> <span class="dv">583</span></a>
-<a class="sourceLine" id="cb2-18" title="18"><span class="dv">170235</span><span class="op">:</span><span class="st"> </span><span class="dv">582</span> <span class="dv">584</span></a>
-<a class="sourceLine" id="cb2-19" title="19"><span class="dv">170236</span><span class="op">:</span><span class="st"> </span><span class="dv">583</span> <span class="dv">584</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>pairs &lt;-<span class="st"> </span><span class="kw">pair</span>(town_names, <span class="dt">deduplication =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(pairs)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>  First data set<span class="op">:</span><span class="st">  </span><span class="dv">584</span> records</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>  Second data set<span class="op">:</span><span class="st"> </span><span class="dv">584</span> records</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>  Total number of pairs<span class="op">:</span><span class="st"> </span><span class="dv">170</span> <span class="dv">236</span> pairs</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>         .x  .y</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>     <span class="dv">1</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">2</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>     <span class="dv">2</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">3</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>     <span class="dv">3</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">4</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>     <span class="dv">4</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">5</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>     <span class="dv">5</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">6</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>    <span class="op">---</span><span class="st">        </span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="dv">170232</span><span class="op">:</span><span class="st"> </span><span class="dv">581</span> <span class="dv">583</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="dv">170233</span><span class="op">:</span><span class="st"> </span><span class="dv">581</span> <span class="dv">584</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a><span class="dv">170234</span><span class="op">:</span><span class="st"> </span><span class="dv">582</span> <span class="dv">583</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="dv">170235</span><span class="op">:</span><span class="st"> </span><span class="dv">582</span> <span class="dv">584</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a><span class="dv">170236</span><span class="op">:</span><span class="st"> </span><span class="dv">583</span> <span class="dv">584</span></span></code></pre></div>
 <p>We will compare the records on <code>name</code> and use a string similarity function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw">compare_pairs</span>(pairs, <span class="dt">on =</span> <span class="st">&quot;name&quot;</span>, <span class="dt">comparators =</span> <span class="kw">list</span>(<span class="kw">jaro_winkler</span>()), </a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="op">+</span><span class="st">     </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb3-3" title="3"></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(pairs)</a>
-<a class="sourceLine" id="cb3-5" title="5">  First data set<span class="op">:</span><span class="st">  </span><span class="dv">584</span> records</a>
-<a class="sourceLine" id="cb3-6" title="6">  Second data set<span class="op">:</span><span class="st"> </span><span class="dv">584</span> records</a>
-<a class="sourceLine" id="cb3-7" title="7">  Total number of pairs<span class="op">:</span><span class="st"> </span><span class="dv">170</span> <span class="dv">236</span> pairs</a>
-<a class="sourceLine" id="cb3-8" title="8"></a>
-<a class="sourceLine" id="cb3-9" title="9">         .x  .y      name</a>
-<a class="sourceLine" id="cb3-10" title="10">     <span class="dv">1</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">2</span> <span class="fl">0.6679894</span></a>
-<a class="sourceLine" id="cb3-11" title="11">     <span class="dv">2</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">3</span> <span class="fl">0.5753968</span></a>
-<a class="sourceLine" id="cb3-12" title="12">     <span class="dv">3</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">4</span> <span class="fl">0.5383598</span></a>
-<a class="sourceLine" id="cb3-13" title="13">     <span class="dv">4</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">5</span> <span class="fl">0.5882173</span></a>
-<a class="sourceLine" id="cb3-14" title="14">     <span class="dv">5</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">6</span> <span class="fl">0.5753968</span></a>
-<a class="sourceLine" id="cb3-15" title="15">    <span class="op">---</span><span class="st">                  </span></a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="dv">170232</span><span class="op">:</span><span class="st"> </span><span class="dv">581</span> <span class="dv">583</span> <span class="fl">0.5219298</span></a>
-<a class="sourceLine" id="cb3-17" title="17"><span class="dv">170233</span><span class="op">:</span><span class="st"> </span><span class="dv">581</span> <span class="dv">584</span> <span class="fl">0.5228070</span></a>
-<a class="sourceLine" id="cb3-18" title="18"><span class="dv">170234</span><span class="op">:</span><span class="st"> </span><span class="dv">582</span> <span class="dv">583</span> <span class="fl">0.5351852</span></a>
-<a class="sourceLine" id="cb3-19" title="19"><span class="dv">170235</span><span class="op">:</span><span class="st"> </span><span class="dv">582</span> <span class="dv">584</span> <span class="fl">0.7092593</span></a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="dv">170236</span><span class="op">:</span><span class="st"> </span><span class="dv">583</span> <span class="dv">584</span> <span class="fl">0.9296296</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">compare_pairs</span>(pairs, <span class="dt">on =</span> <span class="st">&quot;name&quot;</span>, <span class="dt">comparators =</span> <span class="kw">list</span>(<span class="kw">jaro_winkler</span>()), </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(pairs)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>  First data set<span class="op">:</span><span class="st">  </span><span class="dv">584</span> records</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>  Second data set<span class="op">:</span><span class="st"> </span><span class="dv">584</span> records</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>  Total number of pairs<span class="op">:</span><span class="st"> </span><span class="dv">170</span> <span class="dv">236</span> pairs</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>         .x  .y      name</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>     <span class="dv">1</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">2</span> <span class="fl">0.6679894</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>     <span class="dv">2</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">3</span> <span class="fl">0.5753968</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>     <span class="dv">3</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">4</span> <span class="fl">0.5383598</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>     <span class="dv">4</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">5</span> <span class="fl">0.5882173</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>     <span class="dv">5</span><span class="op">:</span><span class="st">   </span><span class="dv">1</span>   <span class="dv">6</span> <span class="fl">0.5753968</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>    <span class="op">---</span><span class="st">                  </span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a><span class="dv">170232</span><span class="op">:</span><span class="st"> </span><span class="dv">581</span> <span class="dv">583</span> <span class="fl">0.5219298</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a><span class="dv">170233</span><span class="op">:</span><span class="st"> </span><span class="dv">581</span> <span class="dv">584</span> <span class="fl">0.5228070</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a><span class="dv">170234</span><span class="op">:</span><span class="st"> </span><span class="dv">582</span> <span class="dv">583</span> <span class="fl">0.5351852</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a><span class="dv">170235</span><span class="op">:</span><span class="st"> </span><span class="dv">582</span> <span class="dv">584</span> <span class="fl">0.7092593</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a><span class="dv">170236</span><span class="op">:</span><span class="st"> </span><span class="dv">583</span> <span class="dv">584</span> <span class="fl">0.9296296</span></span></code></pre></div>
 <p>Now comes the difficult part: selecting a threshold. The problem is that it is not really possible to say beforehand what an appropriate threshold is. That depends on the exact problem and also depends on the number of different objects that are expected. To explain that, first a short explanation how the <code>deduplicate_equivalence</code> function that we are going to use later works. Let’s assume we have two actual town names and using our string similarity function we select pairs that differ one letter from each other, so we end up with the following set of pairs as an example</p>
 <pre><code>rotterdam -&gt; rottrdam
 rotterdam -&gt; rotterdm
@@ -197,163 +214,162 @@ amstrdam -&gt; amstdam
 amsterdm -&gt; amsterdam</code></pre>
 <p>That means that we are saying that <code>rotterdam</code> is the same object as <code>rottrdam</code> which is the same object as <code>rottrdm</code>. Therefore, <code>rotterdam</code> and <code>rottrdm</code> are the same object although we didn’t select a pair <code>rotterdam -&gt; rottrdm</code>. So all names <code>rotterdam</code>, <code>rottrdam</code>, <code>rotterdm</code>, <code>rottrdm</code> and <code>rtterdam</code> are going to be in one class. When the number of misspelled names increases and when the number of actual town names increases, the likelihood that two names that do not belong to the same object are linked by a chain of pairs increases. This is a bit like the game where you have to change one word into another in a given number of steps by changing one letter at a time (the words in between have to be valid words). When the vocabulary is bigger this becomes easier. Therefore, the optimal threshold depends on the number of actual town names and the number of misspellings.</p>
 <p>We have the official names and can therefore measure how many errors we make. We make an error when we put two records from <code>x</code> in the same group while they actually belong to different object (official town names). First we add a variable indicating whether two pairs have the same official name:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw">compare_vars</span>(pairs, <span class="st">&quot;true&quot;</span>, <span class="dt">on_x =</span> <span class="st">&quot;official_name&quot;</span>, </a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="op">+</span><span class="st">     </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">compare_vars</span>(pairs, <span class="st">&quot;true&quot;</span>, <span class="dt">on_x =</span> <span class="st">&quot;official_name&quot;</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>In practice this information is not available, but it might be available for a subset of records, for example, after manual inspection of a subset of the pairs. We now round the similarity scores and count how many errors we make for each value of the similarity score threshold:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="op">&gt;</span><span class="st"> </span>pairs<span class="op">$</span>threshold &lt;-<span class="st"> </span><span class="kw">trunc</span>(pairs<span class="op">$</span>name<span class="op">/</span><span class="fl">0.05</span>) <span class="op">*</span><span class="st"> </span><span class="fl">0.05</span></a>
-<a class="sourceLine" id="cb6-2" title="2"></a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="op">&gt;</span><span class="st"> </span>thresholds &lt;-<span class="st"> </span>pairs[, .(<span class="dt">ftrue =</span> <span class="kw">mean</span>(true)), by =<span class="st"> </span>threshold]</a>
-<a class="sourceLine" id="cb6-4" title="4"></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(thresholds[<span class="kw">order</span>(ftrue)])</a>
-<a class="sourceLine" id="cb6-6" title="6">  Total number of pairs<span class="op">:</span><span class="st"> </span><span class="dv">16</span> pairs</a>
-<a class="sourceLine" id="cb6-7" title="7"></a>
-<a class="sourceLine" id="cb6-8" title="8">    threshold       ftrue</a>
-<a class="sourceLine" id="cb6-9" title="9"> <span class="dv">1</span><span class="op">:</span><span class="st">      </span><span class="fl">0.25</span> <span class="fl">0.000000000</span></a>
-<a class="sourceLine" id="cb6-10" title="10"> <span class="dv">2</span><span class="op">:</span><span class="st">      </span><span class="fl">0.30</span> <span class="fl">0.001727116</span></a>
-<a class="sourceLine" id="cb6-11" title="11"> <span class="dv">3</span><span class="op">:</span><span class="st">      </span><span class="fl">0.35</span> <span class="fl">0.014810045</span></a>
-<a class="sourceLine" id="cb6-12" title="12"> <span class="dv">4</span><span class="op">:</span><span class="st">      </span><span class="fl">0.50</span> <span class="fl">0.034417054</span></a>
-<a class="sourceLine" id="cb6-13" title="13"> <span class="dv">5</span><span class="op">:</span><span class="st">      </span><span class="fl">0.45</span> <span class="fl">0.036163208</span></a>
-<a class="sourceLine" id="cb6-14" title="14"> <span class="dv">6</span><span class="op">:</span><span class="st">      </span><span class="fl">0.00</span> <span class="fl">0.055555556</span></a>
-<a class="sourceLine" id="cb6-15" title="15"> <span class="dv">7</span><span class="op">:</span><span class="st">      </span><span class="fl">0.40</span> <span class="fl">0.055960708</span></a>
-<a class="sourceLine" id="cb6-16" title="16"> <span class="dv">8</span><span class="op">:</span><span class="st">      </span><span class="fl">0.55</span> <span class="fl">0.057551227</span></a>
-<a class="sourceLine" id="cb6-17" title="17"> <span class="dv">9</span><span class="op">:</span><span class="st">      </span><span class="fl">0.60</span> <span class="fl">0.176160406</span></a>
-<a class="sourceLine" id="cb6-18" title="18"><span class="dv">10</span><span class="op">:</span><span class="st">      </span><span class="fl">0.65</span> <span class="fl">0.365251342</span></a>
-<a class="sourceLine" id="cb6-19" title="19"><span class="dv">11</span><span class="op">:</span><span class="st">      </span><span class="fl">0.70</span> <span class="fl">0.573084217</span></a>
-<a class="sourceLine" id="cb6-20" title="20"><span class="dv">12</span><span class="op">:</span><span class="st">      </span><span class="fl">0.75</span> <span class="fl">0.772509347</span></a>
-<a class="sourceLine" id="cb6-21" title="21"><span class="dv">13</span><span class="op">:</span><span class="st">      </span><span class="fl">0.80</span> <span class="fl">0.895522388</span></a>
-<a class="sourceLine" id="cb6-22" title="22"><span class="dv">14</span><span class="op">:</span><span class="st">      </span><span class="fl">0.85</span> <span class="fl">0.941742311</span></a>
-<a class="sourceLine" id="cb6-23" title="23"><span class="dv">15</span><span class="op">:</span><span class="st">      </span><span class="fl">0.90</span> <span class="fl">0.995657100</span></a>
-<a class="sourceLine" id="cb6-24" title="24"><span class="dv">16</span><span class="op">:</span><span class="st">      </span><span class="fl">0.95</span> <span class="fl">1.000000000</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>pairs<span class="op">$</span>threshold &lt;-<span class="st"> </span><span class="kw">trunc</span>(pairs<span class="op">$</span>name<span class="op">/</span><span class="fl">0.05</span>) <span class="op">*</span><span class="st"> </span><span class="fl">0.05</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>thresholds &lt;-<span class="st"> </span>pairs[, .(<span class="dt">ftrue =</span> <span class="kw">mean</span>(true)), by =<span class="st"> </span>threshold]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(thresholds[<span class="kw">order</span>(ftrue)])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>  Total number of pairs<span class="op">:</span><span class="st"> </span><span class="dv">16</span> pairs</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    threshold       ftrue</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a> <span class="dv">1</span><span class="op">:</span><span class="st">      </span><span class="fl">0.25</span> <span class="fl">0.000000000</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a> <span class="dv">2</span><span class="op">:</span><span class="st">      </span><span class="fl">0.30</span> <span class="fl">0.001727116</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a> <span class="dv">3</span><span class="op">:</span><span class="st">      </span><span class="fl">0.35</span> <span class="fl">0.014810045</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a> <span class="dv">4</span><span class="op">:</span><span class="st">      </span><span class="fl">0.50</span> <span class="fl">0.034417054</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true"></a> <span class="dv">5</span><span class="op">:</span><span class="st">      </span><span class="fl">0.45</span> <span class="fl">0.036163208</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true"></a> <span class="dv">6</span><span class="op">:</span><span class="st">      </span><span class="fl">0.00</span> <span class="fl">0.055555556</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true"></a> <span class="dv">7</span><span class="op">:</span><span class="st">      </span><span class="fl">0.40</span> <span class="fl">0.055960708</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true"></a> <span class="dv">8</span><span class="op">:</span><span class="st">      </span><span class="fl">0.55</span> <span class="fl">0.057551227</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true"></a> <span class="dv">9</span><span class="op">:</span><span class="st">      </span><span class="fl">0.60</span> <span class="fl">0.176160406</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true"></a><span class="dv">10</span><span class="op">:</span><span class="st">      </span><span class="fl">0.65</span> <span class="fl">0.365251342</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true"></a><span class="dv">11</span><span class="op">:</span><span class="st">      </span><span class="fl">0.70</span> <span class="fl">0.573084217</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true"></a><span class="dv">12</span><span class="op">:</span><span class="st">      </span><span class="fl">0.75</span> <span class="fl">0.772509347</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true"></a><span class="dv">13</span><span class="op">:</span><span class="st">      </span><span class="fl">0.80</span> <span class="fl">0.895522388</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true"></a><span class="dv">14</span><span class="op">:</span><span class="st">      </span><span class="fl">0.85</span> <span class="fl">0.941742311</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true"></a><span class="dv">15</span><span class="op">:</span><span class="st">      </span><span class="fl">0.90</span> <span class="fl">0.995657100</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true"></a><span class="dv">16</span><span class="op">:</span><span class="st">      </span><span class="fl">0.95</span> <span class="fl">1.000000000</span></span></code></pre></div>
 <p>For a threshold of 0.95 and 1.00 we make no errors. Below that we start making errors. So let’s work with a threshold of 0.95 for now</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw">select_threshold</span>(pairs, <span class="st">&quot;select&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="dt">threshold =</span> <span class="fl">0.95</span>, </a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="op">+</span><span class="st">     </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb7-3" title="3"></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="op">&gt;</span><span class="st"> </span>res &lt;-<span class="st"> </span><span class="kw">deduplicate_equivalence</span>(pairs, <span class="st">&quot;group&quot;</span>, <span class="st">&quot;select&quot;</span>)</a>
-<a class="sourceLine" id="cb7-5" title="5"></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(res)</a>
-<a class="sourceLine" id="cb7-7" title="7">                         name          official_name group</a>
-<a class="sourceLine" id="cb7-8" title="8">  <span class="dv">1</span><span class="op">:</span><span class="st">             </span>alblasserdam           Alblasserdam   <span class="dv">541</span></a>
-<a class="sourceLine" id="cb7-9" title="9">  <span class="dv">2</span><span class="op">:</span><span class="st">                </span>amsterdam              Amsterdam   <span class="dv">427</span></a>
-<a class="sourceLine" id="cb7-10" title="10">  <span class="dv">3</span><span class="op">:</span><span class="st">           </span>amsterdam<span class="op">-</span>z.o.              Amsterdam   <span class="dv">427</span></a>
-<a class="sourceLine" id="cb7-11" title="11">  <span class="dv">4</span><span class="op">:</span><span class="st">       </span>amsterdam<span class="op">-</span>zuidoost              Amsterdam   <span class="dv">166</span></a>
-<a class="sourceLine" id="cb7-12" title="12">  <span class="dv">5</span><span class="op">:</span><span class="st">            </span>amsterdam z<span class="op">-</span>o              Amsterdam   <span class="dv">427</span></a>
-<a class="sourceLine" id="cb7-13" title="13"> <span class="op">---</span><span class="st">                                                      </span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="dv">580</span><span class="op">:</span><span class="st"> </span><span class="kw">amsterdam</span> (duivendrecht) Amsterdam<span class="op">-</span>Duivendrecht   <span class="dv">580</span></a>
-<a class="sourceLine" id="cb7-15" title="15"><span class="dv">581</span><span class="op">:</span><span class="st">      </span>amsterdam zzuidoost              Amsterdam   <span class="dv">166</span></a>
-<a class="sourceLine" id="cb7-16" title="16"><span class="dv">582</span><span class="op">:</span><span class="st">     </span><span class="kw">hoovliet</span> (rotterdam)    Hoogvliet Rotterdam   <span class="dv">568</span></a>
-<a class="sourceLine" id="cb7-17" title="17"><span class="dv">583</span><span class="op">:</span><span class="st">                </span>roettrdam              Rotterdam   <span class="dv">496</span></a>
-<a class="sourceLine" id="cb7-18" title="18"><span class="dv">584</span><span class="op">:</span><span class="st">               </span>srotterdam              Rotterdam   <span class="dv">496</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">select_threshold</span>(pairs, <span class="st">&quot;select&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="dt">threshold =</span> <span class="fl">0.95</span>, </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>res &lt;-<span class="st"> </span><span class="kw">deduplicate_equivalence</span>(pairs, <span class="st">&quot;group&quot;</span>, <span class="st">&quot;select&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(res)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>                         name          official_name group</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>  <span class="dv">1</span><span class="op">:</span><span class="st">             </span>alblasserdam           Alblasserdam   <span class="dv">541</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>  <span class="dv">2</span><span class="op">:</span><span class="st">                </span>amsterdam              Amsterdam   <span class="dv">427</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>  <span class="dv">3</span><span class="op">:</span><span class="st">           </span>amsterdam<span class="op">-</span>z.o.              Amsterdam   <span class="dv">427</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>  <span class="dv">4</span><span class="op">:</span><span class="st">       </span>amsterdam<span class="op">-</span>zuidoost              Amsterdam   <span class="dv">166</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>  <span class="dv">5</span><span class="op">:</span><span class="st">            </span>amsterdam z<span class="op">-</span>o              Amsterdam   <span class="dv">427</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a> <span class="op">---</span><span class="st">                                                      </span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true"></a><span class="dv">580</span><span class="op">:</span><span class="st"> </span><span class="kw">amsterdam</span> (duivendrecht) Amsterdam<span class="op">-</span>Duivendrecht   <span class="dv">580</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true"></a><span class="dv">581</span><span class="op">:</span><span class="st">      </span>amsterdam zzuidoost              Amsterdam   <span class="dv">166</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true"></a><span class="dv">582</span><span class="op">:</span><span class="st">     </span><span class="kw">hoovliet</span> (rotterdam)    Hoogvliet Rotterdam   <span class="dv">568</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true"></a><span class="dv">583</span><span class="op">:</span><span class="st">                </span>roettrdam              Rotterdam   <span class="dv">496</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true"></a><span class="dv">584</span><span class="op">:</span><span class="st">               </span>srotterdam              Rotterdam   <span class="dv">496</span></span></code></pre></div>
 <p>With <code>deduplicate_equivalence</code> we take all selected pairs (indicated by the column <code>select</code>) and put them in the same group.<br />
 <code>res</code> now contains the original dataset with a <code>group</code> column added that indicates the unique objects (towns in this case). We can see how many towns we have in the resulting dataset:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(res<span class="op">$</span>group))</a>
-<a class="sourceLine" id="cb8-2" title="2">[<span class="dv">1</span>] <span class="dv">162</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(res<span class="op">$</span>group))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>[<span class="dv">1</span>] <span class="dv">162</span></span></code></pre></div>
 <p>This is quite large. We started with 584 town names and reduced that to 162 while there are actually 19 town names. We can measure the quality by counting how often we have more than one official town name in one group:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="op">&gt;</span><span class="st"> </span>qual &lt;-<span class="st"> </span>res[, .(<span class="dt">errors =</span> <span class="kw">length</span>(<span class="kw">unique</span>(official_name)) <span class="op">-</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-2" title="2"><span class="op">+</span><span class="st">     </span><span class="dv">1</span>, <span class="dt">n =</span> .N), by =<span class="st"> </span>group]</a>
-<a class="sourceLine" id="cb9-3" title="3"></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="op">&gt;</span><span class="st"> </span>qual<span class="op">$</span>ferrors &lt;-<span class="st"> </span>qual<span class="op">$</span>errors<span class="op">/</span>qual<span class="op">$</span>n</a>
-<a class="sourceLine" id="cb9-5" title="5"></a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="op">&gt;</span><span class="st"> </span>qual[errors <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb9-7" title="7">Empty <span class="kw">data.table</span> (<span class="dv">0</span> rows and <span class="dv">4</span> cols)<span class="op">:</span><span class="st"> </span>group,errors,n,ferrors</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>qual &lt;-<span class="st"> </span>res[, .(<span class="dt">errors =</span> <span class="kw">length</span>(<span class="kw">unique</span>(official_name)) <span class="op">-</span><span class="st"> </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span><span class="dv">1</span>, <span class="dt">n =</span> .N), by =<span class="st"> </span>group]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>qual<span class="op">$</span>ferrors &lt;-<span class="st"> </span>qual<span class="op">$</span>errors<span class="op">/</span>qual<span class="op">$</span>n</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>qual[errors <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>Empty <span class="kw">data.table</span> (<span class="dv">0</span> rows and <span class="dv">4</span> cols)<span class="op">:</span><span class="st"> </span>group,errors,n,ferrors</span></code></pre></div>
 <p>So we have a large number of groups and no errors: no town names have been classified in the same group while actually being different towns. We can check what happens when we decrease the threshold. We will probably introduce some errors while we decrease the number of groups:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="op">&gt;</span><span class="st"> </span>thresholds &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.02</span>)</a>
-<a class="sourceLine" id="cb10-2" title="2"></a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="op">&gt;</span><span class="st"> </span>sizes &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="kw">length</span>(thresholds))</a>
-<a class="sourceLine" id="cb10-4" title="4"></a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="op">&gt;</span><span class="st"> </span>nerrors &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="kw">length</span>(thresholds))</a>
-<a class="sourceLine" id="cb10-6" title="6"></a>
-<a class="sourceLine" id="cb10-7" title="7"><span class="op">&gt;</span><span class="st"> </span><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(thresholds)) {</a>
-<a class="sourceLine" id="cb10-8" title="8"><span class="op">+</span><span class="st">     </span>threshold &lt;-<span class="st"> </span>thresholds[i]</a>
-<a class="sourceLine" id="cb10-9" title="9"><span class="op">+</span><span class="st">     </span><span class="kw">select_threshold</span>(pairs, <span class="st">&quot;select&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="dt">threshold =</span> threshold, </a>
-<a class="sourceLine" id="cb10-10" title="10"><span class="op">+</span><span class="st">         </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb10-11" title="11"><span class="op">+</span><span class="st">     </span>res &lt;-<span class="st"> </span><span class="kw">deduplicate_equivalence</span>(pairs, <span class="st">&quot;group&quot;</span>, <span class="st">&quot;select&quot;</span>)</a>
-<a class="sourceLine" id="cb10-12" title="12"><span class="op">+</span><span class="st">     </span>sizes[i] &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(res<span class="op">$</span>group))</a>
-<a class="sourceLine" id="cb10-13" title="13"><span class="op">+</span><span class="st">     </span>qual &lt;-<span class="st"> </span>res[, .(<span class="dt">errors =</span> <span class="kw">length</span>(<span class="kw">unique</span>(official_name)) <span class="op">-</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-14" title="14"><span class="op">+</span><span class="st">         </span><span class="dv">1</span>, <span class="dt">n =</span> .N), by =<span class="st"> </span>group]</a>
-<a class="sourceLine" id="cb10-15" title="15"><span class="op">+</span><span class="st">     </span>nerrors[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(qual<span class="op">$</span>errors)</a>
-<a class="sourceLine" id="cb10-16" title="16"><span class="op">+</span><span class="st"> </span>}</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>thresholds &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dt">by =</span> <span class="fl">0.02</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>sizes &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="kw">length</span>(thresholds))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>nerrors &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="kw">length</span>(thresholds))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(thresholds)) {</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span>threshold &lt;-<span class="st"> </span>thresholds[i]</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span><span class="kw">select_threshold</span>(pairs, <span class="st">&quot;select&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="dt">threshold =</span> threshold, </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a><span class="op">+</span><span class="st">         </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span>res &lt;-<span class="st"> </span><span class="kw">deduplicate_equivalence</span>(pairs, <span class="st">&quot;group&quot;</span>, <span class="st">&quot;select&quot;</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span>sizes[i] &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(res<span class="op">$</span>group))</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span>qual &lt;-<span class="st"> </span>res[, .(<span class="dt">errors =</span> <span class="kw">length</span>(<span class="kw">unique</span>(official_name)) <span class="op">-</span><span class="st"> </span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a><span class="op">+</span><span class="st">         </span><span class="dv">1</span>, <span class="dt">n =</span> .N), by =<span class="st"> </span>group]</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span>nerrors[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(qual<span class="op">$</span>errors)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a><span class="op">+</span><span class="st"> </span>}</span></code></pre></div>
 <p>The results are plotted in the figure below.</p>
-<p><img src="data:image/png;base64,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3DMb/dJL6puG5gA0N+Smd/sF7v0FfmEDiscb6vXEdzBT8GSYsBmgCsoyX//R3DRkHUATfW56zC/wsAmYAo2ZmlvwhnobV3DvhoI3x0Nxu7Q8mDvd3LS8Lxxsz26y3ofvnwdToDFTcwveUG+jCr7fIutxwcbUtq0Kilp06FVubtL17xBwnCn4Qax/chCYAo2ZmlvwhnrpQAdySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBySDBynBZcsUQJLL3rjjdLiTgteFU/T8tzhNjt7nizlIjzgle4Iw25+YQE1yNN8J+eeuppNyQjHySYQ5LgNk91yfNuwySYQ5Lgpxm5aV49/ibBHJIE/44R/DIJVgSSBDPb56efesEd6cgFCeaQNsg6/Lune7shGfkgwRwSd5OMV27DXaP86cgFCeaQJnjpH//z93/o1MF730USzCFJcO3/tK4OfNb/ob/OHSnJAQnmkCT43F+T6sL8OjwceMkdKckBCeaQuAa/WR34HK3BSkDad/DXf/yv3/9B7b/NDQnJAwnmkDiKrjt/HW7TKFoBSP816UbWJr3MycgHCeaQLPhE4NKPIrRypyMXJJhDsuDEEoCZG+RORy5IMIdkwV1qAFYvlzsduSDBHHYFP7B6zQleNE5XoS5zQ0ayQII5xAQnAexq8mLzQotGTrDxi4iYg+7Ly0VIMIeYYD+AV49CUTuLRjonS1nYERzG/K+NRSMJVhZigp+LSGmxBdLjLBpJsLIQHWTdKsw7BmmV9a8uz2KJGtsIWbkMCeZwYjfp3o8sUUnuS0Y+SDCH0/vBg1LckYbckGAOMcG355uxaCTBykJMcG3ms3YEe+3vSSSYQ3wTHWbb9ITgZQHq3vflTkgeSDCHC9/BZ2INsGmMvOnIBQnmcEFw1jJmG62WNx25IMEcLgj+v4EAhV465CLBHK7sJk3qPKBTuazZyAYJ5nBpP/hOSZ2cucgICeagAx3IIcHIIcHI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" /></p>
 <p>We can see that as the threshold decreases the number of errors increases and the number of groups decreases. We cannot get much less than the 161 groups we found without introducing some errors. How many errors and/or groups are acceptable depends on the application and the amount of time one s willing to spend in manually merging the groups. In this case manually inspecting the groups and merging them will probably take only a few hours and</p>
 <p>With a threshold of 0.9 we should get approximately 100 groups and 5 errors which seems a reasonable trade-off. So, let’s rerun some of the previous code with a threshold of 0.90.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw">select_threshold</span>(pairs, <span class="st">&quot;select&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="dt">threshold =</span> <span class="fl">0.9</span>, </a>
-<a class="sourceLine" id="cb11-2" title="2"><span class="op">+</span><span class="st">     </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb11-3" title="3"></a>
-<a class="sourceLine" id="cb11-4" title="4"><span class="op">&gt;</span><span class="st"> </span>res &lt;-<span class="st"> </span><span class="kw">deduplicate_equivalence</span>(pairs, <span class="st">&quot;group&quot;</span>, <span class="st">&quot;select&quot;</span>)</a>
-<a class="sourceLine" id="cb11-5" title="5"></a>
-<a class="sourceLine" id="cb11-6" title="6"><span class="op">&gt;</span><span class="st"> </span>qual &lt;-<span class="st"> </span>res[, .(<span class="dt">errors =</span> <span class="kw">length</span>(<span class="kw">unique</span>(official_name)) <span class="op">-</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-7" title="7"><span class="op">+</span><span class="st">     </span><span class="dv">1</span>, <span class="dt">n =</span> .N), by =<span class="st"> </span>group]</a>
-<a class="sourceLine" id="cb11-8" title="8"></a>
-<a class="sourceLine" id="cb11-9" title="9"><span class="op">&gt;</span><span class="st"> </span>qual<span class="op">$</span>ferrors &lt;-<span class="st"> </span>qual<span class="op">$</span>errors<span class="op">/</span>qual<span class="op">$</span>n</a>
-<a class="sourceLine" id="cb11-10" title="10"></a>
-<a class="sourceLine" id="cb11-11" title="11"><span class="op">&gt;</span><span class="st"> </span>qual[errors <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb11-12" title="12">   group errors   n    ferrors</a>
-<a class="sourceLine" id="cb11-13" title="13"><span class="dv">1</span><span class="op">:</span><span class="st">   </span><span class="dv">543</span>      <span class="dv">1</span> <span class="dv">256</span> <span class="fl">0.00390625</span></a>
-<a class="sourceLine" id="cb11-14" title="14"><span class="dv">2</span><span class="op">:</span><span class="st">   </span><span class="dv">571</span>      <span class="dv">1</span>   <span class="dv">7</span> <span class="fl">0.14285714</span></a>
-<a class="sourceLine" id="cb11-15" title="15"><span class="dv">3</span><span class="op">:</span><span class="st">   </span><span class="dv">441</span>      <span class="dv">1</span>  <span class="dv">78</span> <span class="fl">0.01282051</span></a>
-<a class="sourceLine" id="cb11-16" title="16"><span class="dv">4</span><span class="op">:</span><span class="st">   </span><span class="dv">578</span>      <span class="dv">1</span>  <span class="dv">10</span> <span class="fl">0.10000000</span></a>
-<a class="sourceLine" id="cb11-17" title="17"><span class="dv">5</span><span class="op">:</span><span class="st">   </span><span class="dv">296</span>      <span class="dv">1</span>   <span class="dv">6</span> <span class="fl">0.16666667</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">select_threshold</span>(pairs, <span class="st">&quot;select&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="dt">threshold =</span> <span class="fl">0.9</span>, </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span><span class="dt">inplace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>res &lt;-<span class="st"> </span><span class="kw">deduplicate_equivalence</span>(pairs, <span class="st">&quot;group&quot;</span>, <span class="st">&quot;select&quot;</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>qual &lt;-<span class="st"> </span>res[, .(<span class="dt">errors =</span> <span class="kw">length</span>(<span class="kw">unique</span>(official_name)) <span class="op">-</span><span class="st"> </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span><span class="dv">1</span>, <span class="dt">n =</span> .N), by =<span class="st"> </span>group]</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>qual<span class="op">$</span>ferrors &lt;-<span class="st"> </span>qual<span class="op">$</span>errors<span class="op">/</span>qual<span class="op">$</span>n</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>qual[errors <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true"></a>   group errors   n    ferrors</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true"></a><span class="dv">1</span><span class="op">:</span><span class="st">   </span><span class="dv">543</span>      <span class="dv">1</span> <span class="dv">256</span> <span class="fl">0.00390625</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true"></a><span class="dv">2</span><span class="op">:</span><span class="st">   </span><span class="dv">571</span>      <span class="dv">1</span>   <span class="dv">7</span> <span class="fl">0.14285714</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true"></a><span class="dv">3</span><span class="op">:</span><span class="st">   </span><span class="dv">441</span>      <span class="dv">1</span>  <span class="dv">78</span> <span class="fl">0.01282051</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true"></a><span class="dv">4</span><span class="op">:</span><span class="st">   </span><span class="dv">578</span>      <span class="dv">1</span>  <span class="dv">10</span> <span class="fl">0.10000000</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true"></a><span class="dv">5</span><span class="op">:</span><span class="st">   </span><span class="dv">296</span>      <span class="dv">1</span>   <span class="dv">6</span> <span class="fl">0.16666667</span></span></code></pre></div>
 <p>One way of assigning names to the groups we derived, is to use the most frequent name used in the group. Assuming that most people will correctly spell the town names this should give us the official town name belonging to each group. In this example dataset each town name occurs only once so can’t use that trick. However, we can use the most frequent official name. We first define a function that returns the most frequent value of a vector and use that to derive the name of the group.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="op">&gt;</span><span class="st"> </span>most_frequent &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb12-2" title="2"><span class="op">+</span><span class="st">     </span>t &lt;-<span class="st"> </span><span class="kw">table</span>(x)</a>
-<a class="sourceLine" id="cb12-3" title="3"><span class="op">+</span><span class="st">     </span>t &lt;-<span class="st"> </span><span class="kw">sort</span>(t)</a>
-<a class="sourceLine" id="cb12-4" title="4"><span class="op">+</span><span class="st">     </span><span class="kw">tail</span>(<span class="kw">names</span>(t), <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb12-5" title="5"><span class="op">+</span><span class="st"> </span>}</a>
-<a class="sourceLine" id="cb12-6" title="6"></a>
-<a class="sourceLine" id="cb12-7" title="7"><span class="op">&gt;</span><span class="st"> </span>res[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(assigned_name, <span class="kw">most_frequent</span>(official_name)), </a>
-<a class="sourceLine" id="cb12-8" title="8"><span class="op">+</span><span class="st">     </span>by =<span class="st"> </span>group]</a>
-<a class="sourceLine" id="cb12-9" title="9"></a>
-<a class="sourceLine" id="cb12-10" title="10"><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(res)</a>
-<a class="sourceLine" id="cb12-11" title="11">                         name          official_name group</a>
-<a class="sourceLine" id="cb12-12" title="12">  <span class="dv">1</span><span class="op">:</span><span class="st">             </span>alblasserdam           Alblasserdam   <span class="dv">453</span></a>
-<a class="sourceLine" id="cb12-13" title="13">  <span class="dv">2</span><span class="op">:</span><span class="st">                </span>amsterdam              Amsterdam   <span class="dv">543</span></a>
-<a class="sourceLine" id="cb12-14" title="14">  <span class="dv">3</span><span class="op">:</span><span class="st">           </span>amsterdam<span class="op">-</span>z.o.              Amsterdam   <span class="dv">543</span></a>
-<a class="sourceLine" id="cb12-15" title="15">  <span class="dv">4</span><span class="op">:</span><span class="st">       </span>amsterdam<span class="op">-</span>zuidoost              Amsterdam   <span class="dv">543</span></a>
-<a class="sourceLine" id="cb12-16" title="16">  <span class="dv">5</span><span class="op">:</span><span class="st">            </span>amsterdam z<span class="op">-</span>o              Amsterdam   <span class="dv">543</span></a>
-<a class="sourceLine" id="cb12-17" title="17"> <span class="op">---</span><span class="st">                                                      </span></a>
-<a class="sourceLine" id="cb12-18" title="18"><span class="dv">580</span><span class="op">:</span><span class="st"> </span><span class="kw">amsterdam</span> (duivendrecht) Amsterdam<span class="op">-</span>Duivendrecht   <span class="dv">580</span></a>
-<a class="sourceLine" id="cb12-19" title="19"><span class="dv">581</span><span class="op">:</span><span class="st">      </span>amsterdam zzuidoost              Amsterdam   <span class="dv">543</span></a>
-<a class="sourceLine" id="cb12-20" title="20"><span class="dv">582</span><span class="op">:</span><span class="st">     </span><span class="kw">hoovliet</span> (rotterdam)    Hoogvliet Rotterdam   <span class="dv">156</span></a>
-<a class="sourceLine" id="cb12-21" title="21"><span class="dv">583</span><span class="op">:</span><span class="st">                </span>roettrdam              Rotterdam   <span class="dv">441</span></a>
-<a class="sourceLine" id="cb12-22" title="22"><span class="dv">584</span><span class="op">:</span><span class="st">               </span>srotterdam              Rotterdam   <span class="dv">441</span></a>
-<a class="sourceLine" id="cb12-23" title="23">              assigned_name</a>
-<a class="sourceLine" id="cb12-24" title="24">  <span class="dv">1</span><span class="op">:</span><span class="st">           </span>Alblasserdam</a>
-<a class="sourceLine" id="cb12-25" title="25">  <span class="dv">2</span><span class="op">:</span><span class="st">              </span>Amsterdam</a>
-<a class="sourceLine" id="cb12-26" title="26">  <span class="dv">3</span><span class="op">:</span><span class="st">              </span>Amsterdam</a>
-<a class="sourceLine" id="cb12-27" title="27">  <span class="dv">4</span><span class="op">:</span><span class="st">              </span>Amsterdam</a>
-<a class="sourceLine" id="cb12-28" title="28">  <span class="dv">5</span><span class="op">:</span><span class="st">              </span>Amsterdam</a>
-<a class="sourceLine" id="cb12-29" title="29"> <span class="op">---</span><span class="st">                       </span></a>
-<a class="sourceLine" id="cb12-30" title="30"><span class="dv">580</span><span class="op">:</span><span class="st"> </span>Amsterdam<span class="op">-</span>Duivendrecht</a>
-<a class="sourceLine" id="cb12-31" title="31"><span class="dv">581</span><span class="op">:</span><span class="st">              </span>Amsterdam</a>
-<a class="sourceLine" id="cb12-32" title="32"><span class="dv">582</span><span class="op">:</span><span class="st">    </span>Hoogvliet Rotterdam</a>
-<a class="sourceLine" id="cb12-33" title="33"><span class="dv">583</span><span class="op">:</span><span class="st">              </span>Rotterdam</a>
-<a class="sourceLine" id="cb12-34" title="34"><span class="dv">584</span><span class="op">:</span><span class="st">              </span>Rotterdam</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>most_frequent &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span>t &lt;-<span class="st"> </span><span class="kw">table</span>(x)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span>t &lt;-<span class="st"> </span><span class="kw">sort</span>(t)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span><span class="kw">tail</span>(<span class="kw">names</span>(t), <span class="dv">1</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a><span class="op">+</span><span class="st"> </span>}</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>res[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>(assigned_name, <span class="kw">most_frequent</span>(official_name)), </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a><span class="op">+</span><span class="st">     </span>by =<span class="st"> </span>group]</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(res)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a>                         name          official_name group</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true"></a>  <span class="dv">1</span><span class="op">:</span><span class="st">             </span>alblasserdam           Alblasserdam   <span class="dv">453</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true"></a>  <span class="dv">2</span><span class="op">:</span><span class="st">                </span>amsterdam              Amsterdam   <span class="dv">543</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true"></a>  <span class="dv">3</span><span class="op">:</span><span class="st">           </span>amsterdam<span class="op">-</span>z.o.              Amsterdam   <span class="dv">543</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true"></a>  <span class="dv">4</span><span class="op">:</span><span class="st">       </span>amsterdam<span class="op">-</span>zuidoost              Amsterdam   <span class="dv">543</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true"></a>  <span class="dv">5</span><span class="op">:</span><span class="st">            </span>amsterdam z<span class="op">-</span>o              Amsterdam   <span class="dv">543</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true"></a> <span class="op">---</span><span class="st">                                                      </span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true"></a><span class="dv">580</span><span class="op">:</span><span class="st"> </span><span class="kw">amsterdam</span> (duivendrecht) Amsterdam<span class="op">-</span>Duivendrecht   <span class="dv">580</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true"></a><span class="dv">581</span><span class="op">:</span><span class="st">      </span>amsterdam zzuidoost              Amsterdam   <span class="dv">543</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true"></a><span class="dv">582</span><span class="op">:</span><span class="st">     </span><span class="kw">hoovliet</span> (rotterdam)    Hoogvliet Rotterdam   <span class="dv">156</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true"></a><span class="dv">583</span><span class="op">:</span><span class="st">                </span>roettrdam              Rotterdam   <span class="dv">441</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true"></a><span class="dv">584</span><span class="op">:</span><span class="st">               </span>srotterdam              Rotterdam   <span class="dv">441</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true"></a>              assigned_name</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true"></a>  <span class="dv">1</span><span class="op">:</span><span class="st">           </span>Alblasserdam</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true"></a>  <span class="dv">2</span><span class="op">:</span><span class="st">              </span>Amsterdam</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true"></a>  <span class="dv">3</span><span class="op">:</span><span class="st">              </span>Amsterdam</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true"></a>  <span class="dv">4</span><span class="op">:</span><span class="st">              </span>Amsterdam</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true"></a>  <span class="dv">5</span><span class="op">:</span><span class="st">              </span>Amsterdam</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true"></a> <span class="op">---</span><span class="st">                       </span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true"></a><span class="dv">580</span><span class="op">:</span><span class="st"> </span>Amsterdam<span class="op">-</span>Duivendrecht</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true"></a><span class="dv">581</span><span class="op">:</span><span class="st">              </span>Amsterdam</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true"></a><span class="dv">582</span><span class="op">:</span><span class="st">    </span>Hoogvliet Rotterdam</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true"></a><span class="dv">583</span><span class="op">:</span><span class="st">              </span>Rotterdam</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true"></a><span class="dv">584</span><span class="op">:</span><span class="st">              </span>Rotterdam</span></code></pre></div>
 <p>We can now also look at the errors:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(res[assigned_name <span class="op">!=</span><span class="st"> </span>official_name])</a>
-<a class="sourceLine" id="cb13-2" title="2">                     name       official_name group    assigned_name</a>
-<a class="sourceLine" id="cb13-3" title="3"> <span class="dv">1</span><span class="op">:</span><span class="st">   </span>rotterdam hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-4" title="4"> <span class="dv">2</span><span class="op">:</span><span class="st">   </span>rotterdam<span class="op">-</span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-5" title="5"> <span class="dv">3</span><span class="op">:</span><span class="st">         </span>nw. amsterdam     Nieuw Amsterdam   <span class="dv">543</span>        Amsterdam</a>
-<a class="sourceLine" id="cb13-6" title="6"> <span class="dv">4</span><span class="op">:</span><span class="st"> </span>rotterdam <span class="op">-</span><span class="st"> </span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-7" title="7"> <span class="dv">5</span><span class="op">:</span><span class="st">  </span><span class="kw">amsterdam</span> (driemond)           Amsterdam   <span class="dv">578</span>           Diemen</a>
-<a class="sourceLine" id="cb13-8" title="8"> <span class="dv">6</span><span class="op">:</span><span class="st">          </span>nw<span class="op">-</span>amsterdam     Nieuw Amsterdam   <span class="dv">543</span>        Amsterdam</a>
-<a class="sourceLine" id="cb13-9" title="9"> <span class="dv">7</span><span class="op">:</span><span class="st">          </span>nw amsterdam     Nieuw Amsterdam   <span class="dv">543</span>        Amsterdam</a>
-<a class="sourceLine" id="cb13-10" title="10"> <span class="dv">8</span><span class="op">:</span><span class="st">   </span>amsterdam<span class="op">-</span><span class="st"> </span>driemond           Amsterdam   <span class="dv">578</span>           Diemen</a>
-<a class="sourceLine" id="cb13-11" title="11"> <span class="dv">9</span><span class="op">:</span><span class="st">    </span>amsterdam<span class="op">-</span>driemond           Amsterdam   <span class="dv">578</span>           Diemen</a>
-<a class="sourceLine" id="cb13-12" title="12"><span class="dv">10</span><span class="op">:</span><span class="st">  </span>rotterdam <span class="op">-</span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-13" title="13"><span class="dv">11</span><span class="op">:</span><span class="st">   </span>rotterdam<span class="op">/</span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-14" title="14"><span class="dv">12</span><span class="op">:</span><span class="st">  </span>rotterdam  hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-15" title="15"><span class="dv">13</span><span class="op">:</span><span class="st">          </span>nw.amsterdam     Nieuw Amsterdam   <span class="dv">543</span>        Amsterdam</a>
-<a class="sourceLine" id="cb13-16" title="16"><span class="dv">14</span><span class="op">:</span><span class="st">    </span>amsterdam driemond           Amsterdam   <span class="dv">578</span>           Diemen</a>
-<a class="sourceLine" id="cb13-17" title="17"><span class="dv">15</span><span class="op">:</span><span class="st">               </span>veerdam             Veendam   <span class="dv">571</span>          Leerdam</a>
-<a class="sourceLine" id="cb13-18" title="18"><span class="dv">16</span><span class="op">:</span><span class="st">  </span><span class="kw">rotterdam</span>(hoogvliet) Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-19" title="19"><span class="dv">17</span><span class="op">:</span><span class="st"> </span><span class="kw">rotterdam</span> (hoogvliet) Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-20" title="20"><span class="dv">18</span><span class="op">:</span><span class="st">    </span>rotterdam<span class="op">-</span>hoogvlie Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-21" title="21"><span class="dv">19</span><span class="op">:</span><span class="st">    </span><span class="kw">rotterdam</span> (prinsen           Rotterdam   <span class="dv">296</span> Pernis Rotterdam</a>
-<a class="sourceLine" id="cb13-22" title="22"><span class="dv">20</span><span class="op">:</span><span class="st">  </span>rotterdam<span class="op">-</span><span class="st"> </span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-23" title="23"><span class="dv">21</span><span class="op">:</span><span class="st">    </span>rotterdam hoogvlie Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</a>
-<a class="sourceLine" id="cb13-24" title="24"><span class="dv">22</span><span class="op">:</span><span class="st">    </span>amsterdam<span class="op">-</span>driemand           Amsterdam   <span class="dv">578</span>           Diemen</a>
-<a class="sourceLine" id="cb13-25" title="25">                     name       official_name group    assigned_name</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">print</span>(res[assigned_name <span class="op">!=</span><span class="st"> </span>official_name])</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>                     name       official_name group    assigned_name</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a> <span class="dv">1</span><span class="op">:</span><span class="st">   </span>rotterdam hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a> <span class="dv">2</span><span class="op">:</span><span class="st">   </span>rotterdam<span class="op">-</span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a> <span class="dv">3</span><span class="op">:</span><span class="st">         </span>nw. amsterdam     Nieuw Amsterdam   <span class="dv">543</span>        Amsterdam</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a> <span class="dv">4</span><span class="op">:</span><span class="st"> </span>rotterdam <span class="op">-</span><span class="st"> </span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a> <span class="dv">5</span><span class="op">:</span><span class="st">  </span><span class="kw">amsterdam</span> (driemond)           Amsterdam   <span class="dv">578</span>           Diemen</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a> <span class="dv">6</span><span class="op">:</span><span class="st">          </span>nw<span class="op">-</span>amsterdam     Nieuw Amsterdam   <span class="dv">543</span>        Amsterdam</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a> <span class="dv">7</span><span class="op">:</span><span class="st">          </span>nw amsterdam     Nieuw Amsterdam   <span class="dv">543</span>        Amsterdam</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a> <span class="dv">8</span><span class="op">:</span><span class="st">   </span>amsterdam<span class="op">-</span><span class="st"> </span>driemond           Amsterdam   <span class="dv">578</span>           Diemen</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a> <span class="dv">9</span><span class="op">:</span><span class="st">    </span>amsterdam<span class="op">-</span>driemond           Amsterdam   <span class="dv">578</span>           Diemen</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a><span class="dv">10</span><span class="op">:</span><span class="st">  </span>rotterdam <span class="op">-</span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true"></a><span class="dv">11</span><span class="op">:</span><span class="st">   </span>rotterdam<span class="op">/</span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true"></a><span class="dv">12</span><span class="op">:</span><span class="st">  </span>rotterdam  hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true"></a><span class="dv">13</span><span class="op">:</span><span class="st">          </span>nw.amsterdam     Nieuw Amsterdam   <span class="dv">543</span>        Amsterdam</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true"></a><span class="dv">14</span><span class="op">:</span><span class="st">    </span>amsterdam driemond           Amsterdam   <span class="dv">578</span>           Diemen</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true"></a><span class="dv">15</span><span class="op">:</span><span class="st">               </span>veerdam             Veendam   <span class="dv">571</span>          Leerdam</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true"></a><span class="dv">16</span><span class="op">:</span><span class="st">  </span><span class="kw">rotterdam</span>(hoogvliet) Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true"></a><span class="dv">17</span><span class="op">:</span><span class="st"> </span><span class="kw">rotterdam</span> (hoogvliet) Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true"></a><span class="dv">18</span><span class="op">:</span><span class="st">    </span>rotterdam<span class="op">-</span>hoogvlie Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true"></a><span class="dv">19</span><span class="op">:</span><span class="st">    </span><span class="kw">rotterdam</span> (prinsen           Rotterdam   <span class="dv">296</span> Pernis Rotterdam</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true"></a><span class="dv">20</span><span class="op">:</span><span class="st">  </span>rotterdam<span class="op">-</span><span class="st"> </span>hoogvliet Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true"></a><span class="dv">21</span><span class="op">:</span><span class="st">    </span>rotterdam hoogvlie Hoogvliet Rotterdam   <span class="dv">441</span>        Rotterdam</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true"></a><span class="dv">22</span><span class="op">:</span><span class="st">    </span>amsterdam<span class="op">-</span>driemand           Amsterdam   <span class="dv">578</span>           Diemen</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true"></a>                     name       official_name group    assigned_name</span></code></pre></div>
 <p>We see that we make a lot of errors with the town of <code>Hoogvliet Rotterdam</code>. The problem we have is a difficult one. For example, <code>rotterdam charlois</code> should be called <code>Rotterdam</code> while <code>rotterdam hoogvliet</code> should be called <code>Hoogvliet Rotterdam</code>. We can’t really expect that a computer is able to distinguish between these two without additional information. One other way of solving this problem is actually consider this as a linkage problem: we want to link a set of written town names to an official set of town names.</p>
 </body>
 </html>

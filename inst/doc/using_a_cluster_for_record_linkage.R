@@ -77,3 +77,6 @@ cluster_modify_pairs(pairs, function(pairs, model, ...) {
   pairs
 }, model = mglm)
 
+# <unlabeled code block>
+stopCluster(cl)
+

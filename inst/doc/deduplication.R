@@ -55,10 +55,11 @@ for (i in seq_along(thresholds)) {
 }
 
 # <unlabeled code block>
-par(mfrow = c(2,2))
+opar = par(mfrow = c(2,2))
 plot(thresholds, sizes)
 plot(thresholds, nerrors)
 plot(sizes, nerrors)
+par(opar)
 
 # <unlabeled code block>
 select_threshold(pairs, "select", "name", threshold = 0.9,

@@ -47,3 +47,23 @@ p.author {
   font-weight : bold;
   color: orange;
 }
+
+/* Code */
+code {
+  color : lightgray;
+}
+code span.op {
+  color: #888888;
+}
+code span.kw {
+  color: #30bd58;
+}
+code span.st {
+  color: #76a9db; 
+}
+code span.dv, code span.ot {
+  color: #7fd0a8; 
+}
+code span.dt {
+  color: #ee8c70; 
+}
