@@ -53,17 +53,17 @@ code {
   color : lightgray;
 }
 code span.op {
-  color: #888888;
+  color: #cccccc;
 }
-code span.kw {
+code span.kw, code span.cf {
   color: #30bd58;
 }
 code span.st {
   color: #76a9db; 
 }
-code span.dv, code span.ot {
+code span.dv, code span.ot, code span.fl{
   color: #7fd0a8; 
 }
-code span.dt {
+code span.dt, code span.er {
   color: #ee8c70; 
 }
