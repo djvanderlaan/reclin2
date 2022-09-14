@@ -7,4 +7,6 @@ CHANGES IN RECLIN2 0.1.2:
 
   - `pairs_minsim` gave an error when the number of records squared is larger 
     the maximum integer value.
+  - `pairs_minsim` did not generate pairs when one of the keys contained 
+    missing values.
 

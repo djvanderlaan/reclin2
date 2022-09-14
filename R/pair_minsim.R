@@ -5,8 +5,8 @@
 #'
 #' @param x first \code{data.frame}
 #' @param y second \code{data.frame}. Ignored when \code{deduplication = TRUE}.
-#' @param on the variables defining the blocks or strata for which 
-#'   all pairs of \code{x} and \code{y} will be generated.
+#' @param on the variables defining on which the pairs of records from \code{x} 
+#'   and \code{y} are compared.
 #' @param minsim minimal similarity score.
 #' @param comparators named list of functions with which the variables are compared. 
 #'   This function should accept two vectors. Function should either return a vector
@@ -28,6 +28,9 @@
 #' similarity score equal or larger than \code{minsim}. The similarity score is
 #' calculated by summing the results of the comparators for all variables 
 #' of \code{on}.
+#'
+#' Missing values in the variables on which the pairs are compared count as a 
+#' similarity of 0. 
 #'  
 #' @return 
 #' A \code{\link{data.table}} with two columns, 
@@ -66,6 +69,7 @@ pair_minsim <- function(x, y, on, minsim = 0.0,
     for (var in on) {
       cmp_fun <- comparators[[var]]
       cmp <- cmp_fun(x[pairs$.x, ..var][[1]], y[pairs$.y, ..var][[1]])
+      cmp[is.na(cmp)] <- 0
       pairs[, simsum := simsum + ..cmp]
     }
     pairs[simsum >= minsim]

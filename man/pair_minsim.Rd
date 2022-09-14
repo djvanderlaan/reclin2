@@ -21,8 +21,8 @@ pair_minsim(
 
 \item{y}{second \code{data.frame}. Ignored when \code{deduplication = TRUE}.}
 
-\item{on}{the variables defining the blocks or strata for which 
-all pairs of \code{x} and \code{y} will be generated.}
+\item{on}{the variables defining on which the pairs of records from \code{x} 
+and \code{y} are compared.}
 
 \item{minsim}{minimal similarity score.}
 
@@ -59,6 +59,9 @@ large number of records. \code{pair_minsim} will only keep pairs with a
 similarity score equal or larger than \code{minsim}. The similarity score is
 calculated by summing the results of the comparators for all variables 
 of \code{on}.
+
+Missing values in the variables on which the pairs are compared count as a 
+similarity of 0.
 }
 \examples{
 data("linkexample1", "linkexample2")
