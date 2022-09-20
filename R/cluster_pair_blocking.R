@@ -51,8 +51,7 @@ cluster_pair_blocking <- function(cluster, x, y, on, deduplication = FALSE, name
   if (deduplication && !missing(y)) warning("y provided will be ignored.")
   y <- if (deduplication) x else as.data.table(y)
   # Split x into a length(cluster) groups
-  group <- floor(seq_len(nrow(x))/(nrow(x)+1)*length(cluster))
-  group <- sample(group)
+  group <- distribute_over_cluster(nrow(x), length(cluster))
   idx <- split(seq_len(nrow(x)), group)
   x <- split(x, group)
   for (i in seq_along(x)) x[[i]]$.id <- idx[[i]]

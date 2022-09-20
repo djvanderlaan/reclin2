@@ -42,51 +42,98 @@ pairs1 <- pair_blocking(linkexample1, linkexample2, on = "postcode")
 pairs2 <- pair_blocking(linkexample1, linkexample2, on = "lastname")
 
 
-if (!isTRUE(all.equal(attr(pairs1, "x"), attr(pairs2, "x")))) 
-  stop("The dataset x of the first set of pairs is not equal to the dataset ",
-    "x of the second set.")
-if (!isTRUE(all.equal(attr(pairs1, "y"), attr(pairs2, "y")))) 
-  stop("The dataset x of the first set of pairs is not equal to the dataset ",
-    "x of the second set.")
-res <- rbind(pairs1, pairs2)
-setkey(res, .x, .y)
-res <- unique(res)
-res <- structure(res, class = c("pairs", class(res)), x = attr(pairs1, "x"), 
-  y = attr(pairs1, "y"))
+
+pkgload::load_all()
+
+merge_pairs <- function(pairs1, pairs2, ...) {
+  UseMethod("merge_pairs")
+}
+merge_pairs.pairs <- function(pairs1, pairs2, ...) {
+  if (!isTRUE(all.equal(attr(pairs1, "x"), attr(pairs2, "x")))) 
+    stop("The dataset x of the first set of pairs is not equal to the dataset ",
+      "x of the second set.")
+  if (!isTRUE(all.equal(attr(pairs1, "y"), attr(pairs2, "y")))) 
+    stop("The dataset x of the first set of pairs is not equal to the dataset ",
+      "x of the second set.")
+  res <- rbind(pairs1, pairs2)
+  setkey(res, .x, .y)
+  res <- unique(res)
+  setattr(res, "class", c("pairs", class(res)))
+  setattr(res, "x", attr(pairs1, "x"))
+  setattr(res, "y", attr(pairs1, "y"))
+  res
+}
+merge_pairs.cluster_pairs <- function(pairs1, pairs2, 
+    name = paste(pairs1$name, pairs2$name, sep="+"), ...) {
+  if (!isTRUE(all.equal(pairs1$cluster, pairs2$cluster))) 
+    stop("The two sets of pairs do not use the same cluster.")
+  if (pairs1$name == pairs2$name)
+    stop("The names of the two sets of pairs are equal.")
+  clusterCall(pairs1$cluster, function(name1, name2, new_name) {
+    if (!require("reclin2"))
+      stop("reclin2 needs to be installed on cluster nodes.")
+    reclin_env <- reclin2:::reclin_env
+    if (exists(new_name, envir = reclin_env)) 
+      warning("'", new_name, "' already exists; overwriting.")
+    env1 <- reclin_env[[name1]]
+    env2 <- reclin_env[[name2]]
+    reclin_env[[new_name]] <- new.env()
+    new_env <- reclin_env[[new_name]]
+    new_env$pairs <- merge_pairs(env1$pairs, env2$pairs)
+    invisible(NULL)
+  }, pairs1$name, pairs2$name, name)
+  structure(list(cluster = pairs1$cluster, name = name),
+    class = "cluster_pairs")
+}
+
+data(linkexample1)
+data(linkexample2)
+linkexample1$postcode[1] <- NA
+linkexample1$postcode[3] <- "6789 XY"
+
+pairs1 <- pair_blocking(linkexample1, linkexample2, on = "postcode")
+pairs2 <- pair_blocking(linkexample1, linkexample2, on = "lastname")
+pairs <- merge_pairs(pairs1, pairs2)
+compare_pairs(pairs, on = c("firstname", "lastname"), inplace = TRUE)
+pairs
+
+library(parallel)
+cl <- makeCluster(2)
+pairs1c <- cluster_pair_blocking(cl, linkexample1, linkexample2, on = "postcode", name="a")
+pairs2c <- cluster_pair_blocking(cl, linkexample1, linkexample2, on = "lastname", name="b")
+pairsc <- merge_pairs(pairs1c, pairs2c)
+compare_pairs(pairsc, on = c("firstname", "lastname"), inplace = TRUE)
+pairsc_local <- cluster_collect(pairsc)
 
 
+rbind.pairs <- function(...) {
+  p <- list(...)
+  if (length(p) < 1) stop("No arguments given.")
+  if (length(p) == 1) return (p[[1]])
+  res <- merge_pairs(p[[1]], p[[2]])
+  if (length(p) > 2) {
+    for (i in seq(3, length(p), by = 1)) 
+      res <- merge_pairs(res, p[[i]])
+  }
+  res
+}
+rbind(pairs1, pairs2, pairs2)
 
+rbind.cluster_pairs <- function(...) {
+  p <- list(...)
+  name <- paste(sapply(p, function(p) p$name), collapse="+")
+  if (length(p) < 1) stop("No arguments given.")
+  if (length(p) == 1) return (p[[1]])
+  res <- merge_pairs(p[[1]], p[[2]], name = name)
+  if (length(p) > 2) {
+    for (i in seq(3, length(p), by = 1)) 
+      res <- merge_pairs(res, p[[i]], name = name)
+  }
+  res
+}
+rbind(pairs1c, pairs2c, pairs2c)
 
+p <- list(pairs1, pairs2, pairs1, pairs2)
+Reduce(merge_pairs, p)
 
-
-row.names = c(NA, -15L), class = c("pairs", 
-"data.table", "data.frame"), .internal.selfref = <pointer: 0x7fffe9692240>, x = structure(list(
-    id = 1:6, lastname = structure(c(3L, 3L, 1L, 1L, 1L, 2L), levels = c("Johnson", 
-    "Schwartz", "Smith"), class = "factor"), firstname = structure(c(1L, 
-    5L, 1L, 3L, 4L, 2L), levels = c("Anna", "Ben", "Charles", 
-    "Charly", "George"), class = "factor"), address = structure(c(2L, 
-    2L, 3L, 3L, 3L, 1L), levels = c("1 Eaststr", "12 Mainstr", 
-    "61 Mainstr"), class = "factor"), sex = structure(c(1L, 2L, 
-    1L, 2L, 2L, 2L), levels = c("F", "M"), class = "factor"), 
-    postcode = structure(c(NA, 1L, 2L, 1L, 1L, 2L), levels = c("1234 AB", 
-    "6789 XY"), class = "factor")), row.names = c(NA, -6L), class = c("data.table", 
-"data.frame"), .internal.selfref = <pointer: 0x7fffe9692240>), y = structure(list(
-    id = c(2L, 3L, 4L, 6L, 7L), lastname = structure(c(4L, 2L, 
-    1L, 3L, 3L), levels = c("Johnson", "Jonson", "Schwartz", 
-    "Smith"), class = "factor"), firstname = structure(c(5L, 
-    1L, 4L, 3L, 2L), levels = c("A.", "Anna", "Ben", "Charles", 
-    "Gearge"), class = "factor"), address = structure(c(3L, 5L, 
-    4L, 2L, 1L), levels = c("1 Eaststr", "1 Main", "12 Mainstreet", 
-    "61 Mainstr", "61 Mainstreet"), class = "factor"), sex = structure(c(NA, 
-    1L, 1L, 2L, 1L), levels = c("F", "M"), class = "factor"), 
-    postcode = structure(c(1L, 1L, 1L, 2L, 2L), levels = c("1234 AB", 
-    "6789 XY"), class = "factor")), row.names = c(NA, -5L), class = c("data.table", 
-"data.frame"), .internal.selfref = <pointer: 0x7fffe9692240>))
-
-
-pairs <- unique(rbindlist(list(pair_blocking(dfA, dfB, "postcode"), pair_blocking(dfA, dfB, "birthyear"))))
-setattr(pairs, "class", c("pairs", class(pairs))) #add the 'pairs' class
-setattr(pairs, "blocking_on", "postcode OR birthyear") #add info on blocking variables for the print function
-setattr(pairs, "x", as.data.table(dfA)) #add first dataframe's data as x
-setattr(pairs, "y", as.data.table(dfB)) #add second dataframe's data as y
 
