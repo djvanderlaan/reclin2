@@ -1,15 +1,17 @@
 
-CHANGES IN RECLIN2 0.1.2:
+CHANGES IN VERSION 0.2.0
 
-  NEW FEATURES:
+NEW FEATURES:
+
   - `merge_pairs` combines two sets of pairs into one (like `rbind`). Expecially 
     usefull in combination with `pair_blocking` to generate pairs that are blocked
     on multiple keys (e.g. they have match on either `postcode` or `lastname`).
 
-  BUG FIXES:
+BUG FIXES:
 
   - `pairs_minsim` gave an error when the number of records squared is larger 
     the maximum integer value.
+
   - `pairs_minsim` did not generate pairs when one of the keys contained 
     missing values.
 

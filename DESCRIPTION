@@ -1,7 +1,7 @@
 Package: reclin2
 Type: Package
 Title: Record Linkage Toolkit
-Version: 0.1.2
+Version: 0.2.0
 Authors@R: 
     person(given = "Jan",
            family = "van der Laan",
