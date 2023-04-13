@@ -5,7 +5,7 @@ equivalence_rcpp <- function(a, b, n) {
     .Call('_reclin2_equivalence_rcpp', PACKAGE = 'reclin2', a, b, n)
 }
 
-greedy_rcpp <- function(x, y) {
-    .Call('_reclin2_greedy_rcpp', PACKAGE = 'reclin2', x, y)
+greedy_rcpp <- function(x, y, w, include_ties = FALSE) {
+    .Call('_reclin2_greedy_rcpp', PACKAGE = 'reclin2', x, y, w, include_ties)
 }
 

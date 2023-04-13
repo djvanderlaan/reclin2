@@ -54,6 +54,7 @@ select_greedy(
   x = attr(pairs, "x"),
   y = attr(pairs, "y"),
   inplace = FALSE,
+  include_ties = FALSE,
   ...
 )
 
@@ -118,6 +119,9 @@ each element in \code{y} is unique.}
 
 \item{inplace}{logical indicating whether \code{pairs} should be modified in place. When
 pairs is large this can be more efficient.}
+
+\item{include_ties}{when pairs for a given record have an equal weight, should
+all pairs be included.}
 }
 \value{
 Returns the \code{pairs} with the variable given by \code{variable} added. This
@@ -132,7 +136,10 @@ algorithm that selects the first pair with the highest weight.
 \code{select_n_to_m} tries to optimise the total weight of all of the 
 selected pairs. In general this will result in a better selection. However,
 \code{select_n_to_m} uses much more memory and is much slower and, therefore,
-can only be used when the number of possible pairs is not too large.
+can only be used when the number of possible pairs is not too large. 
+
+Note that whe \code{include_ties = TRUE} the same record can still be 
+selected more than once. In that case the pairs will have an equal weight.
 }
 \examples{
 data("linkexample1", "linkexample2")

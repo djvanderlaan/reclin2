@@ -4,14 +4,17 @@
 \alias{greedy}
 \title{Greedy one-to-one matching of pairs}
 \usage{
-greedy(x, y, weight)
+greedy(x, y, weight, include_ties = FALSE)
 }
 \arguments{
-\item{x}{id's of lhs of pairs}
+\item{x}{id's of lhs of pairs; converted to integer}
 
-\item{y}{id's of rhs of pairs}
+\item{y}{id's of rhs of pairs; converted to integer}
 
-\item{weight}{weight of pair}
+\item{weight}{numeric vector with weight of pair}
+
+\item{include_ties}{when pairs for a given record have an equal weight, should
+all pairs be included.}
 }
 \value{
 A logical vector with the same length as \code{x}.
@@ -21,5 +24,7 @@ Greedy one-to-one matching of pairs
 }
 \details{
 Pairs with the highest weight are selected as long a neither the lhs as the
-rhs are already selected in a pair with a higher weight.
+rhs are already selected in a pair with a higher weight. When \code{include_ties}
+is \code{TRUE} all pairs are included when multiple pairs for a given record have
+an equal weight.
 }

@@ -24,6 +24,8 @@
 #' @param y \code{data.table} with the other half of the pairs.
 #' @param inplace logical indicating whether \code{pairs} should be modified in place. When
 #'   pairs is large this can be more efficient.
+#' @param include_ties when pairs for a given record have an equal weight, should
+#'   all pairs be included.
 #' @param ... Used to pass additional arguments to methods
 #'   
 #' @details 
@@ -33,6 +35,9 @@
 #' selected pairs. In general this will result in a better selection. However,
 #' \code{select_n_to_m} uses much more memory and is much slower and, therefore,
 #' can only be used when the number of possible pairs is not too large. 
+#'
+#' Note that whe \code{include_ties = TRUE} the same record can still be 
+#' selected more than once. In that case the pairs will have an equal weight.
 #'
 #' @return
 #' Returns the \code{pairs} with the variable given by \code{variable} added. This
