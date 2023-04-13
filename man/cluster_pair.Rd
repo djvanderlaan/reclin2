@@ -8,7 +8,7 @@ cluster_pair(cluster, x, y, deduplication = FALSE, name = "default")
 }
 \arguments{
 \item{cluster}{a cluster object as created by \code{\link[parallel]{makeCluster}}
-from \code{parallel} or \code{\link[snow]{makeCluster}} from \code{snow}.}
+from \code{parallel} or from the \code{snow} package.}
 
 \item{x}{first \code{data.frame}}
 

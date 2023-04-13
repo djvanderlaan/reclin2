@@ -3,7 +3,7 @@
 #' Generates all combinations of records from \code{x} and \code{y}.
 #'
 #' @param cluster a cluster object as created by \code{\link[parallel]{makeCluster}}
-#'   from \code{parallel} or \code{\link[snow]{makeCluster}} from \code{snow}.
+#'   from \code{parallel} or from the \code{snow} package.
 #' @param x first \code{data.frame}
 #' @param y second \code{data.frame}. Ignored when \code{deduplication = TRUE}.
 #' @param deduplication generate pairs from only \code{x}. Ignore \code{y}. This 
