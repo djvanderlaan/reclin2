@@ -26,5 +26,3 @@ select_greedy.pairs <- function(pairs, variable, score, threshold, preselect = N
   }
 }
 
-
-
