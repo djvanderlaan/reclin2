@@ -39,3 +39,4 @@ expect_equal_pairs(pairs_ref, pairs_loc)
 
 stopCluster(cl)
 
+stop("IMPLEMENT ON_BLOCKING")
