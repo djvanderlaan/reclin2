@@ -6,13 +6,17 @@ NEW FEATURES
   - `select_greedy` has an `include_ties` option that will include multiple pairs
     for a record when these pairs have an equal weight/score.
 
+  - `pair_min` had an `on_blocking` option that functions similar to the `on` argument
+    of `pair_blocking`: pairs are only generated when the agree exactly on the 
+    blocking keys. 
+
 
 CHANGES IN VERSION 0.2.0
 
 NEW FEATURES:
 
-  - `merge_pairs` combines two sets of pairs into one (like `rbind`). Expecially 
-    usefull in combination with `pair_blocking` to generate pairs that are blocked
+  - `merge_pairs` combines two sets of pairs into one (like `rbind`). Especially 
+    useful in combination with `pair_blocking` to generate pairs that are blocked
     on multiple keys (e.g. they have match on either `postcode` or `lastname`).
 
 BUG FIXES:
