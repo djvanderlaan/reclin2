@@ -1,7 +1,5 @@
 
-expect_equal <- function(x, y) {
-  stopifnot(isTRUE(all.equal(x, y)))
-}
+source("helpers.R")
 
 expect_equal_pairs <- function(x, y) {
   setkey(pairs_ref, .x, .y)
@@ -37,6 +35,43 @@ pairs_ref <- compare_pairs(pairs_ref, c("a", "b"))
 pairs_loc <- compare_pairs(pairs_loc, c("a", "b"))
 expect_equal_pairs(pairs_ref, pairs_loc)
 
-stopCluster(cl)
 
-stop("IMPLEMENT ON_BLOCKING")
+# ===== ON_BLOCKING
+
+x <- data.table(a = c(1,1,2,2), b = c(1,2,1,2))
+y <- data.table(a = c(3,3,2,2), b = c(1,2,1,2))
+
+set.seed(103)
+pairs <- cluster_pair_minsim(cl, x, y, on = "a", on_blocking = "b")
+pairs_ref <- pair_minsim(x, y, on = "a", on_blocking = "b")
+pairs_loc <- cluster_collect(pairs)
+expect_equal_pairs(pairs_ref, pairs_loc)
+
+# Unsing non-existent columns
+expect_error(cluster_pair_minsim(cl, x, y, on = "a", on_blocking = "foo"))
+expect_error(cluster_pair_minsim(cl, x, y, on = c("a", "foo"), on_blocking = "b"))
+
+set.seed(103)
+pairs <- cluster_pair_minsim(cl, x, y, on = "a", on_blocking = "b", minsim = 1)
+pairs_ref <- pair_minsim(x, y, on = "a", on_blocking = "b", minsim = 1)
+pairs_loc <- cluster_collect(pairs)
+expect_equal_pairs(pairs_ref, pairs_loc)
+
+set.seed(103)
+pairs <- cluster_pair_minsim(cl, x, y, on = "a", on_blocking = "b", minsim = 2)
+pairs_ref <- pair_minsim(x, y, on = "a", on_blocking = "b", minsim = 2)
+pairs_loc <- cluster_collect(pairs)
+expect_equal_pairs(pairs_ref, pairs_loc)
+
+# Missing values
+x <- data.table(a = c(1,NA,2,2), b = c(1,2,1,2))
+y <- data.table(a = c(3,3,2,2), b = c(1,2,NA,2))
+set.seed(103)
+pairs <- cluster_pair_minsim(cl, x, y, on = "a", on_blocking = "b", minsim = 1)
+pairs_ref <- pair_minsim(x, y, on = "a", on_blocking = "b", minsim = 1)
+pairs_loc <- cluster_collect(pairs)
+expect_equal_pairs(pairs_ref, pairs_loc)
+
+
+# ======== FINISH
+stopCluster(cl)

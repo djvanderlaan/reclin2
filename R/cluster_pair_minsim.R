@@ -10,6 +10,7 @@
 #' @param on the variables defining the blocks or strata for which 
 #'   all pairs of \code{x} and \code{y} will be generated.
 #' @param minsim minimal similarity score.
+#' @param on_blocking variables for which the pairs have to match.
 #' @param comparators named list of functions with which the variables are compared. 
 #'   This function should accept two vectors. Function should either return a vector
 #'   or a \code{data.table} with multiple columns.
@@ -60,8 +61,9 @@
 #' @import data.table
 #' @export
 cluster_pair_minsim<- function(cluster, x, y, on, minsim = 0.0, 
-    comparators = list(default_comparator), default_comparator = identical(), 
-    keep_simsum = TRUE, deduplication = FALSE, name = "default") {
+    on_blocking = character(0), comparators = list(default_comparator), 
+    default_comparator = identical(), keep_simsum = TRUE, 
+    deduplication = FALSE, name = "default") {
   x <- as.data.table(x)
   if (deduplication && !missing(y)) warning("y provided will be ignored.")
   y <- if (deduplication) x else as.data.table(y)
@@ -71,7 +73,7 @@ cluster_pair_minsim<- function(cluster, x, y, on, minsim = 0.0,
   x <- split(x, group)
   for (i in seq_along(x)) x[[i]]$.id <- idx[[i]]
   # Copy data to cluster
-  clusterApply(cluster, x, function(name, x, y, on, minsim, comparators, 
+  clusterApply(cluster, x, function(name, x, y, on, minsim, on_blocking, comparators, 
       default_comparator, keep_simsum, deduplication) {
     if (!require("reclin2"))
       stop("reclin2 needs to be installed on cluster nodes.")
@@ -82,8 +84,8 @@ cluster_pair_minsim<- function(cluster, x, y, on, minsim = 0.0,
       warning("'", name, "' already exists; overwriting.")
     reclin_env[[name]] <- new.env()
     reclin_env[[name]]$pairs <- pair_minsim(x, y, on = on, minsim = minsim, 
-      comparators = comparators, default_comparator = default_comparator, 
-      keep_simsum = keep_simsum)
+      on_blocking = on_blocking, comparators = comparators, 
+      default_comparator = default_comparator, keep_simsum = keep_simsum)
     # Handle deduplication; we cannot use the deduplication argument of 
     # the pair function
     if (deduplication) {
@@ -91,9 +93,9 @@ cluster_pair_minsim<- function(cluster, x, y, on, minsim = 0.0,
       reclin_env[[name]]$pairs <- reclin_env[[name]]$pairs[.y > ids]
     }
     TRUE
-  }, name = name, y = y, on = on, minsim = minsim, comparators = comparators, 
-    default_comparator = default_comparator, keep_simsum = keep_simsum,
-    deduplication = deduplication)
+  }, name = name, y = y, on = on, on_blocking = on_blocking, minsim = minsim, 
+    comparators = comparators, default_comparator = default_comparator, 
+    keep_simsum = keep_simsum, deduplication = deduplication)
   structure(list(cluster = cluster, name = name), class = "cluster_pairs")
 }
 

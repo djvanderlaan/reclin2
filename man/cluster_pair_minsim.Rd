@@ -10,6 +10,7 @@ cluster_pair_minsim(
   y,
   on,
   minsim = 0,
+  on_blocking = character(0),
   comparators = list(default_comparator),
   default_comparator = identical(),
   keep_simsum = TRUE,
@@ -29,6 +30,8 @@ from \code{parallel} or \code{makeCluster} from \code{snow}.}
 all pairs of \code{x} and \code{y} will be generated.}
 
 \item{minsim}{minimal similarity score.}
+
+\item{on_blocking}{variables for which the pairs have to match.}
 
 \item{comparators}{named list of functions with which the variables are compared. 
 This function should accept two vectors. Function should either return a vector
