@@ -5,7 +5,7 @@
 \alias{select_threshold.cluster_pairs}
 \alias{select_threshold}
 \alias{select_threshold.pairs}
-\title{Select matching pairs with a score above a threshold}
+\title{Select matching pairs with a score above or equal to a threshold}
 \usage{
 \method{select_threshold}{cluster_pairs}(pairs, variable, score, threshold, new_name = NULL, ...)
 
@@ -23,7 +23,7 @@ logical variable with a value of \code{TRUE} for the selected pairs.}
 \item{score}{name of the score/weight variable of the pairs. When not given
 and \code{attr(pairs, "score")} is defined, that is used.}
 
-\item{threshold}{the threshold to apply. Pairs with a score above the 
+\item{threshold}{the threshold to apply. Pairs with a score above or equal to the 
 threshold are selected.}
 
 \item{new_name}{name of new object to assign the pairs to on the cluster
@@ -39,7 +39,7 @@ Returns the \code{pairs} with the variable given by \code{variable} added. This
 is a logical variable indicating which pairs are selected a matches.
 }
 \description{
-Select matching pairs with a score above a threshold
+Select matching pairs with a score above or equal to a threshold
 }
 \examples{
 data("linkexample1", "linkexample2")

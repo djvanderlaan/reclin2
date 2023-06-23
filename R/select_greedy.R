@@ -20,8 +20,8 @@ select_greedy.pairs <- function(pairs, variable, score, threshold, preselect = N
     pairs[prep$index[sel], (variable) := TRUE]
     invisible(pairs)
   } else {
-    pairs[[variable]] <- FALSE
-    pairs[[variable]][prep$index[sel]] <- TRUE
+    pairs[[variable]] <- if (nrow(pairs) > 0) FALSE else logical(0)
+    pairs[[variable]][prep$index[sel]] <- if (nrow(pairs) > 0) TRUE else logical(0)
     pairs
   }
 }

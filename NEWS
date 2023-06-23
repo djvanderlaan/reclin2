@@ -10,6 +10,13 @@ NEW FEATURES
     that functions similar to the `on` argument of `pair_blocking`: pairs are
     only generated when the agree exactly on the blocking keys. 
 
+  - When selecting pairs using a threshold. Pairs are now selected when their
+    score is above or *equal to* the threshold. This has an effect for all of 
+    the `select_` functions.
+
+BUG FIXES
+
+  - `select_greedy` gave an error when the set of pairs is empty. 
 
 CHANGES IN VERSION 0.2.0
 

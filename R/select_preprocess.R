@@ -15,7 +15,7 @@ select_preprocess <- function(pairs, score, threshold = NULL, preselect = NULL,
     if (is.null(select)) stop("'", preselect, "' not found in pairs.")
   } 
   if (!missing(threshold) && !is.null(threshold)) {
-    select <- select & (score > threshold)
+    select <- select & (score >= threshold)
   }
   # When id_x and id_y are not given it is assumed that every row in x and y are
   # unique elements; when given look for object identifier in resp x and y
