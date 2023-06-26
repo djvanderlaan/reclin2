@@ -20,11 +20,13 @@ select_preprocess <- function(pairs, score, threshold = NULL, preselect = NULL,
   # When id_x and id_y are not given it is assumed that every row in x and y are
   # unique elements; when given look for object identifier in resp x and y
   if (!is.null(id_x) && !missing(id_x)) {
-    if (is.character(id_x)) id_x <- x[[id_x]]
+    if (is.character(id_x)) id_x <- x[[id_x]][pairs$.x]
   } else id_x <- pairs$.x
+  stopifnot(length(id_x) == length(select))
   if (!is.null(id_y) && !missing(id_y)) {
-    if (is.character(id_y)) id_y <- y[[id_y]]
+    if (is.character(id_y)) id_y <- y[[id_y]][pairs$.y]
   } else id_y <- pairs$.y
+  stopifnot(length(id_y) == length(select))
   # Select possible matches
   data.table(
     .x = id_x[select],
