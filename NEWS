@@ -18,6 +18,8 @@ BUG FIXES
 
   - `select_greedy` gave an error when the set of pairs is empty. 
 
+  - The `by_x` and `by_y` arguments were not handled correctly. Fixed.
+
 CHANGES IN VERSION 0.2.0
 
 NEW FEATURES:
