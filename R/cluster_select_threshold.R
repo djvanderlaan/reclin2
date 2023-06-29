@@ -15,6 +15,7 @@ select_threshold.cluster_pairs <- function(pairs, variable, score, threshold,
       env$pairs <- select_threshold(pairs, variable, score, threshold, 
         inplace = FALSE)
     } else {
+      if (exists(variable, pairs)) pairs[, (variable) := NULL]
       select_threshold(pairs, variable, score, threshold, inplace = TRUE)
     }
   }, name = pairs$name, variable, score, threshold, new_name)

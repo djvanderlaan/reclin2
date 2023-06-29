@@ -3,6 +3,11 @@
 CHANGES IN VERSION 0.2.1
 
 NEW FEATURES
+  - The `score_simple` function has been added which calculates a weighted sum
+    of the comparison vectors. Different weights are allowed for agreement, 
+    non-agreement and missing values for each of the variables in the comparison
+    vector.
+
   - `select_greedy` has an `include_ties` option that will include multiple pairs
     for a record when these pairs have an equal weight/score.
 

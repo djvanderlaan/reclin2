@@ -15,6 +15,7 @@ compare_vars.cluster_pairs <- function(pairs, variable, on_x = variable, on_y = 
       new_env$pairs <- compare_vars(env$pairs, variable = variable, 
         on_x = on_x, on_y = on_y, comparator = comparator, inplace = FALSE)
     } else {
+      if (exists(variable, env$pairs)) env$pairs[, (variable) := NULL]
       compare_vars(env$pairs, variable = variable, on_x = on_x, on_y = on_y, 
         comparator = comparator, inplace = TRUE)
     }
