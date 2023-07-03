@@ -155,6 +155,52 @@ the weight the more likely the two pairs belong to the same entity/are a match.
 The prediction function can also return the m- and u-probabilities and the 
 posterior m- and u-probabilities.
 
+A simpler method is to base the score directly on the similarity scores by
+calculating a (weighted) sum of the similarity scores. The higher the score the
+more similar the two records in the pair are. In the simplest case
+`score_simple` just calculates the sum of the similarity scores of the compared
+variables:
+
+```{.R}
+pairs <- score_simple(pairs, "score", 
+  on = c("lastname", "firstname", "address", "sex"))
+```
+
+However, it is also possible to provide custom weights for each of the
+variables. In that way some variables can contribute more or less to the final
+score. For example, agreement on last name might give more information than
+agreement on a variable such as sex.
+
+```{.R}
+pairs <- score_simple(pairs, "score", 
+  on = c("lastname", "firstname", "address", "sex"), 
+  w1 = c(lastname = 2, firstname = 2, address = 1, sex = 0.5),
+  w0 = -1, wna = 0)
+```
+
+Using `w1`, `w0` and `wna` it is possible to specify separate weights for
+agreement, non-agreement and missing values respectively. For example, agreement
+on last name might be a strong indication that two records belong to the same
+object, while non-agreement on last name might not be strong indication of two
+records not being from the same object as last name might contain a lot of
+errors. In that case a high values for `w1` and a hight (e.g. only slightly
+negative) values for `w0` might be appropriate. For sex the reverse might be
+true: agreement does not give much information (as two random persons will
+generally have a 50 percent chance of having the same sec) while non-agreement
+might be a strong indication that the two records do not belong to the same
+person (e.g. when there are few errors in sex). In that case relatively low
+values for `w1` and low values for `w0` are appropriate. 
+
+The total contribution of the comparison $c_i$ of variable $i$ is
+
+$$
+  w_{i} = w_{1,i}  c_{i} + w_{0,i}  (1-c_{i})
+$$
+
+Or `wna` when the comparison is missing. This assumes that similarity scores are
+between zero and one.
+
+
 ## Step 4: select pairs
 
 The final step is to select the pairs that are considered to belong to the
