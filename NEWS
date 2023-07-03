@@ -2,7 +2,14 @@
 
 CHANGES IN VERSION 0.2.1
 
+
 NEW FEATURES
+  - The `select_unique` function has been added. This function filters pairs and
+    removes pairs that have been matched more than once. For pairs that are
+    matched more than once (with a high enough link quality) it is not possible
+    to decide which link is the correct one. In some linkage scenarios (with a
+    focus on reducing false matches) it is then preferable to remove both. 
+
   - The `score_simple` function has been added which calculates a weighted sum
     of the comparison vectors. Different weights are allowed for agreement, 
     non-agreement and missing values for each of the variables in the comparison

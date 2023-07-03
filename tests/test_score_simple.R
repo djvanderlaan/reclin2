@@ -87,3 +87,5 @@ score_simple(pairs, on = c("a", "b"), variable = "score",
 tmp <- cluster_collect(pairs)
 expect_equal(tmp$score, c(2, 5, 5, 2))
 
+
+stopCluster(cl)

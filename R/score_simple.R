@@ -40,7 +40,7 @@
 #' the environment \code{reclin_env}. When \code{new_name} is not given (or
 #' equal to NULL) the original pairs on the nodes are overwritten.
 #'
-#' @example
+#' @examples
 #' data("linkexample1", "linkexample2")
 #' pairs <- pair_blocking(linkexample1, linkexample2, "postcode")
 #' compare_pairs(pairs, on = c("firstname", "lastname", "sex"), inplace = TRUE)

@@ -81,3 +81,27 @@ to complete agreement and the value 0 to complete non-agreement. In case of
 complete agreement a variable contributes \code{w1} to the total score and in
 case of complete non-agreement it contributes \code{w0} to the total score.
 }
+\examples{
+data("linkexample1", "linkexample2")
+pairs <- pair_blocking(linkexample1, linkexample2, "postcode")
+compare_pairs(pairs, on = c("firstname", "lastname", "sex"), inplace = TRUE)
+
+score_simple(pairs, "score", on = c("firstname", "lastname", "sex"))
+
+# Change the default weights
+score_simple(pairs, "score", on = c("firstname", "lastname", "sex"), 
+  w1 = 2, w0 = -1, wna = NA)
+
+# Use a named vector; omited elements from w1 get a weight of 1; those from
+# w0 and wna a weight of 0.
+score_simple(pairs, "score", on = c("firstname", "lastname", "sex"), 
+  w1 = c("firstname" = 2, "lastname" = 3), 
+  w0 = c("firstname" = -1, "lastname" = -0.5))
+
+# Use a named list; omited elements from w1 get a weight of 1; those from
+# w0 and wna a weight of 0.
+score_simple(pairs, "score", on = c("firstname", "lastname", "sex"), 
+  w1 = list("firstname" = 2, "lastname" = 3), 
+  w0 = list("firstname" = -1, "lastname" = -0.5))
+
+}

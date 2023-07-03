@@ -41,7 +41,7 @@
 #'
 #' @return
 #' Returns the \code{pairs} with the variable given by \code{variable} added. This
-#' is a logical variable indicating which pairs are selected a matches.
+#' is a logical variable indicating which pairs are selected as matches.
 #'
 #' @examples 
 #' data("linkexample1", "linkexample2")

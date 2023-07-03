@@ -125,7 +125,7 @@ all pairs be included.}
 }
 \value{
 Returns the \code{pairs} with the variable given by \code{variable} added. This
-is a logical variable indicating which pairs are selected a matches.
+is a logical variable indicating which pairs are selected as matches.
 }
 \description{
 Select matching pairs enforcing one-to-one linkage
