@@ -253,6 +253,10 @@ table(pairs$truth, pairs$ntom)
 
 Perfection!
 
+Other functions to select pairs are 
+
+- `select_unique` which will deselect pairs that are matched multiple times.
+
 ## The final, last step
 
 The real final step is to create the linked data set. We now know which pairs

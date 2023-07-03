@@ -434,6 +434,10 @@ color: #ee8c70; }
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>  <span class="ot">FALSE</span>    <span class="dv">13</span>    <span class="dv">0</span></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a>  <span class="ot">TRUE</span>      <span class="dv">0</span>    <span class="dv">4</span></span></code></pre></div>
 <p>Perfection!</p>
+<p>Other functions to select pairs are</p>
+<ul>
+<li><code>select_unique</code> which will deselect pairs that are matched multiple times.</li>
+</ul>
 <h2 id="the-final-last-step">The final, last step</h2>
 <p>The real final step is to create the linked data set. We now know which pairs are to be linked, but we still have to actually link them. <code>link</code> does that (the optional arguments <code>all_x</code> and <code>all_y</code> control the type of linkage):</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="op">&gt;</span><span class="st"> </span>linked_data_set &lt;-<span class="st"> </span><span class="kw">link</span>(pairs, <span class="dt">selection =</span> <span class="st">&quot;ntom&quot;</span>)</span>
