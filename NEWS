@@ -16,6 +16,9 @@ NEW FEATURES
     non-agreement and missing values for each of the variables in the comparison
     vector.
 
+  - `select_greedy` has `n` and `m` arguments that allow the user to specify
+    what type of linkage is allows (1-to-1, n-to-1, 1-to-m, n-to-m).
+
   - `select_greedy` has an `include_ties` option that will include multiple pairs
     for a record when these pairs have an equal weight/score.
 
