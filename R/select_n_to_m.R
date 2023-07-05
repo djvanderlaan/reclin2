@@ -12,11 +12,11 @@
 #'   rows, or the name of such a variable in \code{pairs}. Pairs are only 
 #'   selected when \code{preselect} is \code{TRUE}. This interacts with 
 #'   \code{threshold} (pairs have to be selected with both conditions).
-#' @param id_x a integer vector with the same length a the number of rows in 
+#' @param id_x a integer vector with the same length as the number of rows in 
 #'   \code{pairs}, or the name of a column in \code{x}. This vector should 
 #'   identify unique objects in \code{x}. When not specified it is assumed that
 #'   each element in \code{x} is unique. 
-#' @param id_y a integer vector with the same length a the number of rows in 
+#' @param id_y a integer vector with the same length as the number of rows in 
 #'   \code{pairs}, or the name of a column in \code{y}. This vector should 
 #'   identify unique objects in \code{y}. When not specified it is assumed that
 #'   each element in \code{y} is unique. 
@@ -26,6 +26,10 @@
 #'   pairs is large this can be more efficient.
 #' @param include_ties when pairs for a given record have an equal weight, should
 #'   all pairs be included.
+#' @param n an integer. Each element of x can be linked to at most n elements of
+#'   y. 
+#' @param m an integer. Each element of y can be linked to at most m elements of
+#'   x. 
 #' @param ... Used to pass additional arguments to methods
 #'   
 #' @details 
@@ -36,7 +40,7 @@
 #' \code{select_n_to_m} uses much more memory and is much slower and, therefore,
 #' can only be used when the number of possible pairs is not too large. 
 #'
-#' Note that whe \code{include_ties = TRUE} the same record can still be 
+#' Note that when \code{include_ties = TRUE} the same record can still be 
 #' selected more than once. In that case the pairs will have an equal weight.
 #'
 #' @return

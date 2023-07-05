@@ -9,3 +9,7 @@ greedy_rcpp <- function(x, y, w, include_ties = FALSE) {
     .Call('_reclin2_greedy_rcpp', PACKAGE = 'reclin2', x, y, w, include_ties)
 }
 
+greedy_nm_rcpp <- function(x, y, w, n = 1L, m = 1L) {
+    .Call('_reclin2_greedy_nm_rcpp', PACKAGE = 'reclin2', x, y, w, n, m)
+}
+

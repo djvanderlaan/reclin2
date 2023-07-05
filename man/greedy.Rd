@@ -4,7 +4,7 @@
 \alias{greedy}
 \title{Greedy one-to-one matching of pairs}
 \usage{
-greedy(x, y, weight, include_ties = FALSE)
+greedy(x, y, weight, n = 1L, m = 1L, include_ties = FALSE)
 }
 \arguments{
 \item{x}{id's of lhs of pairs; converted to integer}
@@ -12,6 +12,12 @@ greedy(x, y, weight, include_ties = FALSE)
 \item{y}{id's of rhs of pairs; converted to integer}
 
 \item{weight}{numeric vector with weight of pair}
+
+\item{n}{an integer. Each element of x can be linked to at most n elements of
+y.}
+
+\item{m}{an integer. Each element of y can be linked to at most m elements of
+x.}
 
 \item{include_ties}{when pairs for a given record have an equal weight, should
 all pairs be included.}

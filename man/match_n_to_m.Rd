@@ -20,7 +20,7 @@ maximise the total weight of the selected pairs.}
 y.}
 
 \item{m}{an integer. Each element of y can be linked to at most m elements of
-y.}
+x.}
 }
 \value{
 A logical vector with the same length as \code{x} indicating the selected 

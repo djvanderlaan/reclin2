@@ -59,5 +59,43 @@ expect_error(
   res <- reclin2:::greedy(dta2$x, dta2$y, dta2$w, include_ties = TRUE)
 )
 
+# n, m
+
+dta <- read.csv2(textConnection('x;y;w
+1;1;10
+1;2;9
+1;6;9
+4;1;8
+4;3;7
+5;3;7
+5;4;7
+6;3;6'
+))
+res <- reclin2:::greedy(dta$x, dta$y, dta$w)
+expect_equal(res, c(TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE))
+
+res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 999)
+expect_equal(res, c(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE))
+
+res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 2)
+expect_equal(res, c(TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE))
+
+res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 3)
+expect_equal(res, c(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE))
+
+res <- reclin2:::greedy(dta$x, dta$y, dta$w, m = 999)
+expect_equal(res, c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE))
+
+res <- reclin2:::greedy(dta$x, dta$y, dta$w, m = 2)
+expect_equal(res, c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE))
+
+res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 999, m = 999)
+expect_equal(res, c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE))
+
+expect_error(
+res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 999, m = 999, 
+  include_ties = TRUE)
+)
+
 message("Testing greedy() successful")
 

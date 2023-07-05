@@ -10,7 +10,7 @@
 #' @param n an integer. Each element of x can be linked to at most n elements of
 #'   y. 
 #' @param m an integer. Each element of y can be linked to at most m elements of
-#'   y. 
+#'   x. 
 #'
 #' @details
 #' The algorithm will try to select pairs in such a way each element of \code{x}

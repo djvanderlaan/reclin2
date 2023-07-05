@@ -55,6 +55,8 @@ select_greedy(
   y = attr(pairs, "y"),
   inplace = FALSE,
   include_ties = FALSE,
+  n = 1L,
+  m = 1L,
   ...
 )
 
@@ -101,12 +103,12 @@ rows, or the name of such a variable in \code{pairs}. Pairs are only
 selected when \code{preselect} is \code{TRUE}. This interacts with 
 \code{threshold} (pairs have to be selected with both conditions).}
 
-\item{id_x}{a integer vector with the same length a the number of rows in 
+\item{id_x}{a integer vector with the same length as the number of rows in 
 \code{pairs}, or the name of a column in \code{x}. This vector should 
 identify unique objects in \code{x}. When not specified it is assumed that
 each element in \code{x} is unique.}
 
-\item{id_y}{a integer vector with the same length a the number of rows in 
+\item{id_y}{a integer vector with the same length as the number of rows in 
 \code{pairs}, or the name of a column in \code{y}. This vector should 
 identify unique objects in \code{y}. When not specified it is assumed that
 each element in \code{y} is unique.}
@@ -122,6 +124,12 @@ pairs is large this can be more efficient.}
 
 \item{include_ties}{when pairs for a given record have an equal weight, should
 all pairs be included.}
+
+\item{n}{an integer. Each element of x can be linked to at most n elements of
+y.}
+
+\item{m}{an integer. Each element of y can be linked to at most m elements of
+x.}
 }
 \value{
 Returns the \code{pairs} with the variable given by \code{variable} added. This
@@ -138,7 +146,7 @@ selected pairs. In general this will result in a better selection. However,
 \code{select_n_to_m} uses much more memory and is much slower and, therefore,
 can only be used when the number of possible pairs is not too large. 
 
-Note that whe \code{include_ties = TRUE} the same record can still be 
+Note that when \code{include_ties = TRUE} the same record can still be 
 selected more than once. In that case the pairs will have an equal weight.
 }
 \examples{
