@@ -18,7 +18,7 @@
 #' in order to threshold them. This usually results in values 0 or 1. Missing
 #' values are usually codes as 0. However, this all depends on the comparison
 #' functions used. For more information see the documentation on the 
-#' \link[=identical]{comparison functions}.
+#' \link[=cmp_identical]{comparison functions}.
 #' 
 #' @return 
 #' Returns a \code{data.frame} with all unique comparison patterns that exist

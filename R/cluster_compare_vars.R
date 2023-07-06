@@ -3,7 +3,7 @@
 #' @rdname compare_vars
 #' @export
 compare_vars.cluster_pairs <- function(pairs, variable, on_x = variable, on_y = on_x, 
-    comparator = identical(), new_name = NULL, ...) {
+    comparator = cmp_identical(), new_name = NULL, ...) {
   tmp <- clusterCall(pairs$cluster, function(name, variable, on_x, on_y, comparator, 
       new_name) {
     if (!require("reclin2"))

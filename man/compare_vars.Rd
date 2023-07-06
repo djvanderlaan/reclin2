@@ -11,7 +11,7 @@
   variable,
   on_x = variable,
   on_y = on_x,
-  comparator = identical(),
+  comparator = cmp_identical(),
   new_name = NULL,
   ...
 )
@@ -21,7 +21,7 @@ compare_vars(
   variable,
   on_x = variable,
   on_y = on_x,
-  comparator = identical(),
+  comparator = cmp_identical(),
   ...
 )
 
@@ -30,7 +30,7 @@ compare_vars(
   variable,
   on_x = variable,
   on_y = on_x,
-  comparator = identical(),
+  comparator = cmp_identical(),
   x = attr(pairs, "x"),
   y = attr(pairs, "y"),
   inplace = FALSE,

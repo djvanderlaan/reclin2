@@ -44,7 +44,7 @@ We will compare the records on `name` and use a string similarity function.
 
 ```{.R}
 compare_pairs(pairs, on = "name", 
-  comparators = list(jaro_winkler()), 
+  comparators = list(cmp_jarowinkler()), 
   inplace = TRUE)
 print(pairs)
 ```

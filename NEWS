@@ -16,6 +16,13 @@ NEW FEATURES
     non-agreement and missing values for each of the variables in the comparison
     vector.
 
+  - The functions `identical`, `jaro_winkler`, `lcs` and `jaccard` are
+    deprecated and will be removed in future versions of the package. Instead
+    use the functions `cmp_identical`, `cmp_jarowinkler`, `cmp_lcs` and
+    `cmp_jaccard`. The function `identical` caused a conflict with a function in
+    base R. Also this, hopefully, stresses that these functions return a
+    function.
+
   - `select_greedy` has `n` and `m` arguments that allow the user to specify
     what type of linkage is allows (1-to-1, n-to-1, 1-to-m, n-to-m).
 

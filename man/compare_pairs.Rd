@@ -10,7 +10,7 @@
   pairs,
   on,
   comparators = list(default_comparator),
-  default_comparator = identical(),
+  default_comparator = cmp_identical(),
   new_name = NULL,
   ...
 )
@@ -19,7 +19,7 @@ compare_pairs(
   pairs,
   on,
   comparators = list(default_comparator),
-  default_comparator = identical(),
+  default_comparator = cmp_identical(),
   ...
 )
 
@@ -27,7 +27,7 @@ compare_pairs(
   pairs,
   on,
   comparators = list(default_comparator),
-  default_comparator = identical(),
+  default_comparator = cmp_identical(),
   x = attr(pairs, "x"),
   y = attr(pairs, "y"),
   inplace = FALSE,

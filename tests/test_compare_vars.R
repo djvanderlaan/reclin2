@@ -45,7 +45,7 @@ stopifnot(isTRUE(all.equal(tmp$foo_ja, tmp2)))
 # Multiple variables are compared resulting in one comparison
 # vector
 testfun <- function(x, y) {
-  cmp <- identical()
+  cmp <- cmp_identical()
   c1 <- cmp(x[[1]], y[[1]]) + cmp(x[[2]], y[[2]])
   c2 <- cmp(x[[1]], y[[2]]) + cmp(x[[2]], y[[1]])
   pmax(c1, c2)

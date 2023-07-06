@@ -43,8 +43,8 @@ print(linkexample2)
 pairs <- pair_blocking(linkexample1, linkexample2, "postcode")
 
 compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"), 
-  inplace = TRUE, comparators = list(lastname = jaro_winkler(), 
-  firstname = jaro_winkler(), address = jaro_winkler()))
+  inplace = TRUE, comparators = list(lastname = cmp_jarowinkler(), 
+  firstname = cmp_jarowinkler(), address = cmp_jarowinkler()))
 print(pairs)
 ```
 
@@ -71,8 +71,8 @@ with the new comparison function.
 pairs[, sex := NULL]
 
 compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"), 
-  inplace = TRUE, comparators = list(lastname = jaro_winkler(), 
-  firstname = jaro_winkler(), address = jaro_winkler(), sex = na_as_class))
+  inplace = TRUE, comparators = list(lastname = cmp_jarowinkler(), 
+  firstname = cmp_jarowinkler(), address = cmp_jarowinkler(), sex = na_as_class))
 print(pairs)
 ```
 

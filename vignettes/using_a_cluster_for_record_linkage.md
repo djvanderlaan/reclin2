@@ -75,7 +75,7 @@ pairs on variables:
 
 ```{.R}
 compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"), 
-  default_comparator = jaro_winkler(0.9), inplace = TRUE)
+  default_comparator = cmp_jarowinkler(0.9), inplace = TRUE)
 print(pairs)
 ```
 
@@ -87,7 +87,7 @@ and we should use:
 
 ```{.R}
 compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"),
-  default_comparator = jaro_winkler(0.9))
+  default_comparator = cmp_jarowinkler(0.9))
 print(pairs)
 ```
 

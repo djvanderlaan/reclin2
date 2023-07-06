@@ -2,7 +2,7 @@
 #' @importFrom parallel clusterCall
 #' @export
 compare_pairs.cluster_pairs <- function(pairs, on, 
-    comparators = list(default_comparator), default_comparator = identical(), 
+    comparators = list(default_comparator), default_comparator = cmp_identical(), 
     new_name = NULL, ...) {
   
   tmp <- clusterCall(pairs$cluster, function(name, on, comparators, 

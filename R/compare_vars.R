@@ -30,7 +30,7 @@
 #' 
 #' @export
 compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x, 
-    comparator = identical(), ...) {
+    comparator = cmp_identical(), ...) {
   UseMethod("compare_vars")
 }
 
@@ -38,7 +38,7 @@ compare_vars <- function(pairs, variable, on_x = variable, on_y = on_x,
 #' @rdname compare_vars
 #' @export
 compare_vars.pairs <- function(pairs, variable, on_x = variable, on_y = on_x, 
-    comparator = identical(), x = attr(pairs, 'x'), y = attr(pairs, 'y'), 
+    comparator = cmp_identical(), x = attr(pairs, 'x'), y = attr(pairs, 'y'), 
     inplace = FALSE, ...) {
   xv <- x[pairs$.x, ..on_x]
   yv <- y[pairs$.y, ..on_y]

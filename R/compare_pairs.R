@@ -35,7 +35,7 @@
 #' @rdname compare_pairs
 #' @export 
 compare_pairs <- function(pairs, on, comparators = list(default_comparator), 
-    default_comparator = identical(), ...) {
+    default_comparator = cmp_identical(), ...) {
   UseMethod("compare_pairs", pairs)
 }
 
@@ -43,7 +43,7 @@ compare_pairs <- function(pairs, on, comparators = list(default_comparator),
 #' @rdname compare_pairs
 #' @export
 compare_pairs.pairs <- function(pairs, on, comparators = list(default_comparator), 
-    default_comparator = identical(), x = attr(pairs, 'x'), y = attr(pairs, 'y'), 
+    default_comparator = cmp_identical(), x = attr(pairs, 'x'), y = attr(pairs, 'y'), 
     inplace = FALSE, ...) {
   if (missing(on) && !missing(on)) on <- names(comparators)
   if (missing(on) || is.null(on)) stop("on is missing.")

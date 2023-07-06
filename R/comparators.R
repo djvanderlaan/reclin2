@@ -4,6 +4,12 @@
 #' @param threshold threshold to use for the Jaro-Winkler string distance when
 #'   creating a binary result.
 #'   
+#' @section Warning:
+#' The functions \code{identical}, \code{jaro_winkler}, \code{lcs} and
+#' \code{jaccard} are deprecated and will be removed in future versions of the
+#' package. Instead use the functions \code{cmp_identical},
+#' \code{cmp_jarowinkler}, \code{cmp_lcs} and \code{cmp_jaccard}. 
+#'
 #' @details 
 #' A comparison function should accept two arguments: both vectors. When the 
 #' function is called with both arguments it should compare the elements in the 
@@ -31,14 +37,14 @@
 #' The functions return a comparison function (see details).
 #' 
 #' @examples 
-#' cmp <- identical()
+#' cmp <- cmp_identical()
 #' x <- cmp(c("john", "mary", "susan", "jack"), 
 #'          c("johan", "mary", "susanna", NA))
 #' # Applying the comparison function to the result of the comparison results 
 #' # in a logical result, with NA's and values of FALSE set to FALSE
 #' cmp(x)
 #' 
-#' cmp <- jaro_winkler(0.95)
+#' cmp <- cmp_jarowinkler(0.95)
 #' x <- cmp(c("john", "mary", "susan", "jack"), 
 #'          c("johan", "mary", "susanna", NA))
 #' # Applying the comparison function to the result of the comparison results 
@@ -49,7 +55,7 @@
 #' 
 #' @rdname comparators
 #' @export
-identical <- function() {
+cmp_identical <- function() {
   function(x, y) {
     if (is.factor(x) || (!missing(y) && is.factor(y))) {
       x <- as.character(x)
@@ -64,9 +70,19 @@ identical <- function() {
 }
 
 #' @rdname comparators
+#' @export
+identical <- function() {
+  deprecated_warn(paste0("identical, jaro_winkler, lcs, jaccard",
+      " are deprecated. Use the cmp_ variants (see ?cmp_identical).",
+      " This warning is shown only once. Set the option",
+      " reclin2_deprecate_warn to FALSE to disable these warnings."))
+  identical()
+}
+
+#' @rdname comparators
 #' @importFrom stringdist stringdist
 #' @export
-jaro_winkler <- function(threshold = 0.95) {
+cmp_jarowinkler <- function(threshold = 0.95) {
   function(x, y) {
     if (!missing(y)) {
       1-stringdist(x, y, method = "jw")
@@ -77,9 +93,19 @@ jaro_winkler <- function(threshold = 0.95) {
 }
 
 #' @rdname comparators
+#' @export
+jaro_winkler <- function(threshold = 0.80) {
+  deprecated_warn(paste0("identical, jaro_winkler, lcs, jaccard",
+      " are deprecated. Use the cmp_ variants (see ?cmp_identical).",
+      " This warning is shown only once. Set the option",
+      " reclin2_deprecate_warn to FALSE to disable these warnings."))
+  cmp_jarowinkler(threshold = threshold)
+}
+
+#' @rdname comparators
 #' @importFrom stringdist stringdist
 #' @export
-lcs <- function(threshold = 0.80) {
+cmp_lcs <- function(threshold = 0.80) {
   function(x, y) {
     if (!missing(y)) {
       d <- stringdist(x, y, method = "lcs")
@@ -92,14 +118,44 @@ lcs <- function(threshold = 0.80) {
 }
 
 #' @rdname comparators
+#' @export
+lcs <- function(threshold = 0.80) {
+  deprecated_warn(paste0("identical, jaro_winkler, lcs, jaccard",
+      " are deprecated. Use the cmp_ variants (see ?cmp_identical).",
+      " This warning is shown only once. Set the option",
+      " reclin2_deprecate_warn to FALSE to disable these warnings."))
+  cmp_lcs(threshold = threshold)
+}
+
+
+#' @rdname comparators
 #' @importFrom stringdist stringdist
 #' @export
-jaccard <- function(threshold = 0.80) {
+cmp_jaccard <- function(threshold = 0.80) {
   function(x, y) {
     if (!missing(y)) {
       1-stringdist(x, y, method = "jaccard", q = 2)
     } else {
       (x > threshold) & !is.na(x)
     }
+  }
+}
+
+#' @rdname comparators
+#' @export
+jaccard <- function(threshold = 0.80) {
+  deprecated_warn(paste0("identical, jaro_winkler, lcs, jaccard",
+      " are deprecated. Use the cmp_ variants (see ?cmp_identical).",
+      " This warning is shown only once. Set the option",
+      " reclin2_deprecate_warn to FALSE to disable these warnings."))
+  cmp_jaccard(threshold = threshold)
+}
+
+
+deprecated_warn <- function(message, only_once = TRUE) {
+  should_warn <- getOption("reclin2_deprecate_warn", TRUE)
+  if (should_warn) {
+    warning(message)
+    if (only_once) options("reclin2_deprecate_warn" = FALSE)
   }
 }
