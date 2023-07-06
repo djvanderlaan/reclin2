@@ -43,6 +43,9 @@ BUG FIXES
 
   - The `by_x` and `by_y` arguments were not handled correctly. Fixed.
 
+  - The result from `cluster_collect` can now be used without introducing 
+    a warning from `data.table`.
+
 CHANGES IN VERSION 0.2.0
 
 NEW FEATURES:
