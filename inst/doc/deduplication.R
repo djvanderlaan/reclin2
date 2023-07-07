@@ -9,7 +9,7 @@ print(pairs)
 
 # <unlabeled code block>
 compare_pairs(pairs, on = "name", 
-  comparators = list(jaro_winkler()), 
+  comparators = list(cmp_jarowinkler()), 
   inplace = TRUE)
 print(pairs)
 

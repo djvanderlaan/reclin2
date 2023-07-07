@@ -21,7 +21,7 @@ print(pairs)
 
 # <unlabeled code block>
 compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"),
-  default_comparator = jaro_winkler(0.9), inplace = TRUE)
+  default_comparator = cmp_jarowinkler(0.9), inplace = TRUE)
 print(pairs)
 
 # <unlabeled code block>

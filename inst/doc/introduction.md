@@ -106,11 +106,11 @@ similarity score to compare the two strings: a high score means that the two
 strings are very similar a value close to zero means that the strings are very
 different.
 
-Below we use the `jaro_winkler` similarity score to compare all fields:
+Below we use the `cmp_jarowinkler` similarity score to compare all fields:
 
 ```{.R}
 compare_pairs(pairs, on = c("lastname", "firstname", "address", "sex"),
-  default_comparator = jaro_winkler(0.9), inplace = TRUE)
+  default_comparator = cmp_jarowinkler(0.9), inplace = TRUE)
 print(pairs)
 ```
 
