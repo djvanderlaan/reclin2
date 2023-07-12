@@ -36,7 +36,7 @@
 #' # Generate some pairs
 #' library(parallel)
 #' data("linkexample1", "linkexample2")
-#' cl <- makeCluster(2)
+#' cl <- makeCluster(1)
 #' pairs <- cluster_pair(cl, linkexample1, linkexample2)
 #' compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
 #' 

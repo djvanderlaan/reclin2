@@ -163,7 +163,7 @@ table(pairs$ntom, pairs$greedy)
 
 # The same example as above using a cluster;
 library(parallel)
-cl <- makeCluster(2)
+cl <- makeCluster(1)
 pairs <- cluster_pair_blocking(cl, linkexample1, linkexample2, "postcode")
 compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
 model <- problink_em(~ lastname + firstname + address + sex, data = pairs)

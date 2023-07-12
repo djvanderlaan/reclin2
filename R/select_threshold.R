@@ -34,7 +34,7 @@
 #' # omitted (also not a problem if it is not).
 #' library(parallel)
 #' data("linkexample1", "linkexample2")
-#' cl <- makeCluster(2)
+#' cl <- makeCluster(1)
 #' pairs <- cluster_pair(cl, linkexample1, linkexample2)
 #' compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
 #' model <- problink_em(~ lastname + firstname + address + sex, data = pairs)
