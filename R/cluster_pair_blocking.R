@@ -39,8 +39,7 @@
 #' @examples
 #' library(parallel)
 #' data("linkexample1", "linkexample2")
-#' cl <- makeCluster(2)
-#' \dontshow{clusterEvalQ(cl, data.table::setDTthreads(1))}
+#' cl <- makeCluster(1)
 #' pairs <- cluster_pair_blocking(cl, linkexample1, linkexample2, "postcode")
 #' stopCluster(cl)
 #'
