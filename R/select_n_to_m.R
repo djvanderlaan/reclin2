@@ -48,6 +48,7 @@
 #' is a logical variable indicating which pairs are selected as matches.
 #'
 #' @examples 
+#' \dontshow{data.table::setDTthreads(1)}
 #' data("linkexample1", "linkexample2")
 #' pairs <- pair_blocking(linkexample1, linkexample2, "postcode")
 #' pairs <- compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
@@ -61,7 +62,8 @@
 #' 
 #' # The same example as above using a cluster;
 #' library(parallel)
-#' cl <- makeCluster(1)
+#' cl <- makeCluster(2)
+#' \dontshow{clusterEvalQ(cl, data.table::setDTthreads(1))}
 #' pairs <- cluster_pair_blocking(cl, linkexample1, linkexample2, "postcode")
 #' compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
 #' model <- problink_em(~ lastname + firstname + address + sex, data = pairs)
