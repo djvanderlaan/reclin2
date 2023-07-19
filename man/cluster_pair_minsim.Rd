@@ -77,7 +77,8 @@ can then be further processes using functions such as
 \examples{
 library(parallel)
 data("linkexample1", "linkexample2")
-cl <- makeCluster(1)
+cl <- makeCluster(2)
+\dontshow{clusterEvalQ(cl, data.table::setDTthreads(1))}
 # Either address or postcode has to match to keep a pair
 pairs <- cluster_pair_minsim(cl, linkexample1, linkexample2, 
    on = c("postcode", "address"), minsim = 1)

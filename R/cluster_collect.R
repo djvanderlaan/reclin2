@@ -13,7 +13,8 @@
 #' @examples
 #' library(parallel)
 #' data("linkexample1", "linkexample2")
-#' cl <- makeCluster(1)
+#' cl <- makeCluster(2)
+#' \dontshow{clusterEvalQ(cl, data.table::setDTthreads(1))}
 #' 
 #' pairs <- cluster_pair(cl, linkexample1, linkexample2)
 #' local_pairs <- cluster_collect(pairs, clear = FALSE)

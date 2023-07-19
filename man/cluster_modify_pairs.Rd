@@ -49,7 +49,8 @@ assumed that the function modified the pairs by reference (e.g. using
 # Generate some pairs
 library(parallel)
 data("linkexample1", "linkexample2")
-cl <- makeCluster(1)
+cl <- makeCluster(2)
+\dontshow{clusterEvalQ(cl, data.table::setDTthreads(1))}
 pairs <- cluster_pair(cl, linkexample1, linkexample2)
 compare_pairs(pairs, c("lastname", "firstname", "address", "sex"))
 

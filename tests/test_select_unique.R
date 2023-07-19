@@ -99,6 +99,7 @@ x <- data.table(a = c(1,1,2,2), b = c(1,2,1,2))
 y <- data.table(a = c(3,3,2,2), b = c(1,2,1,2))
 
 cl <- makeCluster(2)
+clusterEvalQ(cl, data.table::setDTthreads(1))
 
 set.seed(103)
 pairs <- cluster_pair_blocking(cl, x, y, on = "a")
