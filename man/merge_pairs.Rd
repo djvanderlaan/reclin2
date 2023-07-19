@@ -48,7 +48,8 @@ Merge two sets of pairs into one
 }
 \details{
 The function will give an error when the two sets of pairs have different values
-for \code{attr(pairs1, "x")} and \code{attr(pairs1, "y")}. When there attributes
-are missing the code will execute; the user is then responsible for ensuring that
-the indices in \code{pairs1} and \code{pairs2} refer to the same datasets.
+for \code{attr(pairs1, "x")} and \code{attr(pairs1, "y")}. When these attributes
+are missing the code will not generate an error; the user is then
+responsible for ensuring that the indices in \code{pairs1} and \code{pairs2}
+refer to the same datasets.
 }

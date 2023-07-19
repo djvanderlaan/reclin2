@@ -10,9 +10,10 @@
 #'
 #' @details
 #' The function will give an error when the two sets of pairs have different values
-#' for \code{attr(pairs1, "x")} and \code{attr(pairs1, "y")}. When there attributes
-#' are missing the code will execute; the user is then responsible for ensuring that
-#' the indices in \code{pairs1} and \code{pairs2} refer to the same datasets.
+#' for \code{attr(pairs1, "x")} and \code{attr(pairs1, "y")}. When these attributes
+#' are missing the code will not generate an error; the user is then
+#' responsible for ensuring that the indices in \code{pairs1} and \code{pairs2}
+#' refer to the same datasets.
 #'
 #' @return
 #' Returns a \code{pairs} or \code{cluster_pairs} object where both sets of pairs
@@ -37,7 +38,7 @@ merge_pairs.pairs <- function(pairs1, pairs2, ...) {
   if (!isTRUE(all.equal(attr(pairs1, "y"), attr(pairs2, "y")))) 
     stop("The dataset x of the first set of pairs is not equal to the dataset ",
       "x of the second set.")
-  res <- data.table::rbindlist(list(pairs1, pairs2))
+  res <- data.table::rbindlist(list(pairs1, pairs2), use.names = TRUE, fill = TRUE)
   setkey(res, .x, .y)
   res <- unique(res)
   setattr(res, "class", c("pairs", class(res)))
