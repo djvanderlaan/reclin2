@@ -1,6 +1,6 @@
 
 
-CHANGES IN VERSION 0.3.1
+CHANGES IN VERSION 0.3.2
 
 
 NEW FEATURES
@@ -15,6 +15,10 @@ NEW FEATURES
     of the comparison vectors. Different weights are allowed for agreement, 
     non-agreement and missing values for each of the variables in the comparison
     vector.
+
+  - The `merge_pairs` function can combine different sets of pairs for the same
+    two data sets. For example, combine two sets of pairs generated with
+    different blocking variables.
 
   - The functions `identical`, `jaro_winkler`, `lcs` and `jaccard` are
     deprecated and will be removed in future versions of the package. Instead
