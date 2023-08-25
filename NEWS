@@ -1,4 +1,15 @@
 
+CHANGES IN VERSION 0.3.5
+
+NEW FEATURES
+ 
+  - Additional arguments to `compare_vars` are passed on to the comparison
+    function.
+
+BUG FIXES
+
+  - `identical` called itself resulting in a stack overflow. This has been
+    fixed.
 
 CHANGES IN VERSION 0.3.2
 
