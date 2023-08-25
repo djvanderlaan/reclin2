@@ -58,7 +58,7 @@ or a \code{data.table} with multiple columns.}
 \item{new_name}{name of new object to assign the pairs to on the cluster
 nodes.}
 
-\item{...}{Used to pass additional arguments to methods}
+\item{...}{Passed on to the comparator function.}
 
 \item{x}{\code{data.table} with one half of the pairs.}
 

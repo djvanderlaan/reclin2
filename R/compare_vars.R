@@ -18,7 +18,7 @@
 #'   pairs is large this can be more efficient.
 #' @param new_name name of new object to assign the pairs to on the cluster
 #'   nodes.
-#' @param ... Used to pass additional arguments to methods
+#' @param ... Passed on to the comparator function.
 #'
 #' @details
 #' When \code{comparator} returns a \code{data.table} multiple columns are added to \code{pairs}. 
