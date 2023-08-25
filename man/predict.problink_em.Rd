@@ -12,6 +12,7 @@
   binary = FALSE,
   add = FALSE,
   comparators,
+  inplace = FALSE,
   new_name = NULL,
   ...
 )
@@ -35,6 +36,9 @@ comparison function in comparators.}
 
 \item{comparators}{a list of comparison functions (see \code{\link{compare_pairs}}). 
 When missing \code{attr(pairs, 'comparators')} is used.}
+
+\item{inplace}{logical indicating whether \code{pairs} should be modified in place. When
+pairs is large this can be more efficient.}
 
 \item{new_name}{name of new object to assign the pairs to on the cluster
 nodes (only relevant when pairs is of type \code{cluster_pairs}.}

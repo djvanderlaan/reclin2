@@ -6,6 +6,8 @@ NEW FEATURES
   - Additional arguments to `compare_vars` are passed on to the comparison
     function.
 
+  - Added `inplace` argument to `predict`.
+
 BUG FIXES
 
   - `identical` called itself resulting in a stack overflow. This has been

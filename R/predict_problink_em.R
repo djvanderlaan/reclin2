@@ -12,6 +12,8 @@
 #' @param add add the predictions to the original pairs object.
 #' @param comparators a list of comparison functions (see \code{\link{compare_pairs}}). 
 #'   When missing \code{attr(pairs, 'comparators')} is used. 
+#' @param inplace logical indicating whether \code{pairs} should be modified in place. When
+#'   pairs is large this can be more efficient.
 #' @param new_name name of new object to assign the pairs to on the cluster
 #'   nodes (only relevant when pairs is of type \code{cluster_pairs}.
 #' @param ... unused.
@@ -40,23 +42,25 @@
 #' @export
 predict.problink_em <- function(object, pairs = newdata, newdata = NULL, 
     type = c("weights", "mpost", "probs", "all"), binary = FALSE, 
-    add = FALSE, comparators, new_name = NULL, ...) {
+    add = FALSE, comparators, inplace = FALSE, new_name = NULL, ...) {
   # Process input
   type <- match.arg(type)
   if (is.null(pairs)) pairs <- newdata
   if (is.null(pairs)) stop("Missing pairs or newdata.")
   if (missing(comparators) || is.null(comparators))  
     comparators <- get_comparators(pairs)
-  predict_problinkem(pairs, object, type, binary, add, comparators, new_name, ...) 
+  predict_problinkem(pairs, object, type, binary, add, comparators, inplace = inplace, 
+    new_name = new_name, ...) 
 }
 
 
-predict_problinkem <- function(pairs, model, type, binary, add, comparators, ...) {
+predict_problinkem <- function(pairs, model, type, binary, add, comprators, ...) {
   UseMethod("predict_problinkem")
 }
 
 #' @import data.table
-predict_problinkem.pairs <- function(pairs, model, type, binary, add, comparators, ...) {
+predict_problinkem.pairs <- function(pairs, model, type, binary, add, comparators, inplace = FALSE,
+    ...) {
   on <- names(model$mprobs)
   # Initialise end result and for-loop
   weights <- rep(0, nrow(pairs))
@@ -78,7 +82,12 @@ predict_problinkem.pairs <- function(pairs, model, type, binary, add, comparator
     uprobs  <- uprobs * pu
   }
   # Construct end result
-  res <- if (add) pairs else pairs[, list(.x, .y)]
+  res <- if (add) {
+    if (inplace) pairs else copy(pairs)
+  } else {
+    if (inplace) warning("inplace = TRUE is only relevant when add = TRUE. inplace is ignored.")
+    pairs[, list(.x, .y)]
+  }
   if (type == "weights") {
     res[, weights := weights]
   } else if (type == "mpost") {
@@ -90,6 +99,6 @@ predict_problinkem.pairs <- function(pairs, model, type, binary, add, comparator
     res[, upost := 1 - mpost]
     if (type == "all") res[,  weight := weights]
   } 
-  res
+  if (inplace) invisible(res) else res 
 }
 
