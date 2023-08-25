@@ -68,7 +68,7 @@ efficiently perform some of the computations. Therefore, the `pairs` object is a
 Other functions to generate pairs are:
 
 - `pair`: generate all possible pairs
-- `pairs_minsim`: generate pairs that have minimum similarity score (e.g. should
+- `pair_minsim`: generate pairs that have minimum similarity score (e.g. should
   agree on at least one variable in a set of given variables). Can be
   computationally intensive as all records have to be compared. 
 
