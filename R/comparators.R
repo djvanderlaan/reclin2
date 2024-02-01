@@ -70,16 +70,6 @@ cmp_identical <- function() {
 }
 
 #' @rdname comparators
-#' @export
-identical <- function() {
-  deprecated_warn(paste0("identical, jaro_winkler, lcs, jaccard",
-      " are deprecated. Use the cmp_ variants (see ?cmp_identical).",
-      " This warning is shown only once. Set the option",
-      " reclin2_deprecate_warn to FALSE to disable these warnings."))
-  cmp_identical()
-}
-
-#' @rdname comparators
 #' @importFrom stringdist stringdist
 #' @export
 cmp_jarowinkler <- function(threshold = 0.95) {

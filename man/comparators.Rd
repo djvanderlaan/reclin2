@@ -2,7 +2,6 @@
 % Please edit documentation in R/comparators.R
 \name{cmp_identical}
 \alias{cmp_identical}
-\alias{identical}
 \alias{cmp_jarowinkler}
 \alias{jaro_winkler}
 \alias{cmp_lcs}
@@ -12,8 +11,6 @@
 \title{Comparison functions}
 \usage{
 cmp_identical()
-
-identical()
 
 cmp_jarowinkler(threshold = 0.95)
 

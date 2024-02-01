@@ -10,6 +10,9 @@ NEW FEATURES
 
   - The `greedy` function is now exported.
 
+  - The `identical` function has been removed. It was already deprecated. The
+    identical `cmp_identical` can be used instead.
+
 BUG FIXES
 
   - `identical` called itself resulting in a stack overflow. This has been
