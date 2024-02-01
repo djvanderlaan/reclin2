@@ -15,40 +15,40 @@ dta <- read.csv2(textConnection('x;y;w
 6;3;6'
 ))
 
-res <- reclin2:::greedy(dta$x, dta$y, dta$w)
+res <- greedy(dta$x, dta$y, dta$w)
 expect_equal(res, c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE))
 
 # Change order; greedy should sort
 set.seed(10)
 o <- sample(nrow(dta))
-res <- reclin2:::greedy(dta$x[o], dta$y[o], dta$w[o])
+res <- greedy(dta$x[o], dta$y[o], dta$w[o])
 expect_equal(res, c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE)[o])
 
 # Empty input
-res <- reclin2:::greedy(dta$x[FALSE], dta$y[FALSE], dta$w[FALSE])
+res <- greedy(dta$x[FALSE], dta$y[FALSE], dta$w[FALSE])
 expect_equal(res, logical(0))
 
 # Missing values
 dta2 <- dta
 dta2$w[1] <- NA
 expect_error(
-  res <- reclin2:::greedy(dta2$x, dta2$y, dta2$w)
+  res <- greedy(dta2$x, dta2$y, dta2$w)
 )
 
 # include_ties = TRUE
-res <- reclin2:::greedy(dta$x, dta$y, dta$w, include_ties = TRUE)
+res <- greedy(dta$x, dta$y, dta$w, include_ties = TRUE)
 expect_equal(res, c(TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE))
 
 # include_ties = TRUE
 # Change order; greedy should sort
 set.seed(10)
 o <- sample(nrow(dta))
-res <- reclin2:::greedy(dta$x[o], dta$y[o], dta$w[o], include_ties = TRUE)
+res <- greedy(dta$x[o], dta$y[o], dta$w[o], include_ties = TRUE)
 expect_equal(res, c(TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE)[o])
 
 # include_ties = TRUE
 # Empty input
-res <- reclin2:::greedy(dta$x[FALSE], dta$y[FALSE], dta$w[FALSE], include_ties = TRUE)
+res <- greedy(dta$x[FALSE], dta$y[FALSE], dta$w[FALSE], include_ties = TRUE)
 expect_equal(res, logical(0))
 
 # include_ties = TRUE
@@ -56,7 +56,7 @@ expect_equal(res, logical(0))
 dta2 <- dta
 dta2$w[1] <- NA
 expect_error(
-  res <- reclin2:::greedy(dta2$x, dta2$y, dta2$w, include_ties = TRUE)
+  res <- greedy(dta2$x, dta2$y, dta2$w, include_ties = TRUE)
 )
 
 # n, m
@@ -71,29 +71,29 @@ dta <- read.csv2(textConnection('x;y;w
 5;4;7
 6;3;6'
 ))
-res <- reclin2:::greedy(dta$x, dta$y, dta$w)
+res <- greedy(dta$x, dta$y, dta$w)
 expect_equal(res, c(TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE))
 
-res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 999)
+res <- greedy(dta$x, dta$y, dta$w, n = 999)
 expect_equal(res, c(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE))
 
-res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 2)
+res <- greedy(dta$x, dta$y, dta$w, n = 2)
 expect_equal(res, c(TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE))
 
-res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 3)
+res <- greedy(dta$x, dta$y, dta$w, n = 3)
 expect_equal(res, c(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE))
 
-res <- reclin2:::greedy(dta$x, dta$y, dta$w, m = 999)
+res <- greedy(dta$x, dta$y, dta$w, m = 999)
 expect_equal(res, c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE))
 
-res <- reclin2:::greedy(dta$x, dta$y, dta$w, m = 2)
+res <- greedy(dta$x, dta$y, dta$w, m = 2)
 expect_equal(res, c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE))
 
-res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 999, m = 999)
+res <- greedy(dta$x, dta$y, dta$w, n = 999, m = 999)
 expect_equal(res, c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE))
 
 expect_error(
-res <- reclin2:::greedy(dta$x, dta$y, dta$w, n = 999, m = 999, 
+res <- greedy(dta$x, dta$y, dta$w, n = 999, m = 999, 
   include_ties = TRUE)
 )
 

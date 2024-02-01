@@ -24,7 +24,7 @@
 #' @useDynLib reclin2
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
-#' 
+#' @export
 greedy <- function(x, y, weight, n = 1L, m = 1L, include_ties = FALSE) {
   stopifnot(length(x) == length(y))
   stopifnot(length(x) == length(weight))

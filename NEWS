@@ -8,6 +8,8 @@ NEW FEATURES
 
   - Added `inplace` argument to `predict`.
 
+  - The `greedy` function is now exported.
+
 BUG FIXES
 
   - `identical` called itself resulting in a stack overflow. This has been
