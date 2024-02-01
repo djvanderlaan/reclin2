@@ -15,6 +15,11 @@ BUG FIXES
   - `identical` called itself resulting in a stack overflow. This has been
     fixed.
 
+  - In extreme cases where the one of the m-probabilities converged to zero
+    `problink_em` gave an error. The algorithm will now converge to a small
+    value and give a warning (as this usually means that the algorithm didn't
+    converge to a valid solution.
+
 CHANGES IN VERSION 0.3.2
 
 

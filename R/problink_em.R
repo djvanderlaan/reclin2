@@ -83,8 +83,16 @@ problink_em <- function(formula, data, patterns, mprobs0 = list(0.95),
       m             <- patterns[[col]]
       mprobs[[col]] <- sum(patterns$n*gm*m) / sum(patterns$n*gm)
       if (mprobs[[col]] > mprob_max) mprobs[[col]] <- mprob_max
+      if (mprobs[[col]] < uprob_min) {
+        warning("m-probabilities close to 0 occured; probably converged to wrong solution")
+        mprobs[[col]] <- uprob_min
+      }
       uprobs[[col]] <- sum(patterns$n*gu*m) / sum(patterns$n*gu)
       if (uprobs[[col]] < uprob_min) uprobs[[col]] <- uprob_min
+      if (uprobs[[col]] > mprob_max) {
+        warning("u-probabilities close to 1 occured; probably converged to wrong solution")
+        uprobs[[col]] <- mprob_max
+      }
     }
     # check convergence
     eps <- 0
@@ -97,6 +105,12 @@ problink_em <- function(formula, data, patterns, mprobs0 = list(0.95),
     if (eps < tol) recalculate_p_and_stop <- TRUE
     mprobs_prev <- mprobs
     uprobs_prev <- uprobs
+  }
+  for (col in by) {
+    if (mprobs[[col]] <= uprobs[[col]]) {
+      warning("m-probabilities for '", col, "' are smaller than or equal to u-probabilities; ", 
+        "probably converged to wrong solution")
+    }
   }
   structure(list(mprobs=mprobs, uprobs=uprobs, p=p, patterns=patterns), 
     class="problink_em")
