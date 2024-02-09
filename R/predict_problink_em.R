@@ -54,7 +54,7 @@ predict.problink_em <- function(object, pairs = newdata, newdata = NULL,
 }
 
 
-predict_problinkem <- function(pairs, model, type, binary, add, comprators, ...) {
+predict_problinkem <- function(pairs, model, type, binary, add, comparators, ...) {
   UseMethod("predict_problinkem")
 }
 

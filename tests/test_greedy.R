@@ -97,5 +97,12 @@ res <- greedy(dta$x, dta$y, dta$w, n = 999, m = 999,
   include_ties = TRUE)
 )
 
+
+# Regression tests
+# Issue 26
+res <- greedy(1:5, c(1,1,2,2,2), rep(1,5), n = 2, m = 2)
+expect_equal(res, c(TRUE, TRUE, TRUE, TRUE, FALSE))
+
+
 message("Testing greedy() successful")
 

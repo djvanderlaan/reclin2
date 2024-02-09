@@ -47,7 +47,7 @@ LogicalVector greedy_nm_rcpp(IntegerVector x, IntegerVector y, NumericVector w,
     const bool yok = (yindex == yseen.end()) || (yindex->second < m);
     if (xok && yok) {
       xseen[x[i]] = xseen[x[i]] + 1;
-      yseen[y[i]] = yseen[x[i]] + 1;
+      yseen[y[i]] = yseen[y[i]] + 1;
       res[i] = true;
     } else {
       res[i] = false;
