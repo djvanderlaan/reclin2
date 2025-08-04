@@ -107,7 +107,7 @@ problink_em <- function(formula, data, patterns, mprobs0 = list(0.95),
     uprobs_prev <- uprobs
   }
   for (col in by) {
-    if (mprobs[[col]] <= uprobs[[col]]) {
+    if (any(mprobs[[col]] <= uprobs[[col]])) {
       warning("m-probabilities for '", col, "' are smaller than or equal to u-probabilities; ", 
         "probably converged to wrong solution")
     }
