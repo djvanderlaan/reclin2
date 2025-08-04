@@ -38,7 +38,7 @@ compare_vars(
 )
 }
 \arguments{
-\item{pairs}{\code{\link{data.table}} with pairs. Should contain the columns 
+\item{pairs}{\code{\link[data.table]{data.table}} with pairs. Should contain the columns 
 \code{.x} and \code{.y}.}
 
 \item{variable}{character vector with name of resulting column name that is added

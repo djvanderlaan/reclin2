@@ -30,7 +30,7 @@
 #' not contain missing values. 
 #' 
 #' The \code{jaro_winkler}, \code{lcs} and \code{jaccard} functions use the corresponding 
-#' methods from \code{\link{stringdist}} except that they are transformed from
+#' methods from \code{\link[stringdist]{stringdist}} except that they are transformed from
 #' a distance to a similarity score.
 #' 
 #' @return 

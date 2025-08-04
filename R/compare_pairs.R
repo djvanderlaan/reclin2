@@ -1,6 +1,6 @@
 #' Compare pairs on a set of variables common in both data sets
 #'
-#' @param pairs \code{\link{data.table}} with pairs. Should contain the columns 
+#' @param pairs \code{\link[data.table]{data.table}} with pairs. Should contain the columns 
 #'   \code{.x} and \code{.y}.
 #' @param on character vector of variables that should be compared. 
 #' @param comparators named list of functions with which the variables are compared. 

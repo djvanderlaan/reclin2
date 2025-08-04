@@ -1,6 +1,6 @@
 #' Get a subset of pairs to inspect
 #'
-#' @param pairs \code{\link{data.table}} with pairs.
+#' @param pairs \code{\link[data.table]{data.table}} with pairs.
 #' @param variable name of variable to base the selection on; should be a variable
 #'   with the similarity score of the pairs.
 #' @param threshold the threshold around which to select pairs. Used when position 

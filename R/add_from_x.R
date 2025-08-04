@@ -1,7 +1,7 @@
 
 #' Add a variable from one of the data sets to pairs
 #'
-#' @param pairs \code{\link{data.table}} with pairs. Should contain the columns 
+#' @param pairs \code{\link[data.table]{data.table}} with pairs. Should contain the columns 
 #'   \code{.x} and \code{.y}.
 #' @param variable name of the variable that should be added
 #' @param new_variable optional variable name of the new variable in

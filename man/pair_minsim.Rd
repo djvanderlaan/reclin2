@@ -47,7 +47,7 @@ pairs. This makes calling some subsequent operations that need \code{x} and
 \code{y} (such as \code{\link{compare_pairs}} easier.}
 }
 \value{
-A \code{\link{data.table}} with two columns, 
+A \code{\link[data.table]{data.table}} with two columns, 
 \code{.x} and \code{.y}, is returned. Columns \code{.x} and \code{.y} are 
 row numbers from \code{data.frame}s \code{.x} and \code{.y} respectively.
 }

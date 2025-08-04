@@ -35,7 +35,7 @@ compare_pairs(
 )
 }
 \arguments{
-\item{pairs}{\code{\link{data.table}} with pairs. Should contain the columns 
+\item{pairs}{\code{\link[data.table]{data.table}} with pairs. Should contain the columns 
 \code{.x} and \code{.y}.}
 
 \item{on}{character vector of variables that should be compared.}

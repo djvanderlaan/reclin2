@@ -15,7 +15,7 @@ get_inspect_pairs(
 )
 }
 \arguments{
-\item{pairs}{\code{\link{data.table}} with pairs.}
+\item{pairs}{\code{\link[data.table]{data.table}} with pairs.}
 
 \item{variable}{name of variable to base the selection on; should be a variable
 with the similarity score of the pairs.}

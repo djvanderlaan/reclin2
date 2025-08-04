@@ -10,7 +10,7 @@ add_from_x(pairs, variable, new_variable = variable, ...)
 add_from_y(pairs, variable, new_variable = variable, ...)
 }
 \arguments{
-\item{pairs}{\code{\link{data.table}} with pairs. Should contain the columns 
+\item{pairs}{\code{\link[data.table]{data.table}} with pairs. Should contain the columns 
 \code{.x} and \code{.y}.}
 
 \item{variable}{name of the variable that should be added}

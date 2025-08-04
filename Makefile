@@ -2,7 +2,7 @@
 .PHONY: build check document install vignettes
 
 build: document
-	cd work && R CMD build ../
+	mkdir -p work && cd work && R CMD build ../
 
 check: build
 	cd work && R CMD check --as-cran `ls reclin2*.tar.gz | sort | tail -n 1`

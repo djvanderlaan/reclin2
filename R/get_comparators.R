@@ -3,6 +3,7 @@ get_comparators <- function(pairs) {
   UseMethod("get_comparators")
 }
 
+#' @export
 get_comparators.pairs <- function(pairs) {
   # when using compare_vars or compare_pairs, the comparator is stored
   # as an attribute in the column; retreive those
