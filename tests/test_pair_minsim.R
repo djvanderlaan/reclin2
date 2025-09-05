@@ -2,6 +2,7 @@
 source("helpers.R")
 
 library(reclin2)
+library(data.table)
 
 x <- data.table(a = c(1,1,2,2), b = c(1,2,1,2))
 y <- data.table(a = c(3,3,2,2), b = c(1,2,1,2))

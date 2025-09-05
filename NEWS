@@ -2,6 +2,11 @@
 
 CHANGES IN VERSION 0.5.1
 
+NEW FEATURES
+
+  - `data.table` is now imported and therefore, not automatically attached into
+    the user session when `reclin2` is loaded.
+
 BUG FIXES
 
   - Fix in `select_greedy` for deduplication. It could select the same record

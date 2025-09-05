@@ -1,4 +1,5 @@
 library(reclin2)
+library(data.table)
 source("helpers.R")
 
 message("Testing cluster_compare_vars()")

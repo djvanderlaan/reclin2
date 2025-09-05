@@ -11,6 +11,7 @@ expect_equal_pairs <- function(x, y) {
 
 library(reclin2)
 library(parallel)
+library(data.table)
 
 # Prepare data
 data(linkexample1)

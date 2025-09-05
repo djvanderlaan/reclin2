@@ -1,5 +1,6 @@
 
 library(reclin2)
+library(data.table)
 source("helpers.R")
 
 message("Testing greedy()")

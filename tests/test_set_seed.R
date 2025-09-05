@@ -3,6 +3,7 @@ expect_equal <- function(x, y) {
 }
 
 library(reclin2)
+library(data.table)
 
 # distribute_over_cluster sets the seed to ensure that for a given dataset
 # the records are distributed the same way over a cluster when called 

@@ -24,6 +24,7 @@ variable is easier and can lead to better quality linkage.
 
 ```{.R}
 library(reclin2)
+library(data.table)
 data(town_names)
 head(town_names)
 ```

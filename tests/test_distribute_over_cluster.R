@@ -3,6 +3,7 @@ expect_equal <- function(x, y) {
 }
 
 library(reclin2)
+library(data.table)
 
 set.seed(2)
 d1 <- reclin2:::distribute_over_cluster(100, 4)

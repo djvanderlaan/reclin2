@@ -34,6 +34,7 @@ regular probabilistic linkage.
 
 ```{.R}
 library(reclin2)
+library(data.table)
 
 data("linkexample1", "linkexample2")
 print(linkexample1)

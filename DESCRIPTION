@@ -20,9 +20,9 @@ Description: Functions to assist in performing probabilistic record linkage and
 BugReports: https://github.com/djvanderlaan/reclin2/issues
 URL: https://github.com/djvanderlaan/reclin2
 Depends:
-    data.table,
     R (>= 3.6.0)
 Imports:
+    data.table,
     stringdist,
     stats,
     utils,
