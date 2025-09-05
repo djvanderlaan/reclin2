@@ -103,6 +103,63 @@ res <- greedy(dta$x, dta$y, dta$w, n = 999, m = 999,
 res <- greedy(1:5, c(1,1,2,2,2), rep(1,5), n = 2, m = 2)
 expect_equal(res, c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
+# =============================================================================
+# Tests for deduplication
+dta <- data.frame(
+    x = c(1,1,2,1),
+    y = c(2,3,3,4),
+    w = c(3,2,4,0)
+  )
+
+# Basic: note that for deduplication this is wrong!
+res <- greedy(dta$x, dta$y, dta$w)
+expect_equal(res, c(TRUE, FALSE, TRUE, FALSE))
+
+# Dedup
+res <- greedy(dta$x, dta$y, dta$w, deduplication = TRUE)
+expect_equal(res, c(FALSE, FALSE, TRUE, TRUE))
+
+# Dedup n = 2
+res <- greedy(dta$x, dta$y, dta$w, n = 2, deduplication = TRUE)
+expect_equal(res, c(TRUE, TRUE, TRUE, FALSE))
+
+# Dedup n = 3
+res <- greedy(dta$x, dta$y, dta$w, n = 3, deduplication = TRUE)
+expect_equal(res, c(TRUE, TRUE, TRUE, TRUE))
+
+expect_error(
+res <- greedy(dta$x, dta$y, dta$w, n = 0, deduplication = TRUE)
+)
+
+# Does nothing in this case: no ties
+res <- greedy(dta$x, dta$y, dta$w, deduplication = TRUE, include_ties = TRUE)
+expect_equal(res, c(FALSE, FALSE, TRUE, TRUE))
+
+# Add ties
+dta <- data.frame(
+    x = c(1,1,2,1),
+    y = c(2,3,3,4),
+    w = c(3,2,3,0)
+  )
+
+# In following solution depends on how sort works; R's sort is stable so in
+# general we will end up wit option 1, but in principle option2 is also 
+# valid.
+res <- greedy(dta$x, dta$y, dta$w, deduplication = TRUE)
+option1 <- all(res == c(TRUE, FALSE, FALSE, FALSE))
+option2 <- all(res == c(FALSE, FALSE, TRUE, TRUE))
+expect_equal(option1 | option2, TRUE)
+
+res <- greedy(dta$x, dta$y, dta$w, deduplication = TRUE, include_ties = TRUE)
+expect_equal(res, c(TRUE, FALSE, TRUE, FALSE))
+
+expect_error(
+res <- greedy(dta$x, dta$y, dta$w, n = 2, deduplication = TRUE, include_ties = TRUE)
+)
+
+
+
+
 
 message("Testing greedy() successful")
 

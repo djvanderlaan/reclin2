@@ -56,6 +56,60 @@ LogicalVector greedy_nm_rcpp(IntegerVector x, IntegerVector y, NumericVector w,
   return res;
 }
 
+// [[Rcpp::export]]
+LogicalVector greedy_dedup_rcpp(IntegerVector x, IntegerVector y, NumericVector w, 
+    bool include_ties = false) {
+  std::unordered_map<int, double> seen;
+  LogicalVector res(x.length());
+  const int n = x.length();
+  if (y.length() != n)
+    throw std::runtime_error("Lengths of x and y do not match.");
+  if (w.length() != n)
+    throw std::runtime_error("Lengths of x and w do not match.");
+  for (int i = 0; i < n; ++i) {
+    const auto xindex = seen.find(x[i]);
+    const bool xok = (xindex == seen.end()) || (include_ties && xindex->second <= w[i]);
+    const auto yindex = seen.find(y[i]);
+    const bool yok = (yindex == seen.end()) || (include_ties && yindex->second <= w[i]);
+    if (xok && yok) {
+      seen[x[i]] = w[i];
+      seen[y[i]] = w[i];
+      res[i] = true;
+    } else {
+      res[i] = false;
+    } 
+  }
+  return res;
+}
+
+
+// [[Rcpp::export]]
+LogicalVector greedy_nm_dedup_rcpp(IntegerVector x, IntegerVector y, NumericVector w, 
+    int n = 1) {
+  std::unordered_map<int, int> seen;
+  LogicalVector res(x.length());
+  const int nrecords = x.length();
+  if (y.length() != nrecords)
+    throw std::runtime_error("Lengths of x and y do not match.");
+  if (w.length() != nrecords)
+    throw std::runtime_error("Lengths of x and w do not match.");
+  for (int i = 0; i < nrecords; ++i) {
+    const auto xindex = seen.find(x[i]);
+    const bool xok = (xindex == seen.end()) || (xindex->second < n);
+    const auto yindex = seen.find(y[i]);
+    const bool yok = (yindex == seen.end()) || (yindex->second < n);
+    if (xok && yok) {
+      seen[x[i]] = seen[x[i]] + 1;
+      seen[y[i]] = seen[y[i]] + 1;
+      res[i] = true;
+    } else {
+      res[i] = false;
+    } 
+  }
+  return res;
+}
+
+
 /*
 LogicalVector greedy_rcpp(IntegerVector x, IntegerVector y) {
   std::unordered_set<int> xseen;

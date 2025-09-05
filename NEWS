@@ -4,8 +4,10 @@ CHANGES IN VERSION 0.5.1
 
 BUG FIXES
 
-  - Small fixes in documentation in order to comply with CRAN rules.
+  - Fix in `select_greedy` for deduplication. It could select the same record
+    multiple times. `select_n_to_m` issues an error in this case.
 
+  - Small fixes in documentation in order to comply with CRAN rules.
 
 CHANGES IN VERSION 0.5.0
 

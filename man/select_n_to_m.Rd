@@ -57,6 +57,7 @@ select_greedy(
   include_ties = FALSE,
   n = 1L,
   m = 1L,
+  deduplication = val_or(attr(pairs, "deduplication"), FALSE),
   ...
 )
 
@@ -130,6 +131,11 @@ y.}
 
 \item{m}{an integer. Each element of y can be linked to at most m elements of
 x.}
+
+\item{deduplication}{the problem is a deduplication problem. Both \code{x}
+and \code{y} are the same data set. In general forcing one-to-one linkage
+is only necesary during deduplication when it is known that each record
+can only occur at most twice in the dataset.}
 }
 \value{
 Returns the \code{pairs} with the variable given by \code{variable} added. This

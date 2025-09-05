@@ -30,6 +30,10 @@
 #'   y. 
 #' @param m an integer. Each element of y can be linked to at most m elements of
 #'   x. 
+#' @param deduplication the problem is a deduplication problem. Both \code{x}
+#'   and \code{y} are the same data set. In general forcing one-to-one linkage
+#'   is only necesary during deduplication when it is known that each record
+#'   can only occur at most twice in the dataset. 
 #' @param ... Used to pass additional arguments to methods
 #'   
 #' @details 

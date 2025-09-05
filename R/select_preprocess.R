@@ -2,9 +2,7 @@
 # Used internally by `select_greedy` and `select_n_to_m`
 #
 select_preprocess <- function(pairs, score, threshold = NULL, preselect = NULL, 
-    id_x = NULL, id_y = NULL, x = attr(pairs, 'x'), y = attr(pairs, 'y'), 
-    deduplication = FALSE) {
-  
+    id_x = NULL, id_y = NULL, x = attr(pairs, 'x'), y = attr(pairs, 'y')) {
   if (is.character(score)) {
     stopifnot(score %in% names(pairs))
     score <- pairs[[score]]
@@ -35,10 +33,6 @@ select_preprocess <- function(pairs, score, threshold = NULL, preselect = NULL,
     score = score[select],
     index = which(select)
   )
-  if (deduplication) {
-    res <- rbind(res, 
-      res[, .(.x = .y, .y = .x, score = score, index = index)])
-  }
   res
 }
 

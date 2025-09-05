@@ -11,6 +11,8 @@
 #'   x. 
 #' @param include_ties when pairs for a given record have an equal weight, should
 #'   all pairs be included.
+#' @param deduplication \code{x} and \code{y} refer to the same object and each
+#'   counts to the total \code{n} selected. \code{m} is ignored.
 #' 
 #' @details 
 #' Pairs with the highest weight are selected as long a neither the lhs as the
@@ -25,7 +27,7 @@
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
 #' @export
-greedy <- function(x, y, weight, n = 1L, m = 1L, include_ties = FALSE) {
+greedy <- function(x, y, weight, n = 1L, m = 1L, include_ties = FALSE, deduplication = FALSE) {
   stopifnot(length(x) == length(y))
   stopifnot(length(x) == length(weight))
   if (anyNA(weight)) stop("Missing values in weight.")
@@ -37,10 +39,18 @@ greedy <- function(x, y, weight, n = 1L, m = 1L, include_ties = FALSE) {
   x <- x[o]
   y <- y[o]
   weight <- weight[o]
-  if (include_ties) {
-    s <- greedy_rcpp(x, y, weight, include_ties)
+  if (deduplication) {
+    if (include_ties) {
+      s <- greedy_dedup_rcpp(x, y, weight, include_ties)
+    } else {
+      s <- greedy_nm_dedup_rcpp(x, y, weight, n)
+    }
   } else {
-    s <- greedy_nm_rcpp(x, y, weight, n, m)
+    if (include_ties) {
+      s <- greedy_rcpp(x, y, weight, include_ties)
+    } else {
+      s <- greedy_nm_rcpp(x, y, weight, n, m)
+    }
   }
   s[o] <- s
   s

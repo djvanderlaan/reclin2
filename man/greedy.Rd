@@ -4,7 +4,15 @@
 \alias{greedy}
 \title{Greedy one-to-one matching of pairs}
 \usage{
-greedy(x, y, weight, n = 1L, m = 1L, include_ties = FALSE)
+greedy(
+  x,
+  y,
+  weight,
+  n = 1L,
+  m = 1L,
+  include_ties = FALSE,
+  deduplication = FALSE
+)
 }
 \arguments{
 \item{x}{id's of lhs of pairs; converted to integer}
@@ -21,6 +29,9 @@ x.}
 
 \item{include_ties}{when pairs for a given record have an equal weight, should
 all pairs be included.}
+
+\item{deduplication}{\code{x} and \code{y} refer to the same object and each
+counts to the total \code{n} selected. \code{m} is ignored.}
 }
 \value{
 A logical vector with the same length as \code{x}.

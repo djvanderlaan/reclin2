@@ -21,3 +21,20 @@ expect_equal(t$select, c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE))
 t <- select_greedy(pairs[FALSE,], "select", "score", threshold = 10)
 expect_equal(t$select, logical(0))
 
+
+
+# Deduplication
+pairs <- data.table(
+  .x    = c(1,1,2,1),
+  .y    = c(2,3,3,4),
+  score = c(3,2,4,0)
+)
+class(pairs) <- c("pairs", class(pairs))
+# Incorrect:
+t <- select_greedy(pairs, "select", "score")
+expect_equal(t$select, c(TRUE, FALSE, TRUE, FALSE))
+attr(pairs, "deduplication") <- TRUE
+t <- select_greedy(pairs, "select", "score")
+t
+expect_equal(t$select, c(FALSE, FALSE, TRUE, TRUE))
+
