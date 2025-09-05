@@ -42,5 +42,5 @@ pairs <- pair_blocking(linkexample1, linkexample2, "postcode")
 }
 \seealso{
 \code{\link{pair}} and \code{\link{pair_minsim}} are other methods
-to generate pairs.
+to generate pairs. The package \pkg{blocking} implements additional methods.
 }

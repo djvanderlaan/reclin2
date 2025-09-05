@@ -83,6 +83,7 @@ select_n_to_m(
   x = attr(pairs, "x"),
   y = attr(pairs, "y"),
   inplace = FALSE,
+  deduplication = val_or(attr(pairs, "deduplication"), FALSE),
   ...
 )
 }
