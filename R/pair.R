@@ -21,7 +21,7 @@
 #'
 #' @seealso
 #' \code{\link{pair_blocking}} and \code{\link{pair_minsim}} are other methods
-#' to generate pairs. 
+#' to generate pairs. The package \pkg{blocking} implements additional methods. 
 #'
 #' @examples
 #' data("linkexample1", "linkexample2")

@@ -31,4 +31,9 @@ Many of the features can be found in the vignettes of the package:
 - [Using a cluster for record linkage](https://htmlpreview.github.io/?https://github.com/djvanderlaan/reclin2/blob/master/inst/doc/using_a_cluster_for_record_linkage.html)
 
 
+### Extensions
+ 
+ The R-package [`blocking`](https://cran.r-project.org/package=blocking)
+ implements additional methods for generating pairs that can be used together
+ with the methods from `reclin2`. 
 
