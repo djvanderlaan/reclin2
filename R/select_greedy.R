@@ -16,6 +16,7 @@ select_greedy.pairs <- function(pairs, variable, score, threshold, preselect = N
     preselect = preselect, id_x = id_x, id_y = id_y, x = x, y = y)
   sel <- greedy(prep$.x, prep$.y, prep$score, include_ties = include_ties, 
     n = n, m = m)
+  #sel <- sel & prep$.y > prep$.x
   if (inplace) {
     pairs[, (variable) := FALSE]
     pairs[prep$index[sel], (variable) := TRUE]

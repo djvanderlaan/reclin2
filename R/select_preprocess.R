@@ -2,7 +2,8 @@
 # Used internally by `select_greedy` and `select_n_to_m`
 #
 select_preprocess <- function(pairs, score, threshold = NULL, preselect = NULL, 
-    id_x = NULL, id_y = NULL, x = attr(pairs, 'x'), y = attr(pairs, 'y')) {
+    id_x = NULL, id_y = NULL, x = attr(pairs, 'x'), y = attr(pairs, 'y'), 
+    deduplication = FALSE) {
   
   if (is.character(score)) {
     stopifnot(score %in% names(pairs))
@@ -28,11 +29,16 @@ select_preprocess <- function(pairs, score, threshold = NULL, preselect = NULL,
   } else id_y <- pairs$.y
   stopifnot(length(id_y) == length(select))
   # Select possible matches
-  data.table(
+  res <- data.table(
     .x = id_x[select],
     .y = id_y[select],
     score = score[select],
     index = which(select)
   )
+  if (deduplication) {
+    res <- rbind(res, 
+      res[, .(.x = .y, .y = .x, score = score, index = index)])
+  }
+  res
 }
 
