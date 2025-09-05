@@ -93,7 +93,10 @@ select_n_to_m <- function(pairs, variable, score, threshold, preselect = NULL,
 #' @export
 select_n_to_m.pairs <- function(pairs, variable, score, threshold, preselect = NULL, 
     id_x = NULL, id_y = NULL, x = attr(pairs, "x"), y = attr(pairs, "y"), 
-    inplace = FALSE, ...) {
+    inplace = FALSE, deduplication = val_or(attr(pairs, "deduplication"), FALSE), ...) {
+  if (deduplication) 
+    stop("The deduplication option is no yet implemented for select_n_to_m. ", 
+      "Try select_greedy.")
   prep <- select_preprocess(pairs, score = score, threshold = threshold, 
     preselect = preselect, id_x = id_x, id_y = id_y, x = x, y = y)
   sel_ind <- match_n_to_m(prep$.x, prep$.y, prep$score, n = 1, m = 1)
