@@ -85,3 +85,28 @@ expect_equal(pairs$simsum, c(1))
 expect_equal(attr(pairs, "x"), x)
 expect_equal(attr(pairs, "y"), y)
 
+
+# ====== WEIGHTS
+
+# First manually using score_simple
+data("linkexample1", "linkexample2")
+pairs <- pair_blocking(linkexample1, linkexample2, "postcode")
+compare_pairs(pairs, on = c("firstname", "lastname", "sex"), inplace = TRUE)
+pairs <- score_simple(pairs, "score", on = c("firstname", "lastname", "sex"), 
+  w1 = c("firstname" = 2.2, "lastname" = 3.3), 
+  w0 = c("firstname" = -1.1, "lastname" = -0.51),
+  wna = c("sex" = 0.5))
+pairs <- pairs[score >= 0]
+# Then using pair_minsim
+pairs2 <- pair_minsim(linkexample1, linkexample2, on_blocking = "postcode", 
+  on = c("firstname", "lastname", "sex"), 
+  w1 = c("firstname" = 2.2, "lastname" = 3.3), 
+  w0 = c("firstname" = -1.1, "lastname" = -0.51),
+  wna = c("sex" = 0.5))
+
+setkey(pairs, .x, .y)
+setkey(pairs2, .x, .y)
+expect_equal(pairs$.x, pairs2$.x)
+expect_equal(pairs$.y, pairs2$.y)
+expect_equal(pairs$score, pairs2$simsum)
+

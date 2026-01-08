@@ -21,6 +21,20 @@
 #' @param add_xy add \code{x} and \code{y} as attributes to the returned 
 #'   pairs. This makes calling some subsequent operations that need \code{x} and 
 #'   \code{y} (such as \code{\link{compare_pairs}} easier.
+#' @param w1 a vector or list with weights for agreement for each of the
+#'   variables. It can either be a numeric vector of length 1 in which case the
+#'   same weight is used for all variables; A numeric vector of length equal to
+#'   the length of \code{on} in which case the weights correspond one-to-one to
+#'   the variables in \code{on}; A named numeric vector where the names
+#'   correspond to those in \code{on}, missing values are assigned a value of 1;
+#'   or a named list with numeric values.  See \code{\link{score_simple}}
+#'   for more information.
+#' @param w0 a vector or list with weights for non-agreement for each of the
+#'   variables. See \code{\link{score_simple}} for more information. 
+#'   For the format see \code{w1}.
+#' @param wna a vector or list with weights for agreement for each of the
+#'   variables. See \code{\link{score_simple}} for more information. 
+#'   For the format see \code{w1}.
 #'
 #' @details
 #' Generating (all) pairs of the records of two data sets, is usually the first 
@@ -58,18 +72,37 @@
 #' @export
 pair_minsim <- function(x, y, on, minsim = 0.0, on_blocking = character(0),
     comparators = list(default_comparator), default_comparator = cmp_identical(), 
-    keep_simsum = TRUE, deduplication = FALSE, add_xy = TRUE) {
+    keep_simsum = TRUE, deduplication = FALSE, add_xy = TRUE,
+    w1 = 1, w0 = 0, wna = 0) {
+  # Process x and y
   x <- as.data.table(x)
   if (deduplication && !missing(y)) warning("y provided will be ignored.")
   y <- if (deduplication) x else as.data.table(y)
+  # Process comparators
   comparators <- extend_to(on, comparators, default = default_comparator) 
+  # Process w1
+  w1_default <- if (is.numeric(w1) && length(w1) == 1) w1 else 1.0
+  if (!is.list(w1)) w1 <- as.list(w1)
+  w1 <- extend_to(on, w1, w1_default)
+  # Process w0
+  w0_default <- if (is.numeric(w0) && length(w0) == 1) w0 else 0.0
+  if (!is.list(w0)) w0 <- as.list(w0)
+  w0 <- extend_to(on, w0, w0_default)
+  # Process wna
+  wna_default <- if (is.numeric(wna) && length(wna) == 1) wna else 0.0
+  if (!is.list(wna)) wna <- as.list(wna)
+  wna <- extend_to(on, wna, wna_default)
+  # Determine chunks
   ny <- nrow(y)
   nx <- nrow(x)
   max_size <- 1E7
   nchunks <- max(ceiling(nx * (ny/ max_size)), 1L)
   group <- floor(seq_len(nrow(x))/(nrow(x)+1)*nchunks)
   idx <- split(seq_len(nrow(x)), group)
-  pairs <- lapply(idx, function(idx, x, y, on, on_blocking, minsim, comparators, deduplication) {
+  # Generate pairs per chunk
+  pairs <- lapply(idx, function(idx, x, y, on, on_blocking, minsim, comparators, 
+      deduplication, w1, w0, wna) {
+    # Generate pairs in chunk
     if (length(on_blocking)) {
       pairs <- pair_blocking(x, y, on = on_blocking, add_xy = FALSE)
       pairs[, .x := idx[.x]]
@@ -78,15 +111,19 @@ pair_minsim <- function(x, y, on, minsim = 0.0, on_blocking = character(0),
     }
     if (deduplication) pairs <- pairs[.y > .x]
     pairs[, simsum := rep(0, nrow(pairs))]
+    # Calculate score
     for (var in on) {
       cmp_fun <- comparators[[var]]
       cmp <- cmp_fun(x[pairs$.x, ..var][[1]], y[pairs$.y, ..var][[1]])
-      cmp[is.na(cmp)] <- 0
-      pairs[, simsum := simsum + ..cmp]
+      cmp <- as.numeric(cmp)
+      s <- cmp*w1[[var]] + (1-cmp) * w0[[var]]
+      s[is.na(s)] <- wna[[var]]
+      pairs[, simsum := simsum + ..s]
     }
     pairs[simsum >= minsim]
   }, x = x, y = y, on = on, on_blocking = on_blocking, minsim = minsim, 
-    comparators = comparators, deduplication = deduplication)
+    comparators = comparators, deduplication = deduplication, 
+    w1 = w1, w0 = w0, wna = wna)
   pairs <- rbindlist(pairs)
   if (!keep_simsum) pairs[, simsum := NULL]
   setattr(pairs, "class", c("pairs", class(pairs)))
@@ -97,4 +134,54 @@ pair_minsim <- function(x, y, on, minsim = 0.0, on_blocking = character(0),
   }
   pairs
 }
+
+
+
+
+
+
+
+
+
+#pair_minsim <- function(x, y, on, minsim = 0.0, on_blocking = character(0),
+#    comparators = list(default_comparator), default_comparator = cmp_identical(), 
+#    keep_simsum = TRUE, deduplication = FALSE, add_xy = TRUE) {
+#  x <- as.data.table(x)
+#  if (deduplication && !missing(y)) warning("y provided will be ignored.")
+#  y <- if (deduplication) x else as.data.table(y)
+#  comparators <- extend_to(on, comparators, default = default_comparator) 
+#  ny <- nrow(y)
+#  nx <- nrow(x)
+#  max_size <- 1E7
+#  nchunks <- max(ceiling(nx * (ny/ max_size)), 1L)
+#  group <- floor(seq_len(nrow(x))/(nrow(x)+1)*nchunks)
+#  idx <- split(seq_len(nrow(x)), group)
+#  pairs <- lapply(idx, function(idx, x, y, on, on_blocking, minsim, comparators, deduplication) {
+#    if (length(on_blocking)) {
+#      pairs <- pair_blocking(x, y, on = on_blocking, add_xy = FALSE)
+#      pairs[, .x := idx[.x]]
+#    } else {
+#      pairs <- CJ(.x = idx, .y = seq_len(nrow(y)))
+#    }
+#    if (deduplication) pairs <- pairs[.y > .x]
+#    pairs[, simsum := rep(0, nrow(pairs))]
+#    for (var in on) {
+#      cmp_fun <- comparators[[var]]
+#      cmp <- cmp_fun(x[pairs$.x, ..var][[1]], y[pairs$.y, ..var][[1]])
+#      cmp[is.na(cmp)] <- 0
+#      pairs[, simsum := simsum + ..cmp]
+#    }
+#    pairs[simsum >= minsim]
+#  }, x = x, y = y, on = on, on_blocking = on_blocking, minsim = minsim, 
+#    comparators = comparators, deduplication = deduplication)
+#  pairs <- rbindlist(pairs)
+#  if (!keep_simsum) pairs[, simsum := NULL]
+#  setattr(pairs, "class", c("pairs", class(pairs)))
+#  if (deduplication) setattr(pairs, "deduplication", TRUE)
+#  if (add_xy) {
+#    setattr(pairs, "x", x)
+#    setattr(pairs, "y", y)
+#  }
+#  pairs
+#}
 

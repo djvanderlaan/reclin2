@@ -14,7 +14,10 @@ pair_minsim(
   default_comparator = cmp_identical(),
   keep_simsum = TRUE,
   deduplication = FALSE,
-  add_xy = TRUE
+  add_xy = TRUE,
+  w1 = 1,
+  w0 = 0,
+  wna = 0
 )
 }
 \arguments{
@@ -45,6 +48,23 @@ is usefull for deduplication of \code{x}.}
 \item{add_xy}{add \code{x} and \code{y} as attributes to the returned 
 pairs. This makes calling some subsequent operations that need \code{x} and 
 \code{y} (such as \code{\link{compare_pairs}} easier.}
+
+\item{w1}{a vector or list with weights for agreement for each of the
+variables. It can either be a numeric vector of length 1 in which case the
+same weight is used for all variables; A numeric vector of length equal to
+the length of \code{on} in which case the weights correspond one-to-one to
+the variables in \code{on}; A named numeric vector where the names
+correspond to those in \code{on}, missing values are assigned a value of 1;
+or a named list with numeric values.  See \code{\link{score_simple}}
+for more information.}
+
+\item{w0}{a vector or list with weights for non-agreement for each of the
+variables. See \code{\link{score_simple}} for more information. 
+For the format see \code{w1}.}
+
+\item{wna}{a vector or list with weights for agreement for each of the
+variables. See \code{\link{score_simple}} for more information. 
+For the format see \code{w1}.}
 }
 \value{
 A \code{\link[data.table]{data.table}} with two columns, 
